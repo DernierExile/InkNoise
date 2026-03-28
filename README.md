@@ -63,8 +63,8 @@ A modern, high-performance web application for applying dithering effects to ima
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/DernierExile/image-dithering-studio.git
-cd image-dithering-studio
+git clone https://github.com/DernierExile/InkNoise.git
+cd InkNoise
 ```
 
 2. Install dependencies:
