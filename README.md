@@ -63,7 +63,7 @@ A modern, high-performance web application for applying dithering effects to ima
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/image-dithering-studio.git
+git clone https://github.com/DernierExile/image-dithering-studio.git
 cd image-dithering-studio
 ```
 
