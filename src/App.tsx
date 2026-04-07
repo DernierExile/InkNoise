@@ -6,6 +6,7 @@ import ImagePreview from './components/ImagePreview';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo } from './utils/imageResize';
+import { loadWatermarkImage, drawWatermarkOnCanvas } from './utils/watermark';
 import DitheringWorker from './workers/dithering.worker?worker';
 
 function App() {
@@ -136,7 +137,7 @@ function App() {
     return () => clearTimeout(timeoutId);
   }, [originalImage, algorithm, colorMode, selectedPalette, colorCount, adjustments]);
 
-  const handleExport = (format: 'png' | 'jpg' | 'webp', quality?: number) => {
+  const handleExport = async (format: 'png' | 'jpg' | 'webp', quality?: number) => {
     if (!processedImageData) return;
 
     const canvas = document.createElement('canvas');
@@ -146,6 +147,14 @@ function App() {
     canvas.width = processedImageData.width;
     canvas.height = processedImageData.height;
     ctx.putImageData(processedImageData, 0, 0);
+
+    // Watermark (free version)
+    try {
+      const wmImage = await loadWatermarkImage();
+      drawWatermarkOnCanvas(ctx, canvas.width, canvas.height, wmImage);
+    } catch {
+      // Export proceeds without watermark if image fails to load
+    }
 
     const mimeType = format === 'jpg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
     const extension = format;

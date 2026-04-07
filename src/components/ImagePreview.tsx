@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Download } from 'lucide-react';
+import { Download, Sparkles } from 'lucide-react';
+import ProModal from './ProModal';
 
 interface ImagePreviewProps {
   originalImage: HTMLImageElement | null;
@@ -13,6 +14,7 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [exportFormat, setExportFormat] = useState<'png' | 'jpg' | 'webp'>('png');
   const [exportQuality, setExportQuality] = useState(95);
+  const [showProModal, setShowProModal] = useState(false);
 
   useEffect(() => {
     if (!originalImage || !originalCanvasRef.current) return;
@@ -99,6 +101,13 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
                 Download {exportFormat.toUpperCase()}
               </button>
             </div>
+            <button
+              onClick={() => setShowProModal(true)}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 text-[#00ffff]/60 border border-[#00ffff]/20 rounded-lg hover:border-[#00ffff]/50 hover:text-[#00ffff]/90 transition-all text-sm"
+            >
+              <Sparkles className="w-4 h-4" />
+              InkNoise Pro (bientot)
+            </button>
           </div>
         </div>
       )}
@@ -130,6 +139,8 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
           </div>
         </div>
       </div>
+
+      <ProModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
     </div>
   );
 }
