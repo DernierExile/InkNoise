@@ -22,38 +22,38 @@ export default function ProModal({ isOpen, onClose }: ProModalProps) {
         <div className="flex items-center gap-3 mb-4">
           <Sparkles className="w-6 h-6 text-[#00ffff]" />
           <h2 className="text-xl font-bold text-[#00ff41] tracking-wider">
-            InkNoise Pro arrive bientot
+            InkNoise Pro — Coming Soon
           </h2>
         </div>
 
         <p className="text-[#00ffff]/80 text-sm leading-relaxed mb-3">
-          La version actuelle d'InkNoise est entierement gratuite et le restera.
+          The current version of InkNoise is completely free and will stay that way.
         </p>
 
         <p className="text-[#00ffff]/80 text-sm leading-relaxed mb-5">
-          Une version Pro avec des fonctions avancees est en preparation :
+          A Pro version with advanced features is in the works:
         </p>
 
         <ul className="text-[#00ff41]/80 text-sm space-y-2 mb-6 pl-4">
           <li className="flex items-start gap-2">
             <span className="text-[#00ffff] mt-0.5">-</span>
-            Presets enregistres et partageables
+            Saved and shareable presets
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#00ffff] mt-0.5">-</span>
-            Export par lot (batch)
+            Batch export
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#00ffff] mt-0.5">-</span>
-            Suppression du watermark
+            Watermark removal
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#00ffff] mt-0.5">-</span>
-            Palettes personnalisees illimitees
+            Unlimited custom palettes
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#00ffff] mt-0.5">-</span>
-            Export haute resolution sans limite
+            Unlimited high-resolution export
           </li>
         </ul>
 
@@ -61,7 +61,7 @@ export default function ProModal({ isOpen, onClose }: ProModalProps) {
           onClick={onClose}
           className="w-full px-4 py-3 bg-[#0f1f18] text-[#00ff41] border-2 border-[#00ff41]/50 rounded-lg hover:border-[#00ff41] hover:glow-green transition-all font-semibold"
         >
-          Fermer
+          Close
         </button>
       </div>
     </div>
