@@ -253,7 +253,7 @@ function App() {
           <img
             src="https://res.cloudinary.com/djgufyqs5/image/upload/v1775561208/BEZIER200x200_pybhdw.png"
             alt="BEZIER"
-            className="w-10 h-10 mx-auto mt-3 opacity-70"
+            className="w-28 h-28 mx-auto mt-3"
           />
         </div>
       </footer>
