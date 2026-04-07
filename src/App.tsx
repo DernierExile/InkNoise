@@ -250,6 +250,11 @@ function App() {
       <footer className="border-t border-glow-cyan bg-black/50 backdrop-blur-sm mt-12">
         <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-[#00ffff]/70">
           <p className="font-semibold tracking-wider">Made by BEZIER</p>
+          <img
+            src="https://res.cloudinary.com/djgufyqs5/image/upload/v1775561208/BEZIER200x200_pybhdw.png"
+            alt="BEZIER"
+            className="w-10 h-10 mx-auto mt-3 opacity-70"
+          />
         </div>
       </footer>
     </div>
