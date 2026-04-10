@@ -163,7 +163,6 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
               <canvas
                 ref={originalCanvasRef}
                 className="max-w-full h-auto rounded"
-                style={{ imageRendering: 'pixelated' }}
               />
             </div>
           </div>
@@ -174,7 +173,6 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
                 <canvas
                   ref={processedCanvasRef}
                   className="max-w-full h-auto rounded"
-                  style={{ imageRendering: 'pixelated' }}
                 />
               ) : (
                 <div className="text-[#00ffff]/40 text-sm">Processing...</div>
@@ -199,7 +197,6 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
             <canvas
               ref={originalCanvasRef}
               className="w-full h-auto block"
-              style={{ imageRendering: 'pixelated' }}
             />
             <div
               className="absolute inset-0"
@@ -209,7 +206,6 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
                 ref={processedCanvasRef}
                 className="block"
                 style={{
-                  imageRendering: 'pixelated',
                   position: 'absolute',
                   top: 0,
                   left: 0,

@@ -177,17 +177,20 @@ function App() {
       <header className="border-b border-[#00ff41]/20 bg-black/60 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <button
+              onClick={() => { setOriginalImage(null); setResizeWarning(null); }}
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            >
               <img
                 src="/capture_d'ecran_2026-02-03_201802.png"
                 alt="InkNoise Logo"
                 className="w-10 h-10 rounded-lg object-cover border border-[#00ff41]/60"
               />
-              <div>
+              <div className="text-left">
                 <h1 className="text-xl font-bold text-[#00ff41] text-glow-green tracking-wider leading-none">InkNoise</h1>
                 <p className="text-xs text-[#00ffff]/50 mt-0.5 leading-none">Professional image dithering</p>
               </div>
-            </div>
+            </button>
             <button
               onClick={() => setShowProModal(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 text-[#00ffff]/55 border border-[#00ffff]/15 rounded-lg hover:border-[#00ffff]/40 hover:text-[#00ffff]/85 transition-all text-xs font-semibold"
