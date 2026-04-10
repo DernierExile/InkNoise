@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Sparkles } from 'lucide-react';
 import ImageUpload from './components/ImageUpload';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
+import ProModal from './components/ProModal';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo } from './utils/imageResize';
@@ -10,6 +11,7 @@ import { loadWatermarkImage, drawWatermarkOnCanvas } from './utils/watermark';
 import DitheringWorker from './workers/dithering.worker?worker';
 
 function App() {
+  const [showProModal, setShowProModal] = useState(false);
   const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
   const [processedImageData, setProcessedImageData] = useState<ImageData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -172,26 +174,37 @@ function App() {
 
   return (
     <div className="min-h-screen retro-gradient text-white scanline-bg">
-      <header className="border-b border-glow-green bg-black/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-4">
-            <img
-              src="/capture_d'ecran_2026-02-03_201802.png"
-              alt="InkNoise Logo"
-              className="w-14 h-14 rounded-lg object-cover glow-green border-2 border-[#00ff41]"
-            />
-            <div>
-              <h1 className="text-3xl font-bold text-[#00ff41] text-glow-green tracking-wider">InkNoise</h1>
-              <p className="text-sm text-[#00ffff]/80">Professional image dithering tool</p>
+      <header className="border-b border-[#00ff41]/20 bg-black/60 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img
+                src="/capture_d'ecran_2026-02-03_201802.png"
+                alt="InkNoise Logo"
+                className="w-10 h-10 rounded-lg object-cover border border-[#00ff41]/60"
+              />
+              <div>
+                <h1 className="text-xl font-bold text-[#00ff41] text-glow-green tracking-wider leading-none">InkNoise</h1>
+                <p className="text-xs text-[#00ffff]/50 mt-0.5 leading-none">Professional image dithering</p>
+              </div>
             </div>
+            <button
+              onClick={() => setShowProModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[#00ffff]/55 border border-[#00ffff]/15 rounded-lg hover:border-[#00ffff]/40 hover:text-[#00ffff]/85 transition-all text-xs font-semibold"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Pro
+            </button>
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {!originalImage ? (
-          <div className="max-w-2xl mx-auto">
-            <ImageUpload onImageLoad={handleImageLoad} />
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] py-8">
+            <div className="w-full max-w-lg">
+              <ImageUpload onImageLoad={handleImageLoad} />
+            </div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -203,19 +216,20 @@ function App() {
             )}
 
             {isProcessing && (
-              <div className="bg-cyan-900/20 border-2 border-[#00ffff]/50 text-[#00ffff] px-4 py-3 rounded-lg glow-cyan">
-                <p className="text-sm">Processing image...</p>
+              <div className="bg-[#00ffff]/5 border border-[#00ffff]/30 text-[#00ffff]/80 px-4 py-2.5 rounded-lg flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#00ffff] animate-pulse" />
+                <p className="text-xs font-medium">Processing...</p>
               </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-1 space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <div className="lg:col-span-1 space-y-3">
                 <button
                   onClick={() => {
                     setOriginalImage(null);
                     setResizeWarning(null);
                   }}
-                  className="w-full px-4 py-2 bg-[#0f1f18] text-[#00ff41] border-2 border-[#00ff41]/50 rounded-lg hover:border-[#00ff41] hover:glow-green transition-all sticky top-4 z-10 font-semibold"
+                  className="w-full px-4 py-2 bg-black/50 text-[#00ff41]/75 border border-[#00ff41]/30 rounded-lg hover:border-[#00ff41]/70 hover:text-[#00ff41] transition-all text-sm font-semibold"
                 >
                   Load New Image
                 </button>
@@ -247,16 +261,18 @@ function App() {
         )}
       </main>
 
-      <footer className="border-t border-glow-cyan bg-black/50 backdrop-blur-sm mt-12">
-        <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-[#00ffff]/70">
+      <footer className="border-t border-[#00ff41]/10 bg-black/40 backdrop-blur-sm mt-12">
+        <div className="max-w-7xl mx-auto px-4 py-5 text-center text-xs text-[#00ffff]/40">
           <p className="font-semibold tracking-wider">Made by BEZIER</p>
           <img
             src="https://res.cloudinary.com/djgufyqs5/image/upload/v1775561208/BEZIER200x200_pybhdw.png"
             alt="BEZIER"
-            className="w-28 h-28 mx-auto mt-3"
+            className="w-16 h-16 mx-auto mt-2 opacity-60"
           />
         </div>
       </footer>
+
+      <ProModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
     </div>
   );
 }

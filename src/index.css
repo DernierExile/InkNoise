@@ -11,33 +11,33 @@
 
 @layer utilities {
   .glow-green {
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3), 0 0 20px rgba(0, 255, 65, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3), 0 0 20px rgba(0, 255, 65, 0.15);
   }
 
   .glow-cyan {
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.15);
   }
 
   .glow-pink {
-    box-shadow: 0 0 15px rgba(255, 0, 110, 0.4), 0 0 30px rgba(255, 0, 110, 0.2);
+    box-shadow: 0 0 12px rgba(255, 0, 110, 0.45), 0 0 25px rgba(255, 0, 110, 0.2);
   }
 
   .text-glow-green {
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5), 0 0 20px rgba(0, 255, 65, 0.3);
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5), 0 0 20px rgba(0, 255, 65, 0.25);
   }
 
   .text-glow-cyan {
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.25);
   }
 
   .border-glow-green {
     border-color: #00ff41;
-    box-shadow: 0 0 5px rgba(0, 255, 65, 0.5), inset 0 0 5px rgba(0, 255, 65, 0.1);
+    box-shadow: 0 0 5px rgba(0, 255, 65, 0.4), inset 0 0 5px rgba(0, 255, 65, 0.08);
   }
 
   .border-glow-cyan {
     border-color: #00ffff;
-    box-shadow: 0 0 5px rgba(0, 255, 255, 0.5), inset 0 0 5px rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.4), inset 0 0 5px rgba(0, 255, 255, 0.08);
   }
 
   .scanline-bg {
@@ -53,21 +53,145 @@
     bottom: 0;
     background: repeating-linear-gradient(
       0deg,
-      rgba(0, 255, 65, 0.03) 0px,
+      rgba(0, 255, 65, 0.025) 0px,
       transparent 1px,
       transparent 2px,
-      rgba(0, 255, 65, 0.03) 3px
+      rgba(0, 255, 65, 0.025) 3px
     );
     pointer-events: none;
+    z-index: 0;
+  }
+
+  .scanline-bg > * {
+    position: relative;
     z-index: 1;
   }
 
   .retro-gradient {
-    background: linear-gradient(135deg, #0a1510 0%, #0d0d0d 50%, #0a0e1a 100%);
+    background: linear-gradient(135deg, #070f09 0%, #0a0a0a 50%, #080b10 100%);
   }
 
   .control-panel-bg {
-    background: linear-gradient(180deg, #0f1f18 0%, #0a150f 100%);
-    border: 1px solid rgba(0, 255, 65, 0.2);
+    background: linear-gradient(180deg, #0c1a11 0%, #080e0a 100%);
+    border: 1px solid rgba(0, 255, 65, 0.15);
   }
+
+  .animate-section-in {
+    animation: sectionIn 0.15s ease-out;
+  }
+}
+
+@keyframes sectionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom range slider */
+input[type="range"].custom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  height: 18px;
+  padding: 0;
+}
+
+input[type="range"].custom-slider::-webkit-slider-runnable-track {
+  background: rgba(0, 255, 65, 0.12);
+  height: 3px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 255, 65, 0.18);
+}
+
+input[type="range"].custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #00ff41;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  margin-top: -5px;
+  box-shadow: 0 0 6px rgba(0, 255, 65, 0.55);
+  transition: box-shadow 0.15s;
+}
+
+input[type="range"].custom-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+}
+
+input[type="range"].custom-slider::-moz-range-track {
+  background: rgba(0, 255, 65, 0.12);
+  height: 3px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 255, 65, 0.18);
+}
+
+input[type="range"].custom-slider::-moz-range-thumb {
+  background: #00ff41;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 0 6px rgba(0, 255, 65, 0.55);
+}
+
+/* Custom select */
+select.custom-select {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #00ff41;
+  border: 1px solid rgba(0, 255, 65, 0.25);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300ff41' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+select.custom-select:focus {
+  border-color: rgba(0, 255, 65, 0.6);
+  box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.1);
+}
+
+select.custom-select option,
+select.custom-select optgroup {
+  background-color: #0a1510;
+  color: #00ff41;
+}
+
+/* Custom scrollbar for control panel */
+.control-panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 65, 0.25) rgba(0, 255, 65, 0.04);
+}
+
+.control-panel-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.control-panel-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 255, 65, 0.04);
+  border-radius: 2px;
+}
+
+.control-panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.25);
+  border-radius: 2px;
+}
+
+.control-panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 65, 0.45);
 }
