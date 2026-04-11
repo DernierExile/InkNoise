@@ -1,16 +1,9 @@
 import { useState, useCallback } from 'react';
-import { Upload, Zap, Layers, Palette, Download } from 'lucide-react';
+import { Upload, Hexagon } from 'lucide-react';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
 }
-
-const features = [
-  { icon: Zap, label: '25+ Algorithms', desc: 'Floyd-Steinberg, Bayer, Halftone & more' },
-  { icon: Layers, label: 'Real-time Preview', desc: 'Instant comparison slider' },
-  { icon: Palette, label: 'Custom Palettes', desc: 'Mono, indexed & full color modes' },
-  { icon: Download, label: 'Multiple Formats', desc: 'Export PNG, JPG or WebP' },
-];
 
 export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -31,16 +24,8 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
     if (file) processFile(file);
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
+  const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(true); };
+  const handleDragLeave = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(false); };
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
@@ -49,57 +34,60 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
   };
 
   return (
-    <div className="w-full space-y-6">
-      <div className="text-center">
-        <p className="text-[#00ffff]/60 text-sm">Transform any image into stunning dithered artwork</p>
+    <div className="w-full space-y-8">
+      <div className="text-center space-y-3">
+        <div className="flex items-center justify-center gap-2.5">
+          <div className="w-8 h-8 rounded-md bg-[#00ff41]/10 border border-[#00ff41]/25 flex items-center justify-center">
+            <Hexagon className="w-4 h-4 text-[#00ff41]" />
+          </div>
+          <span className="text-lg font-bold text-white/90 tracking-wide">InkNoise</span>
+        </div>
+        <p className="text-[11px] text-white/25 font-mono-ui tracking-wider">PROFESSIONAL IMAGE DITHERING</p>
       </div>
 
       <label
-        className={`upload-zone flex flex-col items-center justify-center w-full h-56 rounded-xl cursor-pointer transition-all duration-300 border-2 border-dashed ${
+        className={`flex flex-col items-center justify-center w-full h-48 rounded-lg cursor-pointer transition-all duration-200 border ${
           isDragging
-            ? 'border-[#00ff41] bg-[#00ff41]/10 scale-[1.01] glow-green'
-            : 'border-[#00ff41]/35 bg-[#0f1f18]/40 hover:border-[#00ff41]/70 hover:bg-[#00ff41]/5 hover:glow-green'
+            ? 'border-[#00ff41]/40 bg-[#00ff41]/[0.04]'
+            : 'border-white/[0.06] bg-white/[0.01] hover:border-[#00ff41]/20 hover:bg-[#00ff41]/[0.02]'
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="flex flex-col items-center gap-3 pointer-events-none px-6 text-center">
-          <div className={`p-4 rounded-full border-2 transition-all duration-300 ${
+        <div className="flex flex-col items-center gap-3 pointer-events-none">
+          <div className={`p-3 rounded-md border transition-all duration-200 ${
             isDragging
-              ? 'border-[#00ff41] bg-[#00ff41]/20'
-              : 'border-[#00ff41]/25 bg-[#00ff41]/5'
+              ? 'border-[#00ff41]/30 bg-[#00ff41]/10'
+              : 'border-white/[0.06] bg-white/[0.02]'
           }`}>
-            <Upload className={`w-7 h-7 transition-colors duration-300 ${
-              isDragging ? 'text-[#00ff41]' : 'text-[#00ff41]/65'
+            <Upload className={`w-5 h-5 transition-colors duration-200 ${
+              isDragging ? 'text-[#00ff41]' : 'text-white/20'
             }`} />
           </div>
-          <div>
-            <p className="text-[#00ffff] font-semibold text-sm">
+          <div className="text-center">
+            <p className={`text-xs transition-colors ${isDragging ? 'text-[#00ff41]/80' : 'text-white/40'}`}>
               {isDragging ? 'Release to process' : 'Drop image here'}
             </p>
-            <p className="text-[#00ff41]/50 text-xs mt-1">
-              or <span className="text-[#00ff41]/75 underline underline-offset-2">browse files</span>
+            <p className="text-[10px] text-white/20 mt-1">
+              or <span className="text-white/30 underline underline-offset-2">browse files</span>
             </p>
-            <p className="text-[#00ff41]/30 text-xs mt-2">PNG · JPG · GIF · WebP · up to 10MB</p>
           </div>
+          <p className="text-[9px] font-mono-ui text-white/12 tracking-wider">PNG / JPG / GIF / WEBP</p>
         </div>
         <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
       </label>
 
-      <div className="grid grid-cols-2 gap-2.5">
-        {features.map(({ icon: Icon, label, desc }) => (
-          <div
-            key={label}
-            className="flex items-start gap-2.5 p-3 rounded-lg bg-[#0f1f18]/60 border border-[#00ff41]/10 hover:border-[#00ff41]/25 transition-colors"
-          >
-            <div className="p-1.5 rounded bg-[#00ff41]/10 flex-shrink-0 mt-0.5">
-              <Icon className="w-3.5 h-3.5 text-[#00ff41]" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#00ffff]">{label}</p>
-              <p className="text-xs text-[#00ff41]/45 mt-0.5 leading-relaxed">{desc}</p>
-            </div>
+      <div className="grid grid-cols-2 gap-2">
+        {[
+          { label: '25+ Algorithms', desc: 'Floyd-Steinberg, Bayer, Halftone' },
+          { label: 'Real-time Preview', desc: 'Instant comparison slider' },
+          { label: 'Color Modes', desc: 'Mono, duo-tone, tri-tone, tonal' },
+          { label: 'Post-Processing', desc: 'CRT, scanlines, chromatic, bloom' },
+        ].map(({ label, desc }) => (
+          <div key={label} className="px-3 py-2.5 rounded-md bg-white/[0.015] border border-white/[0.03]">
+            <p className="text-[10px] font-medium text-white/45">{label}</p>
+            <p className="text-[9px] text-white/15 mt-0.5">{desc}</p>
           </div>
         ))}
       </div>

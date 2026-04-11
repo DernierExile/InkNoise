@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AlertCircle, Sparkles } from 'lucide-react';
+import { AlertCircle, Sparkles, Hexagon } from 'lucide-react';
 import ImageUpload from './components/ImageUpload';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
@@ -70,7 +70,7 @@ function App() {
   const handleImageLoad = useCallback((img: HTMLImageElement) => {
     const resizeInfo = getResizeInfo(img.width, img.height);
     if (resizeInfo.isResized) {
-      setResizeWarning(`Image resized from ${img.width}x${img.height} to ${resizeInfo.newWidth}x${resizeInfo.newHeight} for performance`);
+      setResizeWarning(`Resized from ${img.width}x${img.height} to ${resizeInfo.newWidth}x${resizeInfo.newHeight}`);
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
@@ -149,60 +149,65 @@ function App() {
     }, mimeType, quality);
   };
 
+  const goHome = () => {
+    setOriginalImage(null);
+    setResizeWarning(null);
+  };
+
   return (
-    <div className="min-h-screen retro-gradient text-white scanline-bg">
-      <header className="border-b border-[#00ff41]/20 bg-black/60 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => { setOriginalImage(null); setResizeWarning(null); }}
-              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-            >
-              <img src="/capture_d'ecran_2026-02-03_201802.png" alt="InkNoise Logo" className="w-10 h-10 rounded-lg object-cover border border-[#00ff41]/60" />
-              <div className="text-left">
-                <h1 className="text-xl font-bold text-[#00ff41] text-glow-green tracking-wider leading-none">InkNoise</h1>
-                <p className="text-xs text-[#00ffff]/50 mt-0.5 leading-none">Professional image dithering</p>
+    <div className="min-h-screen bg-[#080a0c] text-white">
+      <header className="border-b border-white/[0.04] bg-[#0a0c0e]/90 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-[1400px] mx-auto px-4 h-12 flex items-center justify-between">
+          <button onClick={goHome} className="flex items-center gap-2.5 group">
+            <div className="w-7 h-7 rounded-md bg-[#00ff41]/10 border border-[#00ff41]/25 flex items-center justify-center group-hover:bg-[#00ff41]/15 group-hover:border-[#00ff41]/40 transition-all">
+              <Hexagon className="w-3.5 h-3.5 text-[#00ff41]" />
+            </div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-sm font-bold text-white/90 tracking-wide">InkNoise</span>
+              <span className="text-[10px] font-mono-ui text-white/25 hidden sm:inline">v2.0</span>
+            </div>
+          </button>
+
+          <div className="flex items-center gap-2">
+            {isProcessing && (
+              <div className="flex items-center gap-1.5 px-2 py-1">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#00ff41] animate-pulse" />
+                <span className="text-[10px] font-mono-ui text-[#00ff41]/70">PROCESSING</span>
               </div>
-            </button>
+            )}
             <button
               onClick={() => setShowProModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[#00ffff]/55 border border-[#00ffff]/15 rounded-lg hover:border-[#00ffff]/40 hover:text-[#00ffff]/85 transition-all text-xs font-semibold"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-white/30 border border-white/[0.06] rounded-md hover:border-white/[0.12] hover:text-white/50 transition-all text-[10px] font-mono-ui tracking-wider"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              Pro
+              <Sparkles className="w-3 h-3" />
+              PRO
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-[1400px] mx-auto px-4">
         {!originalImage ? (
-          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] py-8">
-            <div className="w-full max-w-lg">
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-3rem)] py-12">
+            <div className="w-full max-w-md">
               <ImageUpload onImageLoad={handleImageLoad} />
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="py-3">
             {resizeWarning && (
-              <div className="bg-yellow-900/20 border border-yellow-500/40 text-yellow-300 px-4 py-2.5 rounded-lg flex items-start gap-3">
-                <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <p className="text-xs">{resizeWarning}</p>
+              <div className="mb-3 flex items-center gap-2 px-3 py-2 rounded-md bg-amber-500/[0.06] border border-amber-500/10">
+                <AlertCircle className="w-3 h-3 text-amber-400/60 flex-shrink-0" />
+                <p className="text-[10px] font-mono-ui text-amber-300/60">{resizeWarning}</p>
               </div>
             )}
-            {isProcessing && (
-              <div className="bg-[#00ffff]/5 border border-[#00ffff]/30 text-[#00ffff]/80 px-4 py-2.5 rounded-lg flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#00ffff] animate-pulse" />
-                <p className="text-xs font-medium">Processing...</p>
-              </div>
-            )}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-              <div className="lg:col-span-1 space-y-3">
+            <div className="flex gap-3">
+              <div className="w-[280px] flex-shrink-0 space-y-2">
                 <button
-                  onClick={() => { setOriginalImage(null); setResizeWarning(null); }}
-                  className="w-full px-4 py-2 bg-black/50 text-[#00ff41]/75 border border-[#00ff41]/30 rounded-lg hover:border-[#00ff41]/70 hover:text-[#00ff41] transition-all text-sm font-semibold"
+                  onClick={goHome}
+                  className="w-full px-3 py-2 panel-surface rounded-md text-[10px] font-mono-ui text-white/40 hover:text-white/60 tracking-wider transition-all"
                 >
-                  Load New Image
+                  LOAD NEW IMAGE
                 </button>
                 <ControlPanel
                   algorithm={algorithm}
@@ -225,20 +230,13 @@ function App() {
                   onPostProcessingChange={setPostProcessing}
                 />
               </div>
-              <div className="lg:col-span-2">
+              <div className="flex-1 min-w-0">
                 <ImagePreview originalImage={originalImage} processedImageData={processedImageData} onExport={handleExport} />
               </div>
             </div>
           </div>
         )}
       </main>
-
-      <footer className="border-t border-[#00ff41]/10 bg-black/40 backdrop-blur-sm mt-12">
-        <div className="max-w-7xl mx-auto px-4 py-5 text-center text-xs text-[#00ffff]/40">
-          <p className="font-semibold tracking-wider">Made by BEZIER</p>
-          <img src="https://res.cloudinary.com/djgufyqs5/image/upload/v1775561208/BEZIER200x200_pybhdw.png" alt="BEZIER" className="w-16 h-16 mx-auto mt-2 opacity-60" />
-        </div>
-      </footer>
 
       <ProModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
     </div>
