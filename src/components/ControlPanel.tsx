@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ChevronDown, Sliders, SlidersHorizontal, Palette, Settings, RotateCcw, Layers } from 'lucide-react';
-import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod } from '../types';
+import { ChevronDown, Sliders, SlidersHorizontal, Palette, Settings, RotateCcw, Layers, Wand2, Monitor, Sparkles } from 'lucide-react';
+import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ModulationPreset } from '../types';
 import { PREDEFINED_PALETTES } from '../utils/palettes';
 
 interface ControlPanelProps {
@@ -16,6 +16,12 @@ interface ControlPanelProps {
   onAdjustmentsChange: (adjustments: ImageAdjustments) => void;
   resamplingMethod: ResamplingMethod;
   onResamplingMethodChange: (method: ResamplingMethod) => void;
+  colorModeSettings: ColorModeSettings;
+  onColorModeSettingsChange: (settings: ColorModeSettings) => void;
+  paletteModifiers: PaletteModifiers;
+  onPaletteModifiersChange: (mods: PaletteModifiers) => void;
+  postProcessing: PostProcessing;
+  onPostProcessingChange: (pp: PostProcessing) => void;
 }
 
 const algorithms: { value: DitheringAlgorithm; label: string; category: string }[] = [
@@ -50,6 +56,26 @@ const resamplingMethods: { value: ResamplingMethod; label: string }[] = [
   { value: 'nearest-neighbor', label: 'Nearest Neighbor' },
   { value: 'bilinear', label: 'Bilinear' },
   { value: 'bicubic', label: 'Bicubic' },
+];
+
+const colorModes: { value: ColorMode; label: string }[] = [
+  { value: 'mono', label: 'Mono' },
+  { value: 'indexed', label: 'Indexed' },
+  { value: 'rgb', label: 'RGB' },
+  { value: 'duo-tone', label: 'Duo-Tone' },
+  { value: 'tri-tone', label: 'Tri-Tone' },
+  { value: 'tonal', label: 'Tonal' },
+  { value: 'rgb-split', label: 'RGB Split' },
+  { value: 'modulation', label: 'Modulate' },
+];
+
+const modulationPresets: { value: ModulationPreset; label: string }[] = [
+  { value: 'none', label: 'Custom' },
+  { value: 'crt', label: 'CRT' },
+  { value: 'glitch', label: 'Glitch' },
+  { value: 'chromatic', label: 'Chromatic' },
+  { value: 'vhs', label: 'VHS' },
+  { value: 'digital', label: 'Digital' },
 ];
 
 interface SectionProps {
@@ -116,6 +142,23 @@ function SliderControl({ label, value, min, max, step = 1, onChange, displayValu
   );
 }
 
+function ColorInput({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex items-center gap-2">
+      <label className="text-xs text-[#00ffff]/55 flex-1">{label}</label>
+      <div className="relative">
+        <input
+          type="color"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-8 h-8 rounded border border-[#00ff41]/25 bg-transparent cursor-pointer appearance-none [&::-webkit-color-swatch-wrapper]:p-0.5 [&::-webkit-color-swatch]:rounded"
+        />
+      </div>
+      <span className="text-[10px] font-mono text-[#00ff41]/60 w-14">{value}</span>
+    </div>
+  );
+}
+
 export default function ControlPanel({
   algorithm,
   onAlgorithmChange,
@@ -129,7 +172,26 @@ export default function ControlPanel({
   onAdjustmentsChange,
   resamplingMethod,
   onResamplingMethodChange,
+  colorModeSettings,
+  onColorModeSettingsChange,
+  paletteModifiers,
+  onPaletteModifiersChange,
+  postProcessing,
+  onPostProcessingChange,
 }: ControlPanelProps) {
+
+  const applyModulationPreset = (preset: ModulationPreset) => {
+    const presets: Record<ModulationPreset, typeof colorModeSettings.modulation> = {
+      none: { preset: 'none', scanlineIntensity: 0, scanlineGap: 3, chromaticOffset: 0, rgbShift: 0, noiseAmount: 0, pixelation: 1, interference: 0 },
+      crt: { preset: 'crt', scanlineIntensity: 60, scanlineGap: 3, chromaticOffset: 1, rgbShift: 0, noiseAmount: 5, pixelation: 1, interference: 0 },
+      glitch: { preset: 'glitch', scanlineIntensity: 20, scanlineGap: 8, chromaticOffset: 4, rgbShift: 3, noiseAmount: 15, pixelation: 1, interference: 40 },
+      chromatic: { preset: 'chromatic', scanlineIntensity: 0, scanlineGap: 3, chromaticOffset: 5, rgbShift: 2, noiseAmount: 0, pixelation: 1, interference: 0 },
+      vhs: { preset: 'vhs', scanlineIntensity: 30, scanlineGap: 4, chromaticOffset: 2, rgbShift: 1, noiseAmount: 25, pixelation: 1, interference: 20 },
+      digital: { preset: 'digital', scanlineIntensity: 10, scanlineGap: 2, chromaticOffset: 0, rgbShift: 0, noiseAmount: 8, pixelation: 3, interference: 0 },
+    };
+    onColorModeSettingsChange({ ...colorModeSettings, modulation: presets[preset] });
+  };
+
   return (
     <div className="control-panel-bg rounded-xl p-4 max-h-[calc(100vh-13rem)] overflow-y-auto control-panel-scroll">
       <div className="space-y-0">
@@ -160,21 +222,15 @@ export default function ControlPanel({
 
           <div>
             <label className="block text-xs text-[#00ffff]/55 mb-1.5">Color Mode</label>
-            <div className="flex gap-1.5">
-              {(['mono', 'indexed', 'rgb'] as ColorMode[]).map((mode) => (
-                <button
-                  key={mode}
-                  onClick={() => onColorModeChange(mode)}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
-                    colorMode === mode
-                      ? 'bg-[#00ffff]/12 text-[#00ffff] border-[#00ffff]/55 glow-cyan'
-                      : 'bg-black/20 text-[#00ff41]/45 border-[#00ff41]/12 hover:border-[#00ff41]/35 hover:text-[#00ff41]/75'
-                  }`}
-                >
-                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                </button>
+            <select
+              value={colorMode}
+              onChange={(e) => onColorModeChange(e.target.value as ColorMode)}
+              className="custom-select w-full"
+            >
+              {colorModes.map((m) => (
+                <option key={m.value} value={m.value}>{m.label}</option>
               ))}
-            </div>
+            </select>
           </div>
 
           {colorMode === 'indexed' && (
@@ -187,6 +243,248 @@ export default function ControlPanel({
             />
           )}
         </Section>
+
+        {colorMode === 'duo-tone' && (
+          <Section title="Duo-Tone" icon={Wand2} defaultOpen={true}>
+            <ColorInput
+              label="Shadow"
+              value={colorModeSettings.duoTone.shadowColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                duoTone: { ...colorModeSettings.duoTone, shadowColor: v }
+              })}
+            />
+            <ColorInput
+              label="Highlight"
+              value={colorModeSettings.duoTone.highlightColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                duoTone: { ...colorModeSettings.duoTone, highlightColor: v }
+              })}
+            />
+          </Section>
+        )}
+
+        {colorMode === 'tri-tone' && (
+          <Section title="Tri-Tone" icon={Wand2} defaultOpen={true}>
+            <ColorInput
+              label="Shadow"
+              value={colorModeSettings.triTone.shadowColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                triTone: { ...colorModeSettings.triTone, shadowColor: v }
+              })}
+            />
+            <ColorInput
+              label="Midtone"
+              value={colorModeSettings.triTone.midtoneColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                triTone: { ...colorModeSettings.triTone, midtoneColor: v }
+              })}
+            />
+            <ColorInput
+              label="Highlight"
+              value={colorModeSettings.triTone.highlightColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                triTone: { ...colorModeSettings.triTone, highlightColor: v }
+              })}
+            />
+          </Section>
+        )}
+
+        {colorMode === 'tonal' && (
+          <Section title="Tonal Mapping" icon={Wand2} defaultOpen={true}>
+            <ColorInput
+              label="Shadow"
+              value={colorModeSettings.tonalMapping.shadowColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                tonalMapping: { ...colorModeSettings.tonalMapping, shadowColor: v }
+              })}
+            />
+            <ColorInput
+              label="Midtone"
+              value={colorModeSettings.tonalMapping.midtoneColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                tonalMapping: { ...colorModeSettings.tonalMapping, midtoneColor: v }
+              })}
+            />
+            <ColorInput
+              label="Highlight"
+              value={colorModeSettings.tonalMapping.highlightColor}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                tonalMapping: { ...colorModeSettings.tonalMapping, highlightColor: v }
+              })}
+            />
+            <SliderControl
+              label="Preserve Original"
+              value={colorModeSettings.tonalMapping.preserveOriginal}
+              min={0}
+              max={100}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                tonalMapping: { ...colorModeSettings.tonalMapping, preserveOriginal: v }
+              })}
+              displayValue={`${colorModeSettings.tonalMapping.preserveOriginal}%`}
+            />
+          </Section>
+        )}
+
+        {colorMode === 'rgb-split' && (
+          <Section title="RGB Split" icon={Wand2} defaultOpen={true}>
+            <SliderControl
+              label="Red Offset X"
+              value={colorModeSettings.rgbSplit.redOffsetX}
+              min={-20}
+              max={20}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                rgbSplit: { ...colorModeSettings.rgbSplit, redOffsetX: v }
+              })}
+            />
+            <SliderControl
+              label="Red Offset Y"
+              value={colorModeSettings.rgbSplit.redOffsetY}
+              min={-20}
+              max={20}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                rgbSplit: { ...colorModeSettings.rgbSplit, redOffsetY: v }
+              })}
+            />
+            <SliderControl
+              label="Blue Offset X"
+              value={colorModeSettings.rgbSplit.blueOffsetX}
+              min={-20}
+              max={20}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                rgbSplit: { ...colorModeSettings.rgbSplit, blueOffsetX: v }
+              })}
+            />
+            <SliderControl
+              label="Blue Offset Y"
+              value={colorModeSettings.rgbSplit.blueOffsetY}
+              min={-20}
+              max={20}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                rgbSplit: { ...colorModeSettings.rgbSplit, blueOffsetY: v }
+              })}
+            />
+            <SliderControl
+              label="Intensity"
+              value={colorModeSettings.rgbSplit.intensity}
+              min={0}
+              max={100}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                rgbSplit: { ...colorModeSettings.rgbSplit, intensity: v }
+              })}
+              displayValue={`${colorModeSettings.rgbSplit.intensity}%`}
+            />
+          </Section>
+        )}
+
+        {colorMode === 'modulation' && (
+          <Section title="Modulation" icon={Monitor} defaultOpen={true}>
+            <div>
+              <label className="block text-xs text-[#00ffff]/55 mb-1.5">Preset</label>
+              <div className="grid grid-cols-3 gap-1">
+                {modulationPresets.map((p) => (
+                  <button
+                    key={p.value}
+                    onClick={() => applyModulationPreset(p.value)}
+                    className={`py-1.5 rounded-lg text-[10px] font-semibold transition-all border ${
+                      colorModeSettings.modulation.preset === p.value
+                        ? 'bg-[#00ffff]/12 text-[#00ffff] border-[#00ffff]/55'
+                        : 'bg-black/20 text-[#00ff41]/45 border-[#00ff41]/12 hover:border-[#00ff41]/35 hover:text-[#00ff41]/75'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <SliderControl
+              label="Scanlines"
+              value={colorModeSettings.modulation.scanlineIntensity}
+              min={0}
+              max={100}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                modulation: { ...colorModeSettings.modulation, scanlineIntensity: v, preset: 'none' }
+              })}
+              displayValue={`${colorModeSettings.modulation.scanlineIntensity}%`}
+            />
+            <SliderControl
+              label="Scanline Gap"
+              value={colorModeSettings.modulation.scanlineGap}
+              min={2}
+              max={10}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                modulation: { ...colorModeSettings.modulation, scanlineGap: v, preset: 'none' }
+              })}
+            />
+            <SliderControl
+              label="Chromatic Offset"
+              value={colorModeSettings.modulation.chromaticOffset}
+              min={0}
+              max={15}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                modulation: { ...colorModeSettings.modulation, chromaticOffset: v, preset: 'none' }
+              })}
+            />
+            <SliderControl
+              label="RGB Shift"
+              value={colorModeSettings.modulation.rgbShift}
+              min={0}
+              max={10}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                modulation: { ...colorModeSettings.modulation, rgbShift: v, preset: 'none' }
+              })}
+            />
+            <SliderControl
+              label="Noise"
+              value={colorModeSettings.modulation.noiseAmount}
+              min={0}
+              max={100}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                modulation: { ...colorModeSettings.modulation, noiseAmount: v, preset: 'none' }
+              })}
+              displayValue={`${colorModeSettings.modulation.noiseAmount}%`}
+            />
+            <SliderControl
+              label="Pixelation"
+              value={colorModeSettings.modulation.pixelation}
+              min={1}
+              max={16}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                modulation: { ...colorModeSettings.modulation, pixelation: v, preset: 'none' }
+              })}
+            />
+            <SliderControl
+              label="Interference"
+              value={colorModeSettings.modulation.interference}
+              min={0}
+              max={100}
+              onChange={(v) => onColorModeSettingsChange({
+                ...colorModeSettings,
+                modulation: { ...colorModeSettings.modulation, interference: v, preset: 'none' }
+              })}
+              displayValue={`${colorModeSettings.modulation.interference}%`}
+            />
+          </Section>
+        )}
 
         <Section title="Palette" icon={Palette} defaultOpen={true}>
           <select
@@ -208,6 +506,73 @@ export default function ControlPanel({
               />
             ))}
           </div>
+          <SliderControl
+            label="Hue Shift"
+            value={paletteModifiers.hueShift}
+            min={-180}
+            max={180}
+            onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, hueShift: v })}
+            displayValue={`${paletteModifiers.hueShift > 0 ? '+' : ''}${paletteModifiers.hueShift}`}
+          />
+          <SliderControl
+            label="Saturation"
+            value={paletteModifiers.saturationBoost}
+            min={-100}
+            max={100}
+            onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, saturationBoost: v })}
+            displayValue={`${paletteModifiers.saturationBoost > 0 ? '+' : ''}${paletteModifiers.saturationBoost}`}
+          />
+          <SliderControl
+            label="Brightness"
+            value={paletteModifiers.brightnessShift}
+            min={-100}
+            max={100}
+            onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, brightnessShift: v })}
+            displayValue={`${paletteModifiers.brightnessShift > 0 ? '+' : ''}${paletteModifiers.brightnessShift}`}
+          />
+          <SliderControl
+            label="Intensity"
+            value={paletteModifiers.intensity}
+            min={0}
+            max={200}
+            onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, intensity: v })}
+            displayValue={`${paletteModifiers.intensity}%`}
+          />
+        </Section>
+
+        <Section title="Post-Processing" icon={Sparkles} defaultOpen={false}>
+          <SliderControl
+            label="Scanlines"
+            value={postProcessing.scanlines}
+            min={0}
+            max={100}
+            onChange={(v) => onPostProcessingChange({ ...postProcessing, scanlines: v })}
+            displayValue={`${postProcessing.scanlines}%`}
+          />
+          <SliderControl
+            label="Chromatic Aberration"
+            value={postProcessing.chromaticAberration}
+            min={0}
+            max={100}
+            onChange={(v) => onPostProcessingChange({ ...postProcessing, chromaticAberration: v })}
+            displayValue={`${postProcessing.chromaticAberration}%`}
+          />
+          <SliderControl
+            label="Vignette"
+            value={postProcessing.vignette}
+            min={0}
+            max={100}
+            onChange={(v) => onPostProcessingChange({ ...postProcessing, vignette: v })}
+            displayValue={`${postProcessing.vignette}%`}
+          />
+          <SliderControl
+            label="Bloom"
+            value={postProcessing.bloom}
+            min={0}
+            max={100}
+            onChange={(v) => onPostProcessingChange({ ...postProcessing, bloom: v })}
+            displayValue={`${postProcessing.bloom}%`}
+          />
         </Section>
 
         <Section title="Input / Output" icon={Settings} defaultOpen={false}>

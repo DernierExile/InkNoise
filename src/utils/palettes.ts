@@ -1,4 +1,5 @@
 import { ColorPalette } from '../types';
+import { rgbToOklab, oklabDistance } from './oklab';
 
 export const PREDEFINED_PALETTES: ColorPalette[] = [
   {
@@ -174,23 +175,19 @@ export function rgbToHex(r: number, g: number, b: number): string {
 }
 
 export function findClosestColor(r: number, g: number, b: number, palette: string[]): [number, number, number] {
-  let minDistance = Infinity;
+  const target = rgbToOklab(r, g, b);
+  let minDist = Infinity;
   let closest: [number, number, number] = [0, 0, 0];
 
   for (const color of palette) {
     const [pr, pg, pb] = hexToRgb(color);
-    const distance = Math.sqrt(
-      Math.pow(r - pr, 2) +
-      Math.pow(g - pg, 2) +
-      Math.pow(b - pb, 2)
-    );
-
-    if (distance < minDistance) {
-      minDistance = distance;
+    const lab = rgbToOklab(pr, pg, pb);
+    const dist = oklabDistance(target, lab);
+    if (dist < minDist) {
+      minDist = dist;
       closest = [pr, pg, pb];
     }
   }
-
   return closest;
 }
 
