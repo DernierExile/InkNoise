@@ -177,7 +177,7 @@ function App() {
             )}
             <button
               onClick={() => setShowProModal(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-white/30 border border-white/[0.06] rounded-md hover:border-white/[0.12] hover:text-white/50 transition-all text-[10px] font-mono-ui tracking-wider"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#ff006e]/10 text-[#ff006e] border border-[#ff006e]/25 rounded-md hover:bg-[#ff006e]/15 hover:border-[#ff006e]/40 transition-all text-[10px] font-mono-ui tracking-wider glow-pink"
             >
               <Sparkles className="w-3 h-3" />
               PRO
@@ -229,6 +229,9 @@ function App() {
                   postProcessing={postProcessing}
                   onPostProcessingChange={setPostProcessing}
                 />
+                <div className="flex justify-center py-3">
+                  <img src="/BEZIER200x200.png" alt="Bezier" className="h-7 opacity-15 hover:opacity-30 transition-opacity" />
+                </div>
               </div>
               <div className="flex-1 min-w-0">
                 <ImagePreview originalImage={originalImage} processedImageData={processedImageData} onExport={handleExport} />

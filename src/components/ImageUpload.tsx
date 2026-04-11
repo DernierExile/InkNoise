@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Upload, Hexagon } from 'lucide-react';
+import { Upload } from 'lucide-react';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
@@ -34,15 +34,21 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
   };
 
   return (
-    <div className="w-full space-y-8">
-      <div className="text-center space-y-3">
-        <div className="flex items-center justify-center gap-2.5">
-          <div className="w-8 h-8 rounded-md bg-[#00ff41]/10 border border-[#00ff41]/25 flex items-center justify-center">
-            <Hexagon className="w-4 h-4 text-[#00ff41]" />
+    <div className="w-full space-y-6">
+      <div className="text-center space-y-4">
+        <div className="flex justify-center">
+          <div className="w-24 h-24 rounded-2xl overflow-hidden border border-[#00ff41]/15 shadow-lg shadow-[#00ff41]/5">
+            <img
+              src="/spashInkNoise.png"
+              alt="InkNoise"
+              className="w-full h-full object-cover"
+            />
           </div>
-          <span className="text-lg font-bold text-white/90 tracking-wide">InkNoise</span>
         </div>
-        <p className="text-[11px] text-white/25 font-mono-ui tracking-wider">PROFESSIONAL IMAGE DITHERING</p>
+        <div>
+          <h1 className="text-xl font-bold text-white/90 tracking-wide">InkNoise</h1>
+          <p className="text-[11px] text-white/25 font-mono-ui tracking-wider mt-1">PROFESSIONAL IMAGE DITHERING</p>
+        </div>
       </div>
 
       <label
@@ -90,6 +96,14 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
             <p className="text-[9px] text-white/15 mt-0.5">{desc}</p>
           </div>
         ))}
+      </div>
+
+      <div className="flex justify-center pt-2">
+        <img
+          src="/BEZIER200x200.png"
+          alt="Bezier"
+          className="h-8 opacity-20 hover:opacity-35 transition-opacity"
+        />
       </div>
     </div>
   );

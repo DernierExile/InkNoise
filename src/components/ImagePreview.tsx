@@ -9,6 +9,24 @@ interface ImagePreviewProps {
 
 type ViewMode = 'split' | 'compare';
 
+function drawToCanvas(canvas: HTMLCanvasElement | null, source: HTMLImageElement | ImageData | null) {
+  if (!canvas || !source) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  if (source instanceof HTMLImageElement) {
+    canvas.width = source.width;
+    canvas.height = source.height;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(source, 0, 0);
+  } else {
+    canvas.width = source.width;
+    canvas.height = source.height;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.putImageData(source, 0, 0);
+  }
+}
+
 export default function ImagePreview({ originalImage, processedImageData, onExport }: ImagePreviewProps) {
   const splitOrigRef = useRef<HTMLCanvasElement>(null);
   const splitProcRef = useRef<HTMLCanvasElement>(null);
@@ -23,33 +41,17 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
   const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
 
-  const drawOriginal = useCallback((canvas: HTMLCanvasElement | null) => {
-    if (!originalImage || !canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    canvas.width = originalImage.width;
-    canvas.height = originalImage.height;
-    ctx.drawImage(originalImage, 0, 0);
-  }, [originalImage]);
-
-  const drawProcessed = useCallback((canvas: HTMLCanvasElement | null) => {
-    if (!processedImageData || !canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    canvas.width = processedImageData.width;
-    canvas.height = processedImageData.height;
-    ctx.putImageData(processedImageData, 0, 0);
-  }, [processedImageData]);
-
   useEffect(() => {
-    if (viewMode === 'split') {
-      drawOriginal(splitOrigRef.current);
-      drawProcessed(splitProcRef.current);
-    } else {
-      drawOriginal(cmpOrigRef.current);
-      drawProcessed(cmpProcRef.current);
-    }
-  }, [originalImage, processedImageData, viewMode, drawOriginal, drawProcessed]);
+    requestAnimationFrame(() => {
+      if (viewMode === 'split') {
+        drawToCanvas(splitOrigRef.current, originalImage);
+        drawToCanvas(splitProcRef.current, processedImageData);
+      } else {
+        drawToCanvas(cmpOrigRef.current, originalImage);
+        drawToCanvas(cmpProcRef.current, processedImageData);
+      }
+    });
+  }, [originalImage, processedImageData, viewMode]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!isDragging || !compareContainerRef.current) return;
