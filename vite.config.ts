@@ -7,4 +7,14 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  publicDir: 'public',
+  build: {
+    copyPublicDir: true,
+    assetsInlineLimit: 0,
+  },
+  server: {
+    fs: {
+      strict: false,
+    },
+  },
 });

@@ -4,11 +4,16 @@ import ImageUpload from './components/ImageUpload';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
 import ProModal from './components/ProModal';
+import EmailCaptureModal from './components/EmailCaptureModal';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo } from './utils/imageResize';
 import { loadWatermarkImage, drawWatermarkOnCanvas } from './utils/watermark';
 import DitheringWorker from './workers/dithering.worker?worker';
+
+function getRandomPaletteIndex(): number {
+  return Math.floor(Math.random() * PREDEFINED_PALETTES.length);
+}
 
 const DEFAULT_COLOR_MODE_SETTINGS: ColorModeSettings = {
   duoTone: { shadowColor: '#000000', highlightColor: '#00ff41' },
@@ -33,15 +38,19 @@ const DEFAULT_POST_PROCESSING: PostProcessing = {
   bloom: 0,
 };
 
+const EMAIL_MODAL_KEY = 'inknoise_email_modal_dismissed';
+const EMAIL_MODAL_DELAY = 2 * 60 * 1000;
+
 function App() {
   const [showProModal, setShowProModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
   const [processedImageData, setProcessedImageData] = useState<ImageData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resizeWarning, setResizeWarning] = useState<string | null>(null);
   const [algorithm, setAlgorithm] = useState<DitheringAlgorithm>('floyd-steinberg');
-  const [colorMode, setColorMode] = useState<ColorMode>('mono');
-  const [selectedPalette, setSelectedPalette] = useState(0);
+  const [colorMode, setColorMode] = useState<ColorMode>('rgb');
+  const [selectedPalette, setSelectedPalette] = useState(() => getRandomPaletteIndex());
   const [colorCount, setColorCount] = useState(8);
   const [resamplingMethod, setResamplingMethod] = useState<ResamplingMethod>('bilinear');
   const [colorModeSettings, setColorModeSettings] = useState<ColorModeSettings>(DEFAULT_COLOR_MODE_SETTINGS);
@@ -55,6 +64,7 @@ function App() {
   });
 
   const workerRef = useRef<Worker | null>(null);
+  const emailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     workerRef.current = new DitheringWorker();
@@ -66,6 +76,24 @@ function App() {
     };
     return () => { workerRef.current?.terminate(); };
   }, []);
+
+  useEffect(() => {
+    const dismissed = localStorage.getItem(EMAIL_MODAL_KEY);
+    if (dismissed) return;
+
+    emailTimerRef.current = setTimeout(() => {
+      setShowEmailModal(true);
+    }, EMAIL_MODAL_DELAY);
+
+    return () => {
+      if (emailTimerRef.current) clearTimeout(emailTimerRef.current);
+    };
+  }, []);
+
+  const handleEmailModalClose = () => {
+    setShowEmailModal(false);
+    localStorage.setItem(EMAIL_MODAL_KEY, 'true');
+  };
 
   const handleImageLoad = useCallback((img: HTMLImageElement) => {
     const resizeInfo = getResizeInfo(img.width, img.height);
@@ -177,7 +205,7 @@ function App() {
             )}
             <button
               onClick={() => setShowProModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#ff006e]/10 text-[#ff006e] border border-[#ff006e]/25 rounded-md hover:bg-[#ff006e]/15 hover:border-[#ff006e]/40 transition-all text-[10px] font-mono-ui tracking-wider glow-pink"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00ffff]/10 text-[#00ffff] border border-[#00ffff]/25 rounded-md hover:bg-[#00ffff]/15 hover:border-[#00ffff]/40 transition-all text-[10px] font-mono-ui tracking-wider glow-cyan"
             >
               <Sparkles className="w-3 h-3" />
               PRO
@@ -230,7 +258,7 @@ function App() {
                   onPostProcessingChange={setPostProcessing}
                 />
                 <div className="flex justify-center py-3">
-                  <img src="/BEZIER200x200.png" alt="Bezier" className="h-7 opacity-15 hover:opacity-30 transition-opacity" />
+                  <img src="/BEZIER200x200.png" alt="Bezier" className="h-12 opacity-20 hover:opacity-40 transition-opacity" />
                 </div>
               </div>
               <div className="flex-1 min-w-0">
@@ -242,6 +270,7 @@ function App() {
       </main>
 
       <ProModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
+      <EmailCaptureModal isOpen={showEmailModal} onClose={handleEmailModalClose} />
     </div>
   );
 }

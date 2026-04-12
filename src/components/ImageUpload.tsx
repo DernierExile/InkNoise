@@ -98,11 +98,11 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
         ))}
       </div>
 
-      <div className="flex justify-center pt-2">
+      <div className="flex justify-center pt-4">
         <img
           src="/BEZIER200x200.png"
           alt="Bezier"
-          className="h-8 opacity-20 hover:opacity-35 transition-opacity"
+          className="h-14 opacity-25 hover:opacity-45 transition-opacity"
         />
       </div>
     </div>
