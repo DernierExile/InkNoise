@@ -216,7 +216,7 @@ function App() {
 
       <main className="max-w-[1400px] mx-auto px-4">
         {!originalImage ? (
-          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-3rem)] py-12">
+          <div className="flex flex-col items-center min-h-[calc(100vh-3rem)] pt-16 pb-12">
             <div className="w-full max-w-md">
               <ImageUpload onImageLoad={handleImageLoad} />
             </div>
@@ -258,7 +258,7 @@ function App() {
                   onPostProcessingChange={setPostProcessing}
                 />
                 <div className="flex justify-center py-3">
-                  <img src="/BEZIER200x200.png" alt="Bezier" className="h-12 opacity-20 hover:opacity-40 transition-opacity" />
+                  <img src="/BEZIER200x200.png" alt="Bezier" className="w-[200px] opacity-20 hover:opacity-40 transition-opacity" />
                 </div>
               </div>
               <div className="flex-1 min-w-0">
