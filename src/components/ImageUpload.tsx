@@ -102,7 +102,7 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
         <img
           src="/BEZIER200x200.png"
           alt="Bezier"
-          className="w-[200px] opacity-25 hover:opacity-45 transition-opacity"
+          className="w-[120px] opacity-25 hover:opacity-45 transition-opacity"
         />
       </div>
     </div>

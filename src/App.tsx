@@ -258,7 +258,7 @@ function App() {
                   onPostProcessingChange={setPostProcessing}
                 />
                 <div className="flex justify-center py-3">
-                  <img src="/BEZIER200x200.png" alt="Bezier" className="w-[200px] opacity-20 hover:opacity-40 transition-opacity" />
+                  <img src="/BEZIER200x200.png" alt="Bezier" className="w-[120px] opacity-20 hover:opacity-40 transition-opacity" />
                 </div>
               </div>
               <div className="flex-1 min-w-0">
