@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { ChevronDown, RotateCcw } from 'lucide-react';
+import { ChevronDown, RotateCcw, Zap, RefreshCw } from 'lucide-react';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ModulationPreset } from '../types';
 import { PREDEFINED_PALETTES } from '../utils/palettes';
+import { CreativePresetConfig } from '../utils/smartDefaults';
 
 interface ControlPanelProps {
   algorithm: DitheringAlgorithm;
@@ -22,6 +23,11 @@ interface ControlPanelProps {
   onPaletteModifiersChange: (mods: PaletteModifiers) => void;
   postProcessing: PostProcessing;
   onPostProcessingChange: (pp: PostProcessing) => void;
+  isAutoTuned: boolean;
+  onReAnalyze: () => void;
+  creativePresets: CreativePresetConfig[];
+  activePreset: string | null;
+  onPresetApply: (preset: CreativePresetConfig) => void;
 }
 
 const algorithms: { value: DitheringAlgorithm; label: string; category: string }[] = [
@@ -78,7 +84,7 @@ const modulationPresets: { value: ModulationPreset; label: string }[] = [
   { value: 'digital', label: 'DIGITAL' },
 ];
 
-function Section({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+function Section({ title, children, defaultOpen = true, badge }: { title: string; children: React.ReactNode; defaultOpen?: boolean; badge?: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
     <div className="border-b border-white/[0.03]">
@@ -86,7 +92,10 @@ function Section({ title, children, defaultOpen = true }: { title: string; child
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between py-2 px-0.5 group"
       >
-        <span className="text-[9px] font-mono-ui text-white/30 tracking-[0.15em] group-hover:text-white/45 transition-colors">{title}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[9px] font-mono-ui text-white/30 tracking-[0.15em] group-hover:text-white/45 transition-colors">{title}</span>
+          {badge}
+        </div>
         <ChevronDown className={`w-3 h-3 text-white/15 transition-transform duration-150 ${isOpen ? '' : '-rotate-90'}`} />
       </button>
       {isOpen && (
@@ -137,6 +146,7 @@ export default function ControlPanel({
   colorModeSettings, onColorModeSettingsChange,
   paletteModifiers, onPaletteModifiersChange,
   postProcessing, onPostProcessingChange,
+  isAutoTuned, onReAnalyze, creativePresets, activePreset, onPresetApply,
 }: ControlPanelProps) {
 
   const applyModulationPreset = (preset: ModulationPreset) => {
@@ -158,9 +168,43 @@ export default function ControlPanel({
     });
   };
 
+  const autoBadge = isAutoTuned ? (
+    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#00ff41]/10 border border-[#00ff41]/20 animate-auto-badge">
+      <Zap className="w-2 h-2 text-[#00ff41]" />
+      <span className="text-[7px] font-mono-ui text-[#00ff41] tracking-wider">AUTO</span>
+    </span>
+  ) : null;
+
   return (
     <div className="panel rounded-lg p-3 max-h-[calc(100vh-7rem)] overflow-y-auto control-panel-scroll">
-      <Section title="DITHER" defaultOpen={true}>
+      <div className="pb-2.5 mb-1 border-b border-white/[0.03]">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[9px] font-mono-ui text-white/30 tracking-[0.15em]">PRESETS</span>
+          {isAutoTuned && (
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#00ff41]/10 border border-[#00ff41]/20">
+              <Zap className="w-2 h-2 text-[#00ff41]" />
+              <span className="text-[7px] font-mono-ui text-[#00ff41] tracking-wider">AUTO-TUNED</span>
+            </span>
+          )}
+        </div>
+        <div className="grid grid-cols-3 gap-1">
+          {creativePresets.map((preset) => (
+            <button
+              key={preset.id}
+              onClick={() => onPresetApply(preset)}
+              className={`py-1.5 rounded text-[8px] font-mono-ui tracking-wider transition-all border ${
+                activePreset === preset.id
+                  ? 'bg-[#00ff41]/10 text-[#00ff41] border-[#00ff41]/20'
+                  : 'bg-transparent text-white/25 border-white/[0.04] hover:border-white/[0.08] hover:text-white/40'
+              }`}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <Section title="DITHER" defaultOpen={true} badge={autoBadge}>
         <div>
           <span className="text-[9px] font-mono-ui text-white/20 tracking-wider block mb-1">ALGORITHM</span>
           <select
@@ -368,17 +412,25 @@ export default function ControlPanel({
         <Slider label="Saturation" value={adjustments.saturation} min={0} max={200}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, saturation: v })}
           display={`${adjustments.saturation}%`} />
-        <button onClick={() => onAdjustmentsChange({
-          brightness: 0, contrast: 0, blur: 0, sharpen: 0, sharpenRadius: 10,
-          saturation: 100, noise: 0,
-          tonalControls: { highlights: 0, midtones: 0, shadows: 0 },
-          levels: { inputBlack: 0, inputWhite: 255, outputBlack: 0, outputWhite: 255, gamma: 1 },
-        })}
-          className="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 text-[9px] font-mono-ui text-white/20 border border-white/[0.04] rounded hover:border-white/[0.08] hover:text-white/35 transition-all tracking-wider"
-        >
-          <RotateCcw className="w-2.5 h-2.5" />
-          RESET
-        </button>
+        <div className="flex gap-1.5">
+          <button onClick={() => onAdjustmentsChange({
+            brightness: 0, contrast: 0, blur: 0, sharpen: 0, sharpenRadius: 10,
+            saturation: 100, noise: 0,
+            tonalControls: { highlights: 0, midtones: 0, shadows: 0 },
+            levels: { inputBlack: 0, inputWhite: 255, outputBlack: 0, outputWhite: 255, gamma: 1 },
+          })}
+            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[9px] font-mono-ui text-white/20 border border-white/[0.04] rounded hover:border-white/[0.08] hover:text-white/35 transition-all tracking-wider"
+          >
+            <RotateCcw className="w-2.5 h-2.5" />
+            RESET
+          </button>
+          <button onClick={onReAnalyze}
+            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[9px] font-mono-ui text-[#00ff41]/40 border border-[#00ff41]/10 rounded hover:border-[#00ff41]/20 hover:text-[#00ff41]/60 transition-all tracking-wider"
+          >
+            <RefreshCw className="w-2.5 h-2.5" />
+            RE-ANALYZE
+          </button>
+        </div>
       </Section>
 
       <Section title="INPUT / OUTPUT" defaultOpen={false}>

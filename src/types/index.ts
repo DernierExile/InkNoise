@@ -138,3 +138,15 @@ export interface DitheringSettings {
   adjustments: ImageAdjustments;
   resamplingMethod: ResamplingMethod;
 }
+
+export interface ImageAnalysis {
+  meanBrightness: number;
+  contrastStdDev: number;
+  highFreqEnergy: number;
+  edgeDensity: number;
+  shadowClipPercent: number;
+  highlightClipPercent: number;
+  tonalRangeMin: number;
+  tonalRangeMax: number;
+  imageHeight: number;
+}

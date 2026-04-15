@@ -5,10 +5,12 @@ import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
 import ProModal from './components/ProModal';
 import EmailCaptureModal from './components/EmailCaptureModal';
-import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing } from './types';
+import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ImageAnalysis } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo } from './utils/imageResize';
 import { loadWatermarkImage, drawWatermarkOnCanvas } from './utils/watermark';
+import { analyzeImage } from './utils/imageAnalysis';
+import { computeSmartDefaults, getCreativePresets, CreativePresetConfig } from './utils/smartDefaults';
 import DitheringWorker from './workers/dithering.worker?worker';
 
 function getRandomPaletteIndex(): number {
@@ -38,6 +40,13 @@ const DEFAULT_POST_PROCESSING: PostProcessing = {
   bloom: 0,
 };
 
+const DEFAULT_ADJUSTMENTS: ImageAdjustments = {
+  brightness: 0, contrast: 0, blur: 0, sharpen: 0, sharpenRadius: 10,
+  saturation: 100, noise: 0,
+  tonalControls: { highlights: 0, midtones: 0, shadows: 0 },
+  levels: { inputBlack: 0, inputWhite: 255, outputBlack: 0, outputWhite: 255, gamma: 1 },
+};
+
 const EMAIL_MODAL_KEY = 'inknoise_email_modal_dismissed';
 const EMAIL_MODAL_DELAY = 2 * 60 * 1000;
 
@@ -56,12 +65,11 @@ function App() {
   const [colorModeSettings, setColorModeSettings] = useState<ColorModeSettings>(DEFAULT_COLOR_MODE_SETTINGS);
   const [paletteModifiers, setPaletteModifiers] = useState<PaletteModifiers>(DEFAULT_PALETTE_MODIFIERS);
   const [postProcessing, setPostProcessing] = useState<PostProcessing>(DEFAULT_POST_PROCESSING);
-  const [adjustments, setAdjustments] = useState<ImageAdjustments>({
-    brightness: 0, contrast: 0, blur: 0, sharpen: 0, sharpenRadius: 10,
-    saturation: 100, noise: 0,
-    tonalControls: { highlights: 0, midtones: 0, shadows: 0 },
-    levels: { inputBlack: 0, inputWhite: 255, outputBlack: 0, outputWhite: 255, gamma: 1 },
-  });
+  const [adjustments, setAdjustments] = useState<ImageAdjustments>(DEFAULT_ADJUSTMENTS);
+
+  const [imageAnalysisData, setImageAnalysisData] = useState<ImageAnalysis | null>(null);
+  const [isAutoTuned, setIsAutoTuned] = useState(false);
+  const [activePreset, setActivePreset] = useState<string | null>(null);
 
   const workerRef = useRef<Worker | null>(null);
   const emailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -95,6 +103,29 @@ function App() {
     localStorage.setItem(EMAIL_MODAL_KEY, 'true');
   };
 
+  const runSmartAnalysis = useCallback((img: HTMLImageElement) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    try {
+      const analysis = analyzeImage(imgData);
+      setImageAnalysisData(analysis);
+      const smart = computeSmartDefaults(analysis);
+      setAdjustments(smart.adjustments);
+      setIsAutoTuned(true);
+      setActivePreset(null);
+    } catch {
+      setImageAnalysisData(null);
+      setAdjustments(DEFAULT_ADJUSTMENTS);
+      setIsAutoTuned(false);
+    }
+  }, []);
+
   const handleImageLoad = useCallback((img: HTMLImageElement) => {
     const resizeInfo = getResizeInfo(img.width, img.height);
     if (resizeInfo.isResized) {
@@ -111,13 +142,83 @@ function App() {
       }
       ctx.drawImage(img, 0, 0, resizeInfo.newWidth, resizeInfo.newHeight);
       const resizedImage = new Image();
-      resizedImage.onload = () => setOriginalImage(resizedImage);
+      resizedImage.onload = () => {
+        setOriginalImage(resizedImage);
+        runSmartAnalysis(resizedImage);
+      };
       resizedImage.src = canvas.toDataURL();
     } else {
       setResizeWarning(null);
       setOriginalImage(img);
+      runSmartAnalysis(img);
     }
-  }, [resamplingMethod]);
+  }, [resamplingMethod, runSmartAnalysis]);
+
+  const handleManualAdjustmentChange = useCallback((newAdj: ImageAdjustments) => {
+    setAdjustments(newAdj);
+    setIsAutoTuned(false);
+    setActivePreset(null);
+  }, []);
+
+  const handleReAnalyze = useCallback(() => {
+    if (originalImage) {
+      runSmartAnalysis(originalImage);
+    }
+  }, [originalImage, runSmartAnalysis]);
+
+  const handlePresetApply = useCallback((preset: CreativePresetConfig) => {
+    setAlgorithm(preset.algorithm);
+    setColorMode(preset.colorMode);
+    setActivePreset(preset.id);
+    setIsAutoTuned(false);
+
+    const baseAdj = { ...DEFAULT_ADJUSTMENTS };
+    const newAdj: ImageAdjustments = {
+      ...baseAdj,
+      ...preset.adjustments,
+      tonalControls: {
+        ...baseAdj.tonalControls,
+        ...(preset.adjustments.tonalControls || {}),
+      },
+      levels: {
+        ...baseAdj.levels,
+        ...(preset.adjustments.levels || {}),
+      },
+    };
+    setAdjustments(newAdj);
+
+    if (preset.colorModeSettings) {
+      setColorModeSettings(prev => {
+        const updated = { ...prev };
+        if (preset.colorModeSettings!.modulation) {
+          updated.modulation = preset.colorModeSettings!.modulation;
+        }
+        if (preset.colorModeSettings!.duoTone) {
+          updated.duoTone = preset.colorModeSettings!.duoTone;
+        }
+        if (preset.colorModeSettings!.triTone) {
+          updated.triTone = preset.colorModeSettings!.triTone;
+        }
+        if (preset.colorModeSettings!.tonalMapping) {
+          updated.tonalMapping = preset.colorModeSettings!.tonalMapping;
+        }
+        if (preset.colorModeSettings!.rgbSplit) {
+          updated.rgbSplit = preset.colorModeSettings!.rgbSplit;
+        }
+        return updated;
+      });
+    }
+
+    if (preset.paletteModifiers) {
+      setPaletteModifiers(prev => ({ ...prev, ...preset.paletteModifiers }));
+    }
+
+    if (preset.postProcessing) {
+      setPostProcessing(prev => ({ ...prev, ...preset.postProcessing }));
+    } else {
+      setPostProcessing(DEFAULT_POST_PROCESSING);
+    }
+  }, []);
 
   useEffect(() => {
     if (!originalImage || !workerRef.current) return;
@@ -180,7 +281,18 @@ function App() {
   const goHome = () => {
     setOriginalImage(null);
     setResizeWarning(null);
+    setImageAnalysisData(null);
+    setIsAutoTuned(false);
+    setActivePreset(null);
+    setAdjustments(DEFAULT_ADJUSTMENTS);
+    setColorMode('rgb');
+    setAlgorithm('floyd-steinberg');
+    setColorModeSettings(DEFAULT_COLOR_MODE_SETTINGS);
+    setPaletteModifiers(DEFAULT_PALETTE_MODIFIERS);
+    setPostProcessing(DEFAULT_POST_PROCESSING);
   };
+
+  const creativePresets = getCreativePresets(imageAnalysisData);
 
   return (
     <div className="min-h-screen bg-[#080a0c] text-white">
@@ -192,7 +304,7 @@ function App() {
             </div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-sm font-bold text-white/90 tracking-wide">InkNoise</span>
-              <span className="text-[10px] font-mono-ui text-white/25 hidden sm:inline">v2.0</span>
+              <span className="text-[10px] font-mono-ui text-white/25 hidden sm:inline">v2.1</span>
             </div>
           </button>
 
@@ -239,23 +351,28 @@ function App() {
                 </button>
                 <ControlPanel
                   algorithm={algorithm}
-                  onAlgorithmChange={setAlgorithm}
+                  onAlgorithmChange={(a) => { setAlgorithm(a); setActivePreset(null); }}
                   colorMode={colorMode}
-                  onColorModeChange={setColorMode}
+                  onColorModeChange={(m) => { setColorMode(m); setActivePreset(null); }}
                   selectedPalette={selectedPalette}
                   onPaletteChange={setSelectedPalette}
                   colorCount={colorCount}
                   onColorCountChange={setColorCount}
                   adjustments={adjustments}
-                  onAdjustmentsChange={setAdjustments}
+                  onAdjustmentsChange={handleManualAdjustmentChange}
                   resamplingMethod={resamplingMethod}
                   onResamplingMethodChange={setResamplingMethod}
                   colorModeSettings={colorModeSettings}
-                  onColorModeSettingsChange={setColorModeSettings}
+                  onColorModeSettingsChange={(s) => { setColorModeSettings(s); setActivePreset(null); }}
                   paletteModifiers={paletteModifiers}
                   onPaletteModifiersChange={setPaletteModifiers}
                   postProcessing={postProcessing}
-                  onPostProcessingChange={setPostProcessing}
+                  onPostProcessingChange={(pp) => { setPostProcessing(pp); setActivePreset(null); }}
+                  isAutoTuned={isAutoTuned}
+                  onReAnalyze={handleReAnalyze}
+                  creativePresets={creativePresets}
+                  activePreset={activePreset}
+                  onPresetApply={handlePresetApply}
                 />
                 <div className="flex justify-center py-3">
                   <img src="/BEZIER200x200.png" alt="Bezier" className="w-[120px] opacity-20 hover:opacity-40 transition-opacity" />
