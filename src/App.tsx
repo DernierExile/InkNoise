@@ -70,7 +70,7 @@ function App() {
   const [imageAnalysisData, setImageAnalysisData] = useState<ImageAnalysis | null>(null);
   const [isAutoTuned, setIsAutoTuned] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const workerRef = useRef<Worker | null>(null);
   const emailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
