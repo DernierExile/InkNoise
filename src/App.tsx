@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AlertCircle, Sparkles, Hexagon } from 'lucide-react';
+import { AlertCircle, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import ImageUpload from './components/ImageUpload';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
@@ -70,9 +70,11 @@ function App() {
   const [imageAnalysisData, setImageAnalysisData] = useState<ImageAnalysis | null>(null);
   const [isAutoTuned, setIsAutoTuned] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
 
   const workerRef = useRef<Worker | null>(null);
   const emailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     workerRef.current = new DitheringWorker();
@@ -299,12 +301,11 @@ function App() {
       <header className="border-b border-white/[0.04] bg-[#0a0c0e]/90 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-[1400px] mx-auto px-4 h-12 flex items-center justify-between">
           <button onClick={goHome} className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded-md bg-[#00ff41]/10 border border-[#00ff41]/25 flex items-center justify-center group-hover:bg-[#00ff41]/15 group-hover:border-[#00ff41]/40 transition-all">
-              <Hexagon className="w-3.5 h-3.5 text-[#00ff41]" />
+            <div className="w-7 h-7 rounded-md overflow-hidden border border-[#00ff41]/25 group-hover:border-[#00ff41]/40 transition-all">
+              <img src="/spashInkNoise.png" alt="InkNoise" className="w-full h-full object-cover" />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-sm font-bold text-white/90 tracking-wide">InkNoise</span>
-              <span className="text-[10px] font-mono-ui text-white/25 hidden sm:inline">v2.1</span>
+              <span className="text-sm font-bold text-white/90 tracking-wide" style={{ fontFamily: "'Bodoni Moda', serif" }}>InkNoise 2.1</span>
             </div>
           </button>
 
@@ -328,8 +329,26 @@ function App() {
 
       <main className="max-w-[1400px] mx-auto px-4">
         {!originalImage ? (
-          <div className="flex flex-col items-center min-h-[calc(100vh-3rem)] pt-16 pb-12">
-            <div className="w-full max-w-md">
+          <div className="relative flex flex-col items-center min-h-[calc(100vh-3rem)] pt-16 pb-12 overflow-hidden">
+            <video
+              ref={videoRef}
+              autoPlay
+              loop
+              playsInline
+              muted={isMuted}
+              className="absolute inset-0 w-full h-full object-cover opacity-[0.12] pointer-events-none"
+              src="https://res.cloudinary.com/djgufyqs5/video/upload/v1776296793/0416_ius7vq.mp4"
+              onLoadedMetadata={(e) => { (e.target as HTMLVideoElement).volume = 0.15; }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#080a0c]/40 via-transparent to-[#080a0c]/80 pointer-events-none" />
+            <button
+              onClick={() => setIsMuted(!isMuted)}
+              className="absolute top-4 right-4 z-10 p-2 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/25 hover:text-white/50 hover:border-white/[0.1] transition-all"
+              title={isMuted ? 'Unmute' : 'Mute'}
+            >
+              {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+            </button>
+            <div className="relative z-10 w-full max-w-2xl">
               <ImageUpload onImageLoad={handleImageLoad} />
             </div>
           </div>

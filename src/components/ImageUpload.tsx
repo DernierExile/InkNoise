@@ -34,25 +34,18 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
   };
 
   return (
-    <div className="w-full space-y-6">
-      <div className="text-center space-y-4">
-        <div className="flex justify-center">
-          <div className="w-24 h-24 rounded-2xl overflow-hidden border border-[#00ff41]/15 shadow-lg shadow-[#00ff41]/5">
-            <img
-              src="/spashInkNoise.png"
-              alt="InkNoise"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className="text-xl font-bold text-white/90 tracking-wide">InkNoise</h1>
-          <p className="text-[11px] text-white/25 font-mono-ui tracking-wider mt-1">PROFESSIONAL IMAGE DITHERING</p>
-        </div>
+    <div className="w-full space-y-8 relative">
+      <div className="text-center space-y-3">
+        <h1 className="text-7xl sm:text-8xl font-normal text-white/90 tracking-wide leading-none" style={{ fontFamily: "'Bodoni Moda', serif" }}>
+          InkNoise 2.1
+        </h1>
+        <p className="text-lg sm:text-xl text-white/25 italic tracking-wide" style={{ fontFamily: "'Bodoni Moda', serif" }}>
+          Professional Image Dithering
+        </p>
       </div>
 
       <label
-        className={`flex flex-col items-center justify-center w-full h-48 rounded-lg cursor-pointer transition-all duration-200 border ${
+        className={`flex flex-col items-center justify-center w-full h-48 rounded-lg cursor-pointer transition-all duration-200 border backdrop-blur-sm ${
           isDragging
             ? 'border-[#00ff41]/40 bg-[#00ff41]/[0.04]'
             : 'border-white/[0.06] bg-white/[0.01] hover:border-[#00ff41]/20 hover:bg-[#00ff41]/[0.02]'
@@ -91,7 +84,7 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
           { label: 'Color Modes', desc: 'Mono, duo-tone, tri-tone, tonal' },
           { label: 'Post-Processing', desc: 'CRT, scanlines, chromatic, bloom' },
         ].map(({ label, desc }) => (
-          <div key={label} className="px-3 py-2.5 rounded-md bg-white/[0.015] border border-white/[0.03]">
+          <div key={label} className="px-3 py-2.5 rounded-md bg-white/[0.015] border border-white/[0.03] backdrop-blur-sm">
             <p className="text-[10px] font-medium text-white/45">{label}</p>
             <p className="text-[9px] text-white/15 mt-0.5">{desc}</p>
           </div>
