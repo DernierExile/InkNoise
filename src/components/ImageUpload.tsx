@@ -34,69 +34,79 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
   };
 
   return (
-    <div className="w-full space-y-8 relative">
-      <div className="text-center space-y-3">
-        <h1 className="text-7xl sm:text-8xl font-normal text-white/90 tracking-wide leading-none" style={{ fontFamily: "'Bodoni Moda', serif" }}>
-          InkNoise 2.1
+    <div className="w-full space-y-10 relative">
+      {/* Brand mark + tagline */}
+      <div className="text-center space-y-4">
+        <div className="flex items-center justify-center gap-3">
+          <span className="text-[11px] font-mono-ui text-bz-system tracking-[0.3em]">PRODUCT · 001 · LIVE</span>
+        </div>
+        <h1 className="text-7xl sm:text-8xl font-medium text-bz-interface tracking-tight leading-none">
+          InkNoise
         </h1>
-        <p className="text-lg sm:text-xl text-white/25 italic tracking-wide" style={{ fontFamily: "'Bodoni Moda', serif" }}>
-          Professional Image Dithering
+        <p className="text-base sm:text-lg text-bz-paper/70 tracking-wide max-w-xl mx-auto leading-relaxed">
+          Engineered texture for digital images.
+          <br />
+          <span className="text-bz-system">A texture engine, not a filter.</span>
         </p>
       </div>
 
+      {/* Upload zone — square corners, hairline border */}
       <label
-        className={`flex flex-col items-center justify-center w-full h-48 rounded-lg cursor-pointer transition-all duration-200 border backdrop-blur-sm ${
+        className={`flex flex-col items-center justify-center w-full h-52 cursor-pointer transition-colors duration-240 border ${
           isDragging
-            ? 'border-[#00ff41]/40 bg-[#00ff41]/[0.04]'
-            : 'border-white/[0.06] bg-white/[0.01] hover:border-[#00ff41]/20 hover:bg-[#00ff41]/[0.02]'
+            ? 'border-bz-cyan bg-bz-deep'
+            : 'border-bz-grid bg-bz-deep/60 hover:border-bz-system'
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         <div className="flex flex-col items-center gap-3 pointer-events-none">
-          <div className={`p-3 rounded-md border transition-all duration-200 ${
+          <div className={`p-3 border transition-colors duration-240 ${
             isDragging
-              ? 'border-[#00ff41]/30 bg-[#00ff41]/10'
-              : 'border-white/[0.06] bg-white/[0.02]'
+              ? 'border-bz-cyan bg-bz-cyan/10'
+              : 'border-bz-grid bg-bz-graphite'
           }`}>
-            <Upload className={`w-5 h-5 transition-colors duration-200 ${
-              isDragging ? 'text-[#00ff41]' : 'text-white/20'
+            <Upload className={`w-5 h-5 transition-colors duration-240 ${
+              isDragging ? 'text-bz-cyan' : 'text-bz-system'
             }`} />
           </div>
           <div className="text-center">
-            <p className={`text-xs transition-colors ${isDragging ? 'text-[#00ff41]/80' : 'text-white/40'}`}>
-              {isDragging ? 'Release to process' : 'Drop image here'}
+            <p className={`text-bz-body transition-colors duration-240 ${isDragging ? 'text-bz-cyan' : 'text-bz-paper'}`}>
+              {isDragging ? 'Release to process' : 'Drop image to begin'}
             </p>
-            <p className="text-[10px] text-white/20 mt-1">
-              or <span className="text-white/30 underline underline-offset-2">browse files</span>
+            <p className="text-bz-meta text-bz-system mt-1">
+              or <span className="text-bz-paper underline underline-offset-2">browse files</span>
             </p>
           </div>
-          <p className="text-[9px] font-mono-ui text-white/12 tracking-wider">PNG / JPG / GIF / WEBP</p>
+          <p className="text-[10px] font-mono-ui text-bz-system tracking-[0.3em]">PNG · JPG · GIF · WEBP</p>
         </div>
         <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
       </label>
 
+      {/* Module facts — 4 metadata cards */}
       <div className="grid grid-cols-2 gap-2">
         {[
-          { label: '25+ Algorithms', desc: 'Floyd-Steinberg, Bayer, Halftone' },
-          { label: 'Real-time Preview', desc: 'Instant comparison slider' },
-          { label: 'Color Modes', desc: 'Mono, duo-tone, tri-tone, tonal' },
-          { label: 'Post-Processing', desc: 'CRT, scanlines, chromatic, bloom' },
-        ].map(({ label, desc }) => (
-          <div key={label} className="px-3 py-2.5 rounded-md bg-white/[0.015] border border-white/[0.03] backdrop-blur-sm">
-            <p className="text-[10px] font-medium text-white/45">{label}</p>
-            <p className="text-[9px] text-white/15 mt-0.5">{desc}</p>
+          { tag: '01', label: 'DITHER', desc: '25 algorithms · Floyd-Steinberg, Bayer, Halftone' },
+          { tag: '02', label: 'HALFTONE', desc: 'Print logic · CMYK separation · DPI control' },
+          { tag: '03', label: 'GRAIN', desc: 'Engineered grain · 35mm to digital · directional' },
+          { tag: '04', label: 'CONTRAST', desc: 'Image stack control · output curves · banding' },
+        ].map(({ tag, label, desc }) => (
+          <div key={label} className="px-3 py-3 panel">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em]">{tag}</span>
+              <span className="text-[9px] font-mono-ui text-bz-cyan tracking-[0.2em]">LIVE</span>
+            </div>
+            <p className="text-bz-label font-medium text-bz-interface tracking-wide">{label}</p>
+            <p className="text-[10px] text-bz-system mt-1 leading-relaxed">{desc}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-center pt-4">
-        <img
-          src="/BEZIER200x200.png"
-          alt="Bezier"
-          className="w-[120px] opacity-25 hover:opacity-45 transition-opacity"
-        />
+      {/* Footer wordmark — Bezier umbrella */}
+      <div className="flex flex-col items-center pt-6 gap-2">
+        <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.3em]">BY BEZIER</span>
+        <span className="text-[9px] font-mono-ui text-bz-grid tracking-[0.3em]">RUNNING VISUAL CULTURE · MMXXVI</span>
       </div>
     </div>
   );

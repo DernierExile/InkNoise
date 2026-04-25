@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AlertCircle, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { AlertCircle, Volume2, VolumeX } from 'lucide-react';
 import ImageUpload from './components/ImageUpload';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
@@ -18,9 +18,9 @@ function getRandomPaletteIndex(): number {
 }
 
 const DEFAULT_COLOR_MODE_SETTINGS: ColorModeSettings = {
-  duoTone: { shadowColor: '#000000', highlightColor: '#00ff41' },
-  triTone: { shadowColor: '#000000', midtoneColor: '#00ffff', highlightColor: '#ffffff' },
-  tonalMapping: { shadowColor: '#1a0533', midtoneColor: '#ff006e', highlightColor: '#fffbe6', preserveOriginal: 30 },
+  duoTone: { shadowColor: '#000000', highlightColor: '#00D5FF' },
+  triTone: { shadowColor: '#000000', midtoneColor: '#5361FF', highlightColor: '#F4F4F1' },
+  tonalMapping: { shadowColor: '#11151C', midtoneColor: '#5361FF', highlightColor: '#F4F4F1', preserveOriginal: 30 },
   rgbSplit: { redOffsetX: 3, redOffsetY: 0, blueOffsetX: -3, blueOffsetY: 0, intensity: 80 },
   modulation: { preset: 'none', scanlineIntensity: 40, scanlineGap: 3, chromaticOffset: 2, rgbShift: 1, noiseAmount: 10, pixelation: 1, interference: 0 },
 };
@@ -297,31 +297,31 @@ function App() {
   const creativePresets = getCreativePresets(imageAnalysisData);
 
   return (
-    <div className="min-h-screen bg-[#080a0c] text-white">
-      <header className="border-b border-white/[0.04] bg-[#0a0c0e]/90 backdrop-blur-md sticky top-0 z-50">
+    <div className="min-h-screen bg-bz-graphite text-bz-paper">
+      <header className="border-b border-bz-grid bg-bz-graphite/95 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-[1400px] mx-auto px-4 h-12 flex items-center justify-between">
-          <button onClick={goHome} className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded-md overflow-hidden border border-[#00ff41]/25 group-hover:border-[#00ff41]/40 transition-all">
-              <img src="/spashInkNoise.png" alt="InkNoise" className="w-full h-full object-cover" />
+          <button onClick={goHome} className="flex items-center gap-3 group">
+            <div className="w-8 h-8 overflow-hidden transition-opacity duration-240 group-hover:opacity-80">
+              <img src="/favicon-inknoise.png" alt="InkNoise" className="w-full h-full object-contain" />
             </div>
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-sm font-bold text-white/90 tracking-wide" style={{ fontFamily: "'Bodoni Moda', serif" }}>InkNoise 2.1</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-bz-label font-semibold text-bz-interface tracking-tight">InkNoise</span>
+              <span className="text-[10px] font-mono-ui text-bz-system tracking-widest">BY BEZIER</span>
             </div>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {isProcessing && (
               <div className="flex items-center gap-1.5 px-2 py-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#00ff41] animate-pulse" />
-                <span className="text-[10px] font-mono-ui text-[#00ff41]/70">PROCESSING</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-bz-cyan animate-signal-pulse" />
+                <span className="text-[10px] font-mono-ui text-bz-cyan tracking-widest">RENDERING</span>
               </div>
             )}
             <button
               onClick={() => setShowProModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00ffff]/10 text-[#00ffff] border border-[#00ffff]/25 rounded-md hover:bg-[#00ffff]/15 hover:border-[#00ffff]/40 transition-all text-[10px] font-mono-ui tracking-wider glow-cyan"
+              className="px-3 py-1.5 text-[10px] font-mono-ui text-bz-interface border border-bz-grid hover:border-bz-cyan transition-colors duration-240 tracking-widest"
             >
-              <Sparkles className="w-3 h-3" />
-              PRO
+              GO PRO
             </button>
           </div>
         </div>
@@ -336,14 +336,14 @@ function App() {
               loop
               playsInline
               muted={isMuted}
-              className="absolute inset-0 w-full h-full object-cover opacity-[0.12] pointer-events-none"
+              className="absolute inset-0 w-full h-full object-cover opacity-[0.10] pointer-events-none"
               src="https://www.playbook.com/b23/dpM8TD4hHV8DRcLk1TbnAnkw?assetToken=U3S87XwfErSc1RpjMpLeXUxb"
               onLoadedMetadata={(e) => { (e.target as HTMLVideoElement).volume = 0.15; }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#080a0c]/40 via-transparent to-[#080a0c]/80 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-bz-graphite/60 via-transparent to-bz-graphite pointer-events-none" />
             <button
               onClick={() => setIsMuted(!isMuted)}
-              className="absolute top-4 right-4 z-10 p-2 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/25 hover:text-white/50 hover:border-white/[0.1] transition-all"
+              className="absolute top-4 right-4 z-10 p-2 border border-bz-grid text-bz-system hover:text-bz-paper hover:border-bz-system transition-colors duration-240"
               title={isMuted ? 'Unmute' : 'Mute'}
             >
               {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
@@ -355,16 +355,16 @@ function App() {
         ) : (
           <div className="py-3">
             {resizeWarning && (
-              <div className="mb-3 flex items-center gap-2 px-3 py-2 rounded-md bg-amber-500/[0.06] border border-amber-500/10">
-                <AlertCircle className="w-3 h-3 text-amber-400/60 flex-shrink-0" />
-                <p className="text-[10px] font-mono-ui text-amber-300/60">{resizeWarning}</p>
+              <div className="mb-3 flex items-center gap-2 px-3 py-2 border border-bz-grid bg-bz-deep">
+                <AlertCircle className="w-3 h-3 text-bz-cyan flex-shrink-0" />
+                <p className="text-[10px] font-mono-ui text-bz-system tracking-wide">{resizeWarning}</p>
               </div>
             )}
             <div className="flex gap-3">
               <div className="w-[280px] flex-shrink-0 space-y-2">
                 <button
                   onClick={goHome}
-                  className="w-full px-3 py-2 panel-surface rounded-md text-[10px] font-mono-ui text-white/40 hover:text-white/60 tracking-wider transition-all"
+                  className="w-full px-3 py-2 panel-surface text-[10px] font-mono-ui text-bz-system hover:text-bz-paper tracking-widest transition-colors duration-240"
                 >
                   LOAD NEW IMAGE
                 </button>
@@ -394,7 +394,7 @@ function App() {
                   onPresetApply={handlePresetApply}
                 />
                 <div className="flex justify-center py-3">
-                  <img src="/BEZIER200x200.png" alt="Bezier" className="w-[120px] opacity-20 hover:opacity-40 transition-opacity" />
+                  <span className="text-[10px] font-mono-ui text-bz-system tracking-widest opacity-50 hover:opacity-100 transition-opacity duration-240">BEZIER · MMXXVI</span>
                 </div>
               </div>
               <div className="flex-1 min-w-0">

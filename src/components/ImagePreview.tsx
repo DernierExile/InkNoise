@@ -71,13 +71,13 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <div className="flex gap-px bg-white/[0.02] rounded-md border border-white/[0.04] p-0.5">
+        <div className="flex bg-bz-deep border border-bz-grid p-0.5">
           <button
             onClick={() => setViewMode('split')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[10px] font-mono-ui tracking-wider transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui tracking-widest transition-colors duration-240 ${
               viewMode === 'split'
-                ? 'bg-[#00ff41]/10 text-[#00ff41]'
-                : 'text-white/25 hover:text-white/45'
+                ? 'bg-bz-cyan/10 text-bz-cyan'
+                : 'text-bz-system hover:text-bz-paper'
             }`}
           >
             <Columns2 className="w-3 h-3" />
@@ -85,10 +85,10 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
           </button>
           <button
             onClick={() => setViewMode('compare')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[10px] font-mono-ui tracking-wider transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui tracking-widest transition-colors duration-240 ${
               viewMode === 'compare'
-                ? 'bg-[#00ff41]/10 text-[#00ff41]'
-                : 'text-white/25 hover:text-white/45'
+                ? 'bg-bz-cyan/10 text-bz-cyan'
+                : 'text-bz-system hover:text-bz-paper'
             }`}
           >
             <SlidersHorizontal className="w-3 h-3" />
@@ -101,22 +101,22 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
             <div className="relative">
               <button
                 onClick={() => setShowExportMenu(!showExportMenu)}
-                className="flex items-center gap-1 px-2 py-1.5 text-[10px] font-mono-ui text-white/30 border border-white/[0.06] rounded-md hover:border-white/[0.12] hover:text-white/50 transition-all tracking-wider"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui text-bz-paper border border-bz-grid hover:border-bz-system transition-colors duration-240 tracking-widest"
               >
                 {exportFormat.toUpperCase()}
                 <ChevronDown className="w-2.5 h-2.5" />
               </button>
               {showExportMenu && (
-                <div className="absolute right-0 top-full mt-1 z-20 bg-[#0e1012] border border-white/[0.06] rounded-md shadow-xl p-2 min-w-[140px]">
-                  <div className="space-y-1">
+                <div className="absolute right-0 top-full mt-1 z-20 bg-bz-deep border border-bz-grid p-2 min-w-[160px]">
+                  <div className="space-y-0.5">
                     {(['png', 'jpg', 'webp'] as const).map((fmt) => (
                       <button
                         key={fmt}
                         onClick={() => { setExportFormat(fmt); setShowExportMenu(false); }}
-                        className={`w-full text-left px-2 py-1.5 rounded text-[10px] font-mono-ui tracking-wider transition-all ${
+                        className={`w-full text-left px-2 py-1.5 text-[10px] font-mono-ui tracking-widest transition-colors duration-240 ${
                           exportFormat === fmt
-                            ? 'bg-[#00ff41]/10 text-[#00ff41]'
-                            : 'text-white/40 hover:text-white/60 hover:bg-white/[0.03]'
+                            ? 'bg-bz-cyan/10 text-bz-cyan'
+                            : 'text-bz-paper hover:bg-bz-grid'
                         }`}
                       >
                         {fmt.toUpperCase()}
@@ -124,10 +124,10 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
                     ))}
                   </div>
                   {(exportFormat === 'jpg' || exportFormat === 'webp') && (
-                    <div className="mt-2 pt-2 border-t border-white/[0.04] space-y-1">
+                    <div className="mt-2 pt-2 border-t border-bz-grid space-y-1">
                       <div className="flex justify-between">
-                        <span className="text-[9px] font-mono-ui text-white/25">QUALITY</span>
-                        <span className="text-[9px] font-mono-ui text-[#00ff41]">{exportQuality}%</span>
+                        <span className="text-[9px] font-mono-ui text-bz-system tracking-widest">QUALITY</span>
+                        <span className="text-[9px] font-mono-ui text-bz-cyan">{exportQuality}%</span>
                       </div>
                       <input
                         type="range"
@@ -144,7 +144,7 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
             </div>
             <button
               onClick={() => onExport(exportFormat, exportFormat === 'png' ? undefined : exportQuality / 100)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00ff41]/15 hover:bg-[#00ff41]/20 text-[#00ff41] font-mono-ui text-[10px] tracking-wider rounded-md transition-all border border-[#00ff41]/20 hover:border-[#00ff41]/35"
+              className="flex items-center gap-1.5 px-4 py-1.5 bg-bz-cyan text-bz-graphite font-mono-ui text-[10px] tracking-widest hover:bg-bz-cyan/90 transition-colors duration-240 font-semibold"
             >
               <Download className="w-3 h-3" />
               EXPORT
@@ -157,23 +157,23 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-              <span className="text-[9px] font-mono-ui text-white/25 tracking-widest">ORIGINAL</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-bz-system" />
+              <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em]">INPUT · ORIGINAL</span>
             </div>
-            <div className="panel rounded-lg p-1 flex items-center justify-center min-h-[200px]">
-              <canvas ref={splitOrigRef} className="max-w-full h-auto rounded" />
+            <div className="panel p-1 flex items-center justify-center min-h-[200px]">
+              <canvas ref={splitOrigRef} className="max-w-full h-auto" />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#00ff41]/50" />
-              <span className="text-[9px] font-mono-ui text-[#00ff41]/40 tracking-widest">DITHERED</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-bz-cyan animate-signal-pulse" />
+              <span className="text-[9px] font-mono-ui text-bz-cyan tracking-[0.2em]">OUTPUT · DITHERED</span>
             </div>
-            <div className="panel rounded-lg p-1 flex items-center justify-center min-h-[200px]">
+            <div className="panel p-1 flex items-center justify-center min-h-[200px]">
               {processedImageData ? (
-                <canvas ref={splitProcRef} className="max-w-full h-auto rounded" />
+                <canvas ref={splitProcRef} className="max-w-full h-auto" />
               ) : (
-                <div className="text-[10px] font-mono-ui text-white/20">Processing...</div>
+                <div className="text-[10px] font-mono-ui text-bz-system tracking-widest">RENDERING...</div>
               )}
             </div>
           </div>
@@ -181,12 +181,12 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
       ) : (
         <div>
           <div className="flex items-center gap-1.5 mb-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#00ff41]/50" />
-            <span className="text-[9px] font-mono-ui text-white/25 tracking-widest">DRAG TO COMPARE</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-bz-cyan animate-signal-pulse" />
+            <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em]">DRAG TO COMPARE</span>
           </div>
           <div
             ref={compareContainerRef}
-            className="relative overflow-hidden rounded-lg border border-white/[0.04] cursor-col-resize select-none"
+            className="relative overflow-hidden border border-bz-grid cursor-col-resize select-none"
             onMouseMove={handleMouseMove}
             onMouseUp={() => setIsDragging(false)}
             onMouseLeave={() => setIsDragging(false)}
@@ -208,8 +208,8 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
             )}
 
             <div
-              className="absolute top-0 bottom-0 w-px"
-              style={{ left: `${sliderPos}%`, background: 'rgba(0, 255, 65, 0.4)' }}
+              className="absolute top-0 bottom-0 w-px bg-bz-cyan"
+              style={{ left: `${sliderPos}%` }}
             />
 
             <div
@@ -218,15 +218,15 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
               onMouseDown={() => setIsDragging(true)}
               onTouchStart={() => setIsDragging(true)}
             >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#080a0c] border border-[#00ff41]/40 flex items-center justify-center shadow-lg">
-                <SlidersHorizontal className="w-2.5 h-2.5 text-[#00ff41]/70" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7 bg-bz-graphite border border-bz-cyan flex items-center justify-center">
+                <SlidersHorizontal className="w-3 h-3 text-bz-cyan" />
               </div>
             </div>
 
-            <div className="absolute top-2 left-2 text-[9px] font-mono-ui text-white/50 bg-black/60 px-1.5 py-0.5 rounded pointer-events-none tracking-wider">
+            <div className="absolute top-2 left-2 text-[9px] font-mono-ui text-bz-paper bg-bz-graphite/80 px-1.5 py-0.5 pointer-events-none tracking-[0.2em]">
               ORIGINAL
             </div>
-            <div className="absolute top-2 right-2 text-[9px] font-mono-ui text-[#00ff41]/60 bg-black/60 px-1.5 py-0.5 rounded pointer-events-none tracking-wider">
+            <div className="absolute top-2 right-2 text-[9px] font-mono-ui text-bz-cyan bg-bz-graphite/80 px-1.5 py-0.5 pointer-events-none tracking-[0.2em]">
               DITHERED
             </div>
           </div>

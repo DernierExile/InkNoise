@@ -49,7 +49,7 @@ export function extractPaletteMedianCut(imageData: ImageData, maxColors: number)
     pixels.push([imageData.data[i], imageData.data[i + 1], imageData.data[i + 2]]);
   }
 
-  let buckets: [number, number, number][][] = [pixels];
+  const buckets: [number, number, number][][] = [pixels];
 
   while (buckets.length < maxColors) {
     let largestIdx = 0;

@@ -87,16 +87,16 @@ const modulationPresets: { value: ModulationPreset; label: string }[] = [
 function Section({ title, children, defaultOpen = true, badge }: { title: string; children: React.ReactNode; defaultOpen?: boolean; badge?: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-white/[0.03]">
+    <div className="border-b border-bz-grid">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-2 px-0.5 group"
+        className="w-full flex items-center justify-between py-2.5 px-0.5 group"
       >
         <div className="flex items-center gap-2">
-          <span className="text-[9px] font-mono-ui text-white/30 tracking-[0.15em] group-hover:text-white/45 transition-colors">{title}</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.2em] group-hover:text-bz-paper transition-colors duration-240">{title}</span>
           {badge}
         </div>
-        <ChevronDown className={`w-3 h-3 text-white/15 transition-transform duration-150 ${isOpen ? '' : '-rotate-90'}`} />
+        <ChevronDown className={`w-3 h-3 text-bz-system transition-transform duration-240 ${isOpen ? '' : '-rotate-90'}`} />
       </button>
       {isOpen && (
         <div className="space-y-2.5 pb-3 animate-section-in">
@@ -114,8 +114,8 @@ function Slider({ label, value, min, max, step = 1, onChange, display }: {
   return (
     <div className="space-y-1">
       <div className="flex justify-between items-center">
-        <span className="text-[10px] text-white/35">{label}</span>
-        <span className="text-[9px] font-mono-ui text-[#00ff41]/70 tabular-nums">{display ?? value}</span>
+        <span className="text-[11px] text-bz-paper">{label}</span>
+        <span className="text-[10px] font-mono-ui text-bz-cyan tabular-nums">{display ?? value}</span>
       </div>
       <input
         type="range" min={min} max={max} step={step} value={value}
@@ -129,12 +129,12 @@ function Slider({ label, value, min, max, step = 1, onChange, display }: {
 function ColorRow({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[10px] text-white/35 flex-1">{label}</span>
+      <span className="text-[11px] text-bz-paper flex-1">{label}</span>
       <input
         type="color" value={value} onChange={(e) => onChange(e.target.value)}
-        className="w-6 h-6 rounded border border-white/[0.06] bg-transparent cursor-pointer appearance-none [&::-webkit-color-swatch-wrapper]:p-0.5 [&::-webkit-color-swatch]:rounded-sm"
+        className="w-6 h-6 border border-bz-grid bg-transparent cursor-pointer appearance-none [&::-webkit-color-swatch-wrapper]:p-0.5 [&::-webkit-color-swatch]:rounded-none"
       />
-      <span className="text-[9px] font-mono-ui text-white/20 w-12">{value}</span>
+      <span className="text-[10px] font-mono-ui text-bz-system w-14">{value}</span>
     </div>
   );
 }
@@ -169,21 +169,21 @@ export default function ControlPanel({
   };
 
   const autoBadge = isAutoTuned ? (
-    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#00ff41]/10 border border-[#00ff41]/20 animate-auto-badge">
-      <Zap className="w-2 h-2 text-[#00ff41]" />
-      <span className="text-[7px] font-mono-ui text-[#00ff41] tracking-wider">AUTO</span>
+    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-bz-cyan/10 border border-bz-cyan animate-auto-badge">
+      <Zap className="w-2 h-2 text-bz-cyan" />
+      <span className="text-[8px] font-mono-ui text-bz-cyan tracking-widest">AUTO</span>
     </span>
   ) : null;
 
   return (
-    <div className="panel rounded-lg p-3 max-h-[calc(100vh-7rem)] overflow-y-auto control-panel-scroll">
-      <div className="pb-2.5 mb-1 border-b border-white/[0.03]">
+    <div className="panel p-3 max-h-[calc(100vh-7rem)] overflow-y-auto control-panel-scroll">
+      <div className="pb-2.5 mb-1 border-b border-bz-grid">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[9px] font-mono-ui text-white/30 tracking-[0.15em]">PRESETS</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.2em]">PRESETS</span>
           {isAutoTuned && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#00ff41]/10 border border-[#00ff41]/20">
-              <Zap className="w-2 h-2 text-[#00ff41]" />
-              <span className="text-[7px] font-mono-ui text-[#00ff41] tracking-wider">AUTO-TUNED</span>
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-bz-cyan/10 border border-bz-cyan">
+              <Zap className="w-2 h-2 text-bz-cyan" />
+              <span className="text-[8px] font-mono-ui text-bz-cyan tracking-widest">AUTO-TUNED</span>
             </span>
           )}
         </div>
@@ -192,10 +192,10 @@ export default function ControlPanel({
             <button
               key={preset.id}
               onClick={() => onPresetApply(preset)}
-              className={`py-1.5 rounded text-[8px] font-mono-ui tracking-wider transition-all border ${
+              className={`py-1.5 text-[9px] font-mono-ui tracking-widest transition-colors duration-240 border ${
                 activePreset === preset.id
-                  ? 'bg-[#00ff41]/10 text-[#00ff41] border-[#00ff41]/20'
-                  : 'bg-transparent text-white/25 border-white/[0.04] hover:border-white/[0.08] hover:text-white/40'
+                  ? 'bg-bz-cyan/10 text-bz-cyan border-bz-cyan'
+                  : 'bg-transparent text-bz-system border-bz-grid hover:border-bz-system hover:text-bz-paper'
               }`}
             >
               {preset.label}
@@ -206,7 +206,7 @@ export default function ControlPanel({
 
       <Section title="DITHER" defaultOpen={true} badge={autoBadge}>
         <div>
-          <span className="text-[9px] font-mono-ui text-white/20 tracking-wider block mb-1">ALGORITHM</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest block mb-1">ALGORITHM</span>
           <select
             value={algorithm}
             onChange={(e) => onAlgorithmChange(e.target.value as DitheringAlgorithm)}
@@ -229,7 +229,7 @@ export default function ControlPanel({
         </div>
 
         <div>
-          <span className="text-[9px] font-mono-ui text-white/20 tracking-wider block mb-1">COLOR MODE</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest block mb-1">COLOR MODE</span>
           <select
             value={colorMode}
             onChange={(e) => onColorModeChange(e.target.value as ColorMode)}
@@ -301,10 +301,10 @@ export default function ControlPanel({
           <div className="grid grid-cols-3 gap-1">
             {modulationPresets.map((p) => (
               <button key={p.value} onClick={() => applyModulationPreset(p.value)}
-                className={`py-1.5 rounded text-[8px] font-mono-ui tracking-wider transition-all border ${
+                className={`py-1.5 text-[9px] font-mono-ui tracking-widest transition-colors duration-240 border ${
                   colorModeSettings.modulation.preset === p.value
-                    ? 'bg-[#00ff41]/10 text-[#00ff41] border-[#00ff41]/20'
-                    : 'bg-transparent text-white/20 border-white/[0.04] hover:border-white/[0.08] hover:text-white/35'
+                    ? 'bg-bz-cyan/10 text-bz-cyan border-bz-cyan'
+                    : 'bg-transparent text-bz-system border-bz-grid hover:border-bz-system hover:text-bz-paper'
                 }`}
               >
                 {p.label}
@@ -336,7 +336,7 @@ export default function ControlPanel({
         </select>
         <div className="flex gap-0.5 flex-wrap">
           {PREDEFINED_PALETTES[selectedPalette].colors.map((color, idx) => (
-            <div key={idx} className="w-4 h-4 rounded-sm border border-white/[0.06] flex-shrink-0 transition-transform hover:scale-150 cursor-default"
+            <div key={idx} className="w-4 h-4 border border-bz-grid flex-shrink-0 transition-transform duration-240 hover:scale-150 cursor-default"
               style={{ backgroundColor: color }} title={color} />
           ))}
         </div>
@@ -419,13 +419,13 @@ export default function ControlPanel({
             tonalControls: { highlights: 0, midtones: 0, shadows: 0 },
             levels: { inputBlack: 0, inputWhite: 255, outputBlack: 0, outputWhite: 255, gamma: 1 },
           })}
-            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[9px] font-mono-ui text-white/20 border border-white/[0.04] rounded hover:border-white/[0.08] hover:text-white/35 transition-all tracking-wider"
+            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-mono-ui text-bz-system border border-bz-grid hover:border-bz-system hover:text-bz-paper transition-colors duration-240 tracking-widest"
           >
             <RotateCcw className="w-2.5 h-2.5" />
             RESET
           </button>
           <button onClick={onReAnalyze}
-            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[9px] font-mono-ui text-[#00ff41]/40 border border-[#00ff41]/10 rounded hover:border-[#00ff41]/20 hover:text-[#00ff41]/60 transition-all tracking-wider"
+            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-mono-ui text-bz-cyan border border-bz-grid hover:border-bz-cyan transition-colors duration-240 tracking-widest"
           >
             <RefreshCw className="w-2.5 h-2.5" />
             RE-ANALYZE
@@ -435,7 +435,7 @@ export default function ControlPanel({
 
       <Section title="INPUT / OUTPUT" defaultOpen={false}>
         <div>
-          <span className="text-[9px] font-mono-ui text-white/20 tracking-wider block mb-1">RESAMPLING</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest block mb-1">RESAMPLING</span>
           <select value={resamplingMethod} onChange={(e) => onResamplingMethodChange(e.target.value as ResamplingMethod)} className="custom-select w-full">
             {resamplingMethods.map((m) => (
               <option key={m.value} value={m.value}>{m.label}</option>
