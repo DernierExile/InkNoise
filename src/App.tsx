@@ -337,7 +337,7 @@ function App() {
               playsInline
               muted={isMuted}
               className="absolute inset-0 w-full h-full object-cover opacity-[0.12] pointer-events-none"
-              src="https://www.playbook.com/s/b23/tFrzfhRmUj5ayo1QKbtLGyp5?assetToken=U3S87XwfErSc1RpjMpLeXUxb"
+              src="https://www.playbook.com/b23/dpM8TD4hHV8DRcLk1TbnAnkw?assetToken=U3S87XwfErSc1RpjMpLeXUxb"
               onLoadedMetadata={(e) => { (e.target as HTMLVideoElement).volume = 0.15; }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#080a0c]/40 via-transparent to-[#080a0c]/80 pointer-events-none" />
