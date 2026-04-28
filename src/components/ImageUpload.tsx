@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Upload } from 'lucide-react';
+import { InkNoiseLockup } from './brand';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
@@ -37,13 +38,8 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
     <div className="w-full space-y-10 relative">
       {/* Brand mark + tagline */}
       <div className="text-center space-y-4">
-        <div className="flex items-center justify-center gap-3">
-          <span className="text-[11px] font-mono-ui text-bz-system tracking-[0.3em]">PRODUCT · 001 · LIVE</span>
-        </div>
-        <h1 className="text-7xl sm:text-8xl font-medium text-bz-interface tracking-tight leading-none">
-          InkNoise
-        </h1>
-        <p className="text-base sm:text-lg text-bz-paper/70 tracking-wide max-w-xl mx-auto leading-relaxed">
+        <InkNoiseLockup size="xl" orient="vertical" className="justify-center" />
+        <p className="text-base sm:text-lg text-bz-interface/80 tracking-wide max-w-xl mx-auto leading-relaxed pt-2">
           Engineered texture for digital images.
           <br />
           <span className="text-bz-system">A texture engine, not a filter.</span>

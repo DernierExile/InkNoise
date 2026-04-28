@@ -12,10 +12,11 @@
 :root {
   --bz-graphite: #050607;
   --bz-deep: #11151C;
-  --bz-grid: #242F36;
+  --bz-grid: #2A2F36;
   --bz-system: #8A8F98;
-  --bz-interface: #F4F4F1;
-  --bz-paper: #C8CCD1;
+  --bz-interface: #C8CCD1;
+  --bz-paper: #F4F4F1;
+  --bz-paper-2: #ECECE7;
   --bz-cyan: #00D5FF;
   --bz-violet: #5361FF;
 }
@@ -67,6 +68,55 @@
   /* Mechanical motion */
   .animate-section-in {
     animation: sectionIn 240ms ease-out;
+  }
+
+  /* Brand utility classes — Sprint 1.5 */
+  .bz-eyebrow {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bz-system);
+  }
+
+  .bz-meta {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--bz-system);
+  }
+
+  .bz-coord {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bz-system);
+  }
+
+  .bz-rule {
+    border-top: 1px solid var(--bz-grid);
+  }
+
+  .bz-rule-strong {
+    border-top: 1px solid var(--bz-system);
+  }
+
+  .bz-panel {
+    background: var(--bz-deep);
+    border: 1px solid var(--bz-grid);
+    position: relative;
+  }
+
+  .bz-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--bz-cyan);
+    border-radius: 0;
   }
 }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { AlertCircle, Volume2, VolumeX } from 'lucide-react';
 import ImageUpload from './components/ImageUpload';
+import { BZTile } from './components/brand';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
 import ProModal from './components/ProModal';
@@ -301,11 +302,9 @@ function App() {
       <header className="border-b border-bz-grid bg-bz-graphite/95 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-[1400px] mx-auto px-4 h-12 flex items-center justify-between">
           <button onClick={goHome} className="flex items-center gap-3 group">
-            <div className="w-8 h-8 overflow-hidden transition-opacity duration-240 group-hover:opacity-80">
-              <img src="/favicon-inknoise.png" alt="InkNoise" className="w-full h-full object-contain" />
-            </div>
+            <BZTile schematic size={32} className="text-bz-paper transition-opacity duration-240 group-hover:opacity-80" />
             <div className="flex items-baseline gap-2">
-              <span className="text-bz-label font-semibold text-bz-interface tracking-tight">InkNoise</span>
+              <span className="text-bz-label font-semibold text-bz-paper tracking-tight">InkNoise</span>
               <span className="text-[10px] font-mono-ui text-bz-system tracking-widest">BY BEZIER</span>
             </div>
           </button>
