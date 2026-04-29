@@ -4,48 +4,122 @@
 @tailwind components;
 @tailwind utilities;
 
-/* BEZIER brand system v1.0
- * Cold authority. Precision over emotion.
- * No glow. No rounded cards. Cyan is signal — never decoration.
- */
+/* =========================================================================
+   BEZIER · DESIGN TOKENS — mirrored from official tokens.css
+   Control room. Cold. Precise. Swiss.
+   No glow on wordmark. No rounded cards. Cyan is signal — never decoration.
+   ========================================================================= */
 
 :root {
-  --bz-graphite: #050607;
-  --bz-deep: #11151C;
-  --bz-grid: #2A2F36;
-  --bz-system: #8A8F98;
-  --bz-interface: #C8CCD1;
-  --bz-paper: #F4F4F1;
-  --bz-paper-2: #ECECE7;
-  --bz-cyan: #00D5FF;
-  --bz-violet: #5361FF;
+  /* — CORE PALETTE — */
+  --bz-graphite:  #050607;   /* primary background, master black */
+  --bz-deep:      #11151C;   /* deep interface, panels */
+  --bz-grid:      #2A2F36;   /* grid lines, dividers, hairlines */
+  --bz-system:    #8A8F98;   /* system grey, secondary text, metadata */
+  --bz-interface: #C8CCD1;   /* interface text, secondary on dark */
+  --bz-paper:     #F4F4F1;   /* primary on dark, control white */
+  --bz-paper-2:   #ECECE7;   /* secondary paper */
+
+  /* — SIGNAL — */
+  --bz-cyan:      #00D5FF;   /* primary signal */
+  --bz-violet:    #5361FF;   /* secondary signal (optional) */
+
+  /* — ALIASES — */
+  --bg:           var(--bz-graphite);
+  --bg-panel:     var(--bz-deep);
+  --fg:           var(--bz-paper);
+  --fg-mute:      var(--bz-system);
+  --hairline:     var(--bz-grid);
+
+  /* — TYPE STACKS — */
+  --ff-display:   'Inter', 'Söhne', 'Suisse Intl', 'Neue Haas Grotesk', system-ui, sans-serif;
+  --ff-text:      'Inter', 'Söhne', 'Suisse Intl', system-ui, sans-serif;
+  --ff-mono:      'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* — TRACKING — */
+  --tr-display:   -0.03em;
+  --tr-heading:   -0.02em;
+  --tr-body:       0;
+  --tr-label:      0.18em;
+  --tr-meta:       0.22em;
+  --tr-coord:      0.2em;
 }
 
 @layer base {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
   body {
-    background-color: var(--bz-graphite);
+    font-family: var(--ff-text);
+    font-size: 14px;
+    line-height: 1.5;
     color: var(--bz-paper);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 400;
+    background: var(--bz-graphite);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 }
 
 @layer utilities {
   .font-mono-ui {
-    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-family: var(--ff-mono);
   }
 
-  /* Hairline panels — bezier brand: square corners, hairline borders */
-  .panel {
+  /* — Brand text utilities (mirror official) — */
+  .bz-eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: var(--tr-label);
+    text-transform: uppercase;
+    color: var(--bz-system);
+    font-weight: 500;
+  }
+
+  .bz-meta {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--bz-system);
+    font-weight: 500;
+  }
+
+  .bz-coord {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: var(--tr-coord);
+    color: var(--bz-system);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* — Hairlines — */
+  .bz-rule {
+    height: 1px;
+    background: var(--bz-grid);
+    border: 0;
+    margin: 0;
+  }
+
+  .bz-rule-strong {
+    height: 1px;
+    background: var(--bz-system);
+    border: 0;
+    margin: 0;
+  }
+
+  /* — Panels (square corners, hairline borders) — */
+  .panel,
+  .bz-panel {
     background: var(--bz-deep);
     border: 1px solid var(--bz-grid);
     position: relative;
   }
 
-  .panel-inner {
+  .panel-inner,
+  .bz-panel-flat {
     background: var(--bz-graphite);
     border: 1px solid var(--bz-grid);
   }
@@ -55,100 +129,51 @@
     border: 1px solid var(--bz-grid);
   }
 
-  /* Cyan signal — only for live / active / processing states */
-  .signal-cyan {
-    color: var(--bz-cyan);
-  }
-
-  .signal-cyan-bg {
-    background-color: rgba(0, 213, 255, 0.08);
-    border-color: rgba(0, 213, 255, 0.25);
-  }
-
-  /* Mechanical motion */
-  .animate-section-in {
-    animation: sectionIn 240ms ease-out;
-  }
-
-  /* Brand utility classes — Sprint 1.5 */
-  .bz-eyebrow {
-    font-family: 'JetBrains Mono', 'SF Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--bz-system);
-  }
-
-  .bz-meta {
-    font-family: 'JetBrains Mono', 'SF Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    color: var(--bz-system);
-  }
-
-  .bz-coord {
-    font-family: 'JetBrains Mono', 'SF Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--bz-system);
-  }
-
-  .bz-rule {
-    border-top: 1px solid var(--bz-grid);
-  }
-
-  .bz-rule-strong {
-    border-top: 1px solid var(--bz-system);
-  }
-
-  .bz-panel {
-    background: var(--bz-deep);
-    border: 1px solid var(--bz-grid);
-    position: relative;
-  }
-
+  /* — Status dots — */
   .bz-dot {
     display: inline-block;
     width: 6px;
     height: 6px;
+    border-radius: 50%;
     background: var(--bz-cyan);
-    border-radius: 0;
+  }
+
+  .bz-dot-system { background: var(--bz-system); }
+  .bz-dot-paper  { background: var(--bz-paper); }
+
+  /* — Mechanical motion — */
+  .animate-section-in {
+    animation: sectionIn 240ms ease-out;
+  }
+
+  .animate-signal-pulse {
+    animation: signalPulse 1.6s ease-in-out infinite;
+  }
+
+  .animate-auto-badge {
+    animation: autoBadgeIn 240ms ease-out;
   }
 }
 
 @keyframes sectionIn {
   from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse-dim {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-@keyframes signal-pulse {
+@keyframes signalPulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.animate-signal-pulse {
-  animation: signal-pulse 1.6s ease-in-out infinite;
+  50%      { opacity: 0.5; }
 }
 
 @keyframes autoBadgeIn {
-  0% { opacity: 0; transform: scale(0.95); }
+  0%   { opacity: 0; transform: scale(0.95); }
   100% { opacity: 1; transform: scale(1); }
 }
 
-.animate-auto-badge {
-  animation: autoBadgeIn 240ms ease-out;
-}
+/* =========================================================================
+   FORM CONTROLS — square corners, hairline borders, cyan signal
+   ========================================================================= */
 
-/* Sliders — cyan signal thumb on grid track */
 input[type="range"].custom-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -194,7 +219,6 @@ input[type="range"].custom-slider::-moz-range-thumb {
   border: none;
 }
 
-/* Selects — system fonts, hairline borders */
 select.custom-select {
   background-color: var(--bz-graphite);
   color: var(--bz-paper);
@@ -202,7 +226,7 @@ select.custom-select {
   border-radius: 0;
   padding: 7px 28px 7px 10px;
   font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--ff-mono);
   font-weight: 500;
   outline: none;
   cursor: pointer;
@@ -228,7 +252,7 @@ select.custom-select optgroup {
   color: var(--bz-paper);
 }
 
-/* Scroll — minimalist, system grey */
+/* — Scroll — minimalist, system grey — */
 .control-panel-scroll {
   scrollbar-width: thin;
   scrollbar-color: var(--bz-grid) transparent;

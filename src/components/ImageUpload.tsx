@@ -1,12 +1,21 @@
 import { useState, useCallback } from 'react';
 import { Upload } from 'lucide-react';
 import { InkNoiseLockup } from './brand';
+import { useT } from '../i18n/use-i18n';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
 }
 
+const MODULES: { tag: string; titleKey: string; descKey: string }[] = [
+  { tag: '01', titleKey: 'module.dither.title', descKey: 'module.dither.desc' },
+  { tag: '02', titleKey: 'module.halftone.title', descKey: 'module.halftone.desc' },
+  { tag: '03', titleKey: 'module.grain.title', descKey: 'module.grain.desc' },
+  { tag: '04', titleKey: 'module.contrast.title', descKey: 'module.contrast.desc' },
+];
+
 export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
+  const t = useT();
   const [isDragging, setIsDragging] = useState(false);
 
   const processFile = useCallback((file: File) => {
@@ -36,13 +45,20 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
 
   return (
     <div className="w-full space-y-10 relative">
-      {/* Brand mark + tagline */}
-      <div className="text-center space-y-4">
-        <InkNoiseLockup size="xl" orient="vertical" className="justify-center" />
-        <p className="text-base sm:text-lg text-bz-interface/80 tracking-wide max-w-xl mx-auto leading-relaxed pt-2">
-          Engineered texture for digital images.
+      {/* Brand mark + tagline — InkNoise lockup with halftone "Noise" */}
+      <div className="text-center space-y-5">
+        <div className="flex items-center justify-center gap-3">
+          <span className="text-[11px] font-mono-ui text-bz-system tracking-[0.3em] uppercase">
+            {t('home.productLabel')}
+          </span>
+        </div>
+        <div className="flex justify-center">
+          <InkNoiseLockup size="xl" orient="vertical" color="var(--bz-paper)" />
+        </div>
+        <p className="text-base sm:text-lg text-bz-interface/80 tracking-wide max-w-xl mx-auto leading-relaxed">
+          {t('home.tagline')}
           <br />
-          <span className="text-bz-system">A texture engine, not a filter.</span>
+          <span className="text-bz-system">{t('home.subtagline')}</span>
         </p>
       </div>
 
@@ -68,41 +84,37 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
             }`} />
           </div>
           <div className="text-center">
-            <p className={`text-bz-body transition-colors duration-240 ${isDragging ? 'text-bz-cyan' : 'text-bz-paper'}`}>
-              {isDragging ? 'Release to process' : 'Drop image to begin'}
+            <p className={`text-bz-body transition-colors duration-240 ${isDragging ? 'text-bz-cyan' : 'text-bz-interface'}`}>
+              {isDragging ? t('home.release') : t('home.dropToBegin')}
             </p>
             <p className="text-bz-meta text-bz-system mt-1">
-              or <span className="text-bz-paper underline underline-offset-2">browse files</span>
+              {t('home.orBrowse')}{' '}
+              <span className="text-bz-interface underline underline-offset-2">{t('home.browseFiles')}</span>
             </p>
           </div>
-          <p className="text-[10px] font-mono-ui text-bz-system tracking-[0.3em]">PNG · JPG · GIF · WEBP</p>
+          <p className="text-[10px] font-mono-ui text-bz-system tracking-[0.3em]">{t('home.fileTypes')}</p>
         </div>
         <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
       </label>
 
       {/* Module facts — 4 metadata cards */}
       <div className="grid grid-cols-2 gap-2">
-        {[
-          { tag: '01', label: 'DITHER', desc: '25 algorithms · Floyd-Steinberg, Bayer, Halftone' },
-          { tag: '02', label: 'HALFTONE', desc: 'Print logic · CMYK separation · DPI control' },
-          { tag: '03', label: 'GRAIN', desc: 'Engineered grain · 35mm to digital · directional' },
-          { tag: '04', label: 'CONTRAST', desc: 'Image stack control · output curves · banding' },
-        ].map(({ tag, label, desc }) => (
-          <div key={label} className="px-3 py-3 panel">
+        {MODULES.map(({ tag, titleKey, descKey }) => (
+          <div key={tag} className="px-3 py-3 panel">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em]">{tag}</span>
-              <span className="text-[9px] font-mono-ui text-bz-cyan tracking-[0.2em]">LIVE</span>
+              <span className="text-[9px] font-mono-ui text-bz-cyan tracking-[0.2em] uppercase">{t('module.live')}</span>
             </div>
-            <p className="text-bz-label font-medium text-bz-interface tracking-wide">{label}</p>
-            <p className="text-[10px] text-bz-system mt-1 leading-relaxed">{desc}</p>
+            <p className="text-bz-label font-medium text-bz-paper tracking-wide uppercase">{t(titleKey)}</p>
+            <p className="text-[10px] text-bz-system mt-1 leading-relaxed">{t(descKey)}</p>
           </div>
         ))}
       </div>
 
       {/* Footer wordmark — Bezier umbrella */}
       <div className="flex flex-col items-center pt-6 gap-2">
-        <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.3em]">BY BEZIER</span>
-        <span className="text-[9px] font-mono-ui text-bz-grid tracking-[0.3em]">RUNNING VISUAL CULTURE · MMXXVI</span>
+        <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.3em] uppercase">{t('home.byBezier')}</span>
+        <span className="text-[9px] font-mono-ui text-bz-grid tracking-[0.3em] uppercase">{t('home.footerTagline')}</span>
       </div>
     </div>
   );

@@ -1,14 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AlertCircle, Volume2, VolumeX } from 'lucide-react';
+import { AlertCircle, Volume2, VolumeX, LogOut, CheckCircle2 } from 'lucide-react';
 import ImageUpload from './components/ImageUpload';
-import { BZTile } from './components/brand';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
 import ProModal from './components/ProModal';
 import EmailCaptureModal from './components/EmailCaptureModal';
+import AuthModal from './components/AuthModal';
+import LanguageSwitcher from './components/LanguageSwitcher';
+import { BZTile } from './components/brand';
+import { useAuth, useIsPro } from './contexts/use-auth';
+import { useT } from './i18n/use-i18n';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ImageAnalysis } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
-import { getResizeInfo } from './utils/imageResize';
+import { getResizeInfo, MAX_DIMENSION_FREE, MAX_DIMENSION_PRO } from './utils/imageResize';
 import { loadWatermarkImage, drawWatermarkOnCanvas } from './utils/watermark';
 import { analyzeImage } from './utils/imageAnalysis';
 import { computeSmartDefaults, getCreativePresets, CreativePresetConfig } from './utils/smartDefaults';
@@ -52,8 +56,15 @@ const EMAIL_MODAL_KEY = 'inknoise_email_modal_dismissed';
 const EMAIL_MODAL_DELAY = 2 * 60 * 1000;
 
 function App() {
+  const t = useT();
+  const { session, plan, signOut, refresh } = useAuth();
+  const isPro = useIsPro();
+  const maxDimension = isPro ? MAX_DIMENSION_PRO : MAX_DIMENSION_FREE;
+
   const [showProModal, setShowProModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
+  const [checkoutBanner, setCheckoutBanner] = useState<'success' | 'cancelled' | null>(null);
   const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
   const [processedImageData, setProcessedImageData] = useState<ImageData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -101,6 +112,26 @@ function App() {
     };
   }, []);
 
+  // Handle Stripe checkout return (?checkout=success or ?checkout=cancelled)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const checkoutParam = params.get('checkout');
+    if (checkoutParam === 'success') {
+      setCheckoutBanner('success');
+      // Refresh the session so the new app_metadata.plan is read in
+      refresh();
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Auto-dismiss banner after 8s
+      setTimeout(() => setCheckoutBanner(null), 8000);
+    } else if (checkoutParam === 'cancelled') {
+      setCheckoutBanner('cancelled');
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(() => setCheckoutBanner(null), 5000);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleEmailModalClose = () => {
     setShowEmailModal(false);
     localStorage.setItem(EMAIL_MODAL_KEY, 'true');
@@ -130,9 +161,12 @@ function App() {
   }, []);
 
   const handleImageLoad = useCallback((img: HTMLImageElement) => {
-    const resizeInfo = getResizeInfo(img.width, img.height);
+    const resizeInfo = getResizeInfo(img.width, img.height, maxDimension);
     if (resizeInfo.isResized) {
-      setResizeWarning(`Resized from ${img.width}x${img.height} to ${resizeInfo.newWidth}x${resizeInfo.newHeight}`);
+      setResizeWarning(t('banner.resized', {
+        orig: `${img.width}×${img.height}`,
+        resized: `${resizeInfo.newWidth}×${resizeInfo.newHeight}`,
+      }));
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
@@ -155,7 +189,7 @@ function App() {
       setOriginalImage(img);
       runSmartAnalysis(img);
     }
-  }, [resamplingMethod, runSmartAnalysis]);
+  }, [resamplingMethod, runSmartAnalysis, maxDimension, t]);
 
   const handleManualAdjustmentChange = useCallback((newAdj: ImageAdjustments) => {
     setAdjustments(newAdj);
@@ -265,10 +299,15 @@ function App() {
     canvas.width = processedImageData.width;
     canvas.height = processedImageData.height;
     ctx.putImageData(processedImageData, 0, 0);
-    try {
-      const wmImage = await loadWatermarkImage();
-      drawWatermarkOnCanvas(ctx, canvas.width, canvas.height, wmImage);
-    } catch { /* noop */ }
+
+    // Plan-aware watermark: only applied on free plan
+    if (!isPro) {
+      try {
+        const wmImage = await loadWatermarkImage();
+        drawWatermarkOnCanvas(ctx, canvas.width, canvas.height, wmImage);
+      } catch { /* noop */ }
+    }
+
     const mimeType = format === 'jpg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
     canvas.toBlob((blob) => {
       if (!blob) return;
@@ -298,32 +337,104 @@ function App() {
   const creativePresets = getCreativePresets(imageAnalysisData);
 
   return (
-    <div className="min-h-screen bg-bz-graphite text-bz-paper">
+    <div className="min-h-screen bg-bz-graphite text-bz-interface">
       <header className="border-b border-bz-grid bg-bz-graphite/95 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-[1400px] mx-auto px-4 h-12 flex items-center justify-between">
-          <button onClick={goHome} className="flex items-center gap-3 group">
-            <BZTile schematic size={32} className="text-bz-paper transition-opacity duration-240 group-hover:opacity-80" />
+          <button onClick={goHome} className="flex items-center gap-3 group" aria-label={t('header.homeAria')}>
+            <div className="transition-opacity duration-240 group-hover:opacity-70">
+              <BZTile size={28} schematic color="var(--bz-cyan)" bg="var(--bz-graphite)" radius={5} />
+            </div>
             <div className="flex items-baseline gap-2">
               <span className="text-bz-label font-semibold text-bz-paper tracking-tight">InkNoise</span>
               <span className="text-[10px] font-mono-ui text-bz-system tracking-widest">BY BEZIER</span>
             </div>
           </button>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {isProcessing && (
               <div className="flex items-center gap-1.5 px-2 py-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-bz-cyan animate-signal-pulse" />
-                <span className="text-[10px] font-mono-ui text-bz-cyan tracking-widest">RENDERING</span>
+                <span className="text-[10px] font-mono-ui text-bz-cyan tracking-widest uppercase">{t('header.rendering')}</span>
               </div>
             )}
-            <button
-              onClick={() => setShowProModal(true)}
-              className="px-3 py-1.5 text-[10px] font-mono-ui text-bz-interface border border-bz-grid hover:border-bz-cyan transition-colors duration-240 tracking-widest"
-            >
-              GO PRO
-            </button>
+
+            <LanguageSwitcher />
+
+            {session ? (
+              <>
+                {isPro ? (
+                  <button
+                    onClick={() => setShowProModal(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 border border-bz-cyan bg-bz-cyan/10 text-bz-cyan font-mono-ui text-[10px] tracking-widest hover:bg-bz-cyan/15 transition-colors duration-240 uppercase"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-bz-cyan" />
+                    {plan === 'founder' ? t('header.founderActive') : t('header.studioActive')}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowProModal(true)}
+                    className="px-3 py-1.5 text-[10px] font-mono-ui text-bz-paper border border-bz-grid hover:border-bz-cyan transition-colors duration-240 tracking-widest uppercase"
+                  >
+                    {t('header.goPro')}
+                  </button>
+                )}
+                <button
+                  onClick={() => signOut()}
+                  className="p-2 text-bz-system hover:text-bz-paper border border-bz-grid hover:border-bz-system transition-colors duration-240"
+                  title={t('header.signOutTooltip', { email: session.user.email ?? '' })}
+                  aria-label={t('header.signOut')}
+                >
+                  <LogOut className="w-3 h-3" />
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="px-3 py-1.5 text-[10px] font-mono-ui text-bz-system hover:text-bz-paper transition-colors duration-240 tracking-widest uppercase"
+                >
+                  {t('header.signIn')}
+                </button>
+                <button
+                  onClick={() => setShowProModal(true)}
+                  className="px-3 py-1.5 text-[10px] font-mono-ui text-bz-paper border border-bz-grid hover:border-bz-cyan transition-colors duration-240 tracking-widest uppercase"
+                >
+                  {t('header.goPro')}
+                </button>
+              </>
+            )}
           </div>
         </div>
+
+        {checkoutBanner && (
+          <div className={`border-b ${checkoutBanner === 'success' ? 'bg-bz-cyan/10 border-bz-cyan' : 'bg-bz-deep border-bz-grid'}`}>
+            <div className="max-w-[1400px] mx-auto px-4 py-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {checkoutBanner === 'success' ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-bz-cyan" />
+                    <span className="text-[11px] font-mono-ui text-bz-cyan tracking-wide">
+                      {t('banner.checkoutSuccess')}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="w-3.5 h-3.5 text-bz-system" />
+                    <span className="text-[11px] font-mono-ui text-bz-system tracking-wide">
+                      {t('banner.checkoutCancelled')}
+                    </span>
+                  </>
+                )}
+              </div>
+              <button
+                onClick={() => setCheckoutBanner(null)}
+                className="text-[10px] font-mono-ui text-bz-system hover:text-bz-paper tracking-widest uppercase"
+              >
+                {t('banner.dismiss')}
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="max-w-[1400px] mx-auto px-4">
@@ -336,13 +447,13 @@ function App() {
               playsInline
               muted={isMuted}
               className="absolute inset-0 w-full h-full object-cover opacity-[0.10] pointer-events-none"
-              src="https://www.playbook.com/b23/dpM8TD4hHV8DRcLk1TbnAnkw?assetToken=U3S87XwfErSc1RpjMpLeXUxb"
+              src="https://res.cloudinary.com/djgufyqs5/video/upload/v1776296793/0416_ius7vq.mp4"
               onLoadedMetadata={(e) => { (e.target as HTMLVideoElement).volume = 0.15; }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-bz-graphite/60 via-transparent to-bz-graphite pointer-events-none" />
             <button
               onClick={() => setIsMuted(!isMuted)}
-              className="absolute top-4 right-4 z-10 p-2 border border-bz-grid text-bz-system hover:text-bz-paper hover:border-bz-system transition-colors duration-240"
+              className="absolute top-4 right-4 z-10 p-2 border border-bz-grid text-bz-system hover:text-bz-interface hover:border-bz-system transition-colors duration-240"
               title={isMuted ? 'Unmute' : 'Mute'}
             >
               {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
@@ -363,9 +474,9 @@ function App() {
               <div className="w-[280px] flex-shrink-0 space-y-2">
                 <button
                   onClick={goHome}
-                  className="w-full px-3 py-2 panel-surface text-[10px] font-mono-ui text-bz-system hover:text-bz-paper tracking-widest transition-colors duration-240"
+                  className="w-full px-3 py-2 panel-surface text-[10px] font-mono-ui text-bz-system hover:text-bz-interface tracking-widest uppercase transition-colors duration-240"
                 >
-                  LOAD NEW IMAGE
+                  {t('banner.loadNewImage')}
                 </button>
                 <ControlPanel
                   algorithm={algorithm}
@@ -405,6 +516,11 @@ function App() {
       </main>
 
       <ProModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode="login"
+      />
       <EmailCaptureModal isOpen={showEmailModal} onClose={handleEmailModalClose} />
     </div>
   );

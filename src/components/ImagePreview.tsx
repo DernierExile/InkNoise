@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Download, Columns2, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { useT } from '../i18n/use-i18n';
 
 interface ImagePreviewProps {
   originalImage: HTMLImageElement | null;
@@ -28,6 +29,7 @@ function drawToCanvas(canvas: HTMLCanvasElement | null, source: HTMLImageElement
 }
 
 export default function ImagePreview({ originalImage, processedImageData, onExport }: ImagePreviewProps) {
+  const t = useT();
   const splitOrigRef = useRef<HTMLCanvasElement>(null);
   const splitProcRef = useRef<HTMLCanvasElement>(null);
   const cmpOrigRef = useRef<HTMLCanvasElement>(null);
@@ -74,25 +76,25 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
         <div className="flex bg-bz-deep border border-bz-grid p-0.5">
           <button
             onClick={() => setViewMode('split')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui tracking-widest transition-colors duration-240 ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui tracking-widest uppercase transition-colors duration-240 ${
               viewMode === 'split'
                 ? 'bg-bz-cyan/10 text-bz-cyan'
-                : 'text-bz-system hover:text-bz-paper'
+                : 'text-bz-system hover:text-bz-interface'
             }`}
           >
             <Columns2 className="w-3 h-3" />
-            SPLIT
+            {t('preview.split')}
           </button>
           <button
             onClick={() => setViewMode('compare')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui tracking-widest transition-colors duration-240 ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui tracking-widest uppercase transition-colors duration-240 ${
               viewMode === 'compare'
                 ? 'bg-bz-cyan/10 text-bz-cyan'
-                : 'text-bz-system hover:text-bz-paper'
+                : 'text-bz-system hover:text-bz-interface'
             }`}
           >
             <SlidersHorizontal className="w-3 h-3" />
-            COMPARE
+            {t('preview.compare')}
           </button>
         </div>
 
@@ -101,7 +103,7 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
             <div className="relative">
               <button
                 onClick={() => setShowExportMenu(!showExportMenu)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui text-bz-paper border border-bz-grid hover:border-bz-system transition-colors duration-240 tracking-widest"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono-ui text-bz-interface border border-bz-grid hover:border-bz-system transition-colors duration-240 tracking-widest"
               >
                 {exportFormat.toUpperCase()}
                 <ChevronDown className="w-2.5 h-2.5" />
@@ -116,7 +118,7 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
                         className={`w-full text-left px-2 py-1.5 text-[10px] font-mono-ui tracking-widest transition-colors duration-240 ${
                           exportFormat === fmt
                             ? 'bg-bz-cyan/10 text-bz-cyan'
-                            : 'text-bz-paper hover:bg-bz-grid'
+                            : 'text-bz-interface hover:bg-bz-grid'
                         }`}
                       >
                         {fmt.toUpperCase()}
@@ -126,7 +128,7 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
                   {(exportFormat === 'jpg' || exportFormat === 'webp') && (
                     <div className="mt-2 pt-2 border-t border-bz-grid space-y-1">
                       <div className="flex justify-between">
-                        <span className="text-[9px] font-mono-ui text-bz-system tracking-widest">QUALITY</span>
+                        <span className="text-[9px] font-mono-ui text-bz-system tracking-widest uppercase">{t('export.quality')}</span>
                         <span className="text-[9px] font-mono-ui text-bz-cyan">{exportQuality}%</span>
                       </div>
                       <input
@@ -144,10 +146,10 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
             </div>
             <button
               onClick={() => onExport(exportFormat, exportFormat === 'png' ? undefined : exportQuality / 100)}
-              className="flex items-center gap-1.5 px-4 py-1.5 bg-bz-cyan text-bz-graphite font-mono-ui text-[10px] tracking-widest hover:bg-bz-cyan/90 transition-colors duration-240 font-semibold"
+              className="flex items-center gap-1.5 px-4 py-1.5 bg-bz-cyan text-bz-graphite font-mono-ui text-[10px] tracking-widest uppercase hover:bg-bz-cyan/90 transition-colors duration-240 font-semibold"
             >
               <Download className="w-3 h-3" />
-              EXPORT
+              {t('export.export')}
             </button>
           </div>
         )}
@@ -158,7 +160,7 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-bz-system" />
-              <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em]">INPUT · ORIGINAL</span>
+              <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em] uppercase">{t('preview.inputOriginal')}</span>
             </div>
             <div className="panel p-1 flex items-center justify-center min-h-[200px]">
               <canvas ref={splitOrigRef} className="max-w-full h-auto" />
@@ -167,13 +169,13 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-bz-cyan animate-signal-pulse" />
-              <span className="text-[9px] font-mono-ui text-bz-cyan tracking-[0.2em]">OUTPUT · DITHERED</span>
+              <span className="text-[9px] font-mono-ui text-bz-cyan tracking-[0.2em] uppercase">{t('preview.outputDithered')}</span>
             </div>
             <div className="panel p-1 flex items-center justify-center min-h-[200px]">
               {processedImageData ? (
                 <canvas ref={splitProcRef} className="max-w-full h-auto" />
               ) : (
-                <div className="text-[10px] font-mono-ui text-bz-system tracking-widest">RENDERING...</div>
+                <div className="text-[10px] font-mono-ui text-bz-system tracking-widest uppercase">{t('preview.rendering')}</div>
               )}
             </div>
           </div>
@@ -182,7 +184,7 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
         <div>
           <div className="flex items-center gap-1.5 mb-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-bz-cyan animate-signal-pulse" />
-            <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em]">DRAG TO COMPARE</span>
+            <span className="text-[9px] font-mono-ui text-bz-system tracking-[0.2em] uppercase">{t('preview.dragToCompare')}</span>
           </div>
           <div
             ref={compareContainerRef}
@@ -223,11 +225,11 @@ export default function ImagePreview({ originalImage, processedImageData, onExpo
               </div>
             </div>
 
-            <div className="absolute top-2 left-2 text-[9px] font-mono-ui text-bz-paper bg-bz-graphite/80 px-1.5 py-0.5 pointer-events-none tracking-[0.2em]">
-              ORIGINAL
+            <div className="absolute top-2 left-2 text-[9px] font-mono-ui text-bz-interface bg-bz-graphite/80 px-1.5 py-0.5 pointer-events-none tracking-[0.2em] uppercase">
+              {t('preview.original')}
             </div>
-            <div className="absolute top-2 right-2 text-[9px] font-mono-ui text-bz-cyan bg-bz-graphite/80 px-1.5 py-0.5 pointer-events-none tracking-[0.2em]">
-              DITHERED
+            <div className="absolute top-2 right-2 text-[9px] font-mono-ui text-bz-cyan bg-bz-graphite/80 px-1.5 py-0.5 pointer-events-none tracking-[0.2em] uppercase">
+              {t('preview.dithered')}
             </div>
           </div>
         </div>

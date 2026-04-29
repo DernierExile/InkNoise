@@ -1,11 +1,19 @@
 import { ResamplingMethod } from '../types';
 
-const MAX_DIMENSION = 1200;
+// Plan-aware max dimension caps.
+//   FREE plan : 1200px (Studio gating)
+//   PAID plan : 3840px (4K)
+export const MAX_DIMENSION_FREE = 1200;
+export const MAX_DIMENSION_PRO = 3840;
 
-export function resizeImageIfNeeded(image: HTMLImageElement, method: ResamplingMethod = 'bilinear'): HTMLImageElement {
+export function resizeImageIfNeeded(
+  image: HTMLImageElement,
+  method: ResamplingMethod = 'bilinear',
+  maxDimension: number = MAX_DIMENSION_FREE,
+): HTMLImageElement {
   const { width, height } = image;
 
-  if (width <= MAX_DIMENSION && height <= MAX_DIMENSION) {
+  if (width <= maxDimension && height <= maxDimension) {
     return image;
   }
 
@@ -17,14 +25,14 @@ export function resizeImageIfNeeded(image: HTMLImageElement, method: ResamplingM
   let newHeight = height;
 
   if (width > height) {
-    if (width > MAX_DIMENSION) {
-      newWidth = MAX_DIMENSION;
-      newHeight = (height * MAX_DIMENSION) / width;
+    if (width > maxDimension) {
+      newWidth = maxDimension;
+      newHeight = (height * maxDimension) / width;
     }
   } else {
-    if (height > MAX_DIMENSION) {
-      newHeight = MAX_DIMENSION;
-      newWidth = (width * MAX_DIMENSION) / height;
+    if (height > maxDimension) {
+      newHeight = maxDimension;
+      newWidth = (width * maxDimension) / height;
     }
   }
 
@@ -40,8 +48,12 @@ export function resizeImageIfNeeded(image: HTMLImageElement, method: ResamplingM
   return resizedImage;
 }
 
-export function getResizeInfo(originalWidth: number, originalHeight: number): { isResized: boolean; newWidth: number; newHeight: number } {
-  if (originalWidth <= MAX_DIMENSION && originalHeight <= MAX_DIMENSION) {
+export function getResizeInfo(
+  originalWidth: number,
+  originalHeight: number,
+  maxDimension: number = MAX_DIMENSION_FREE,
+): { isResized: boolean; newWidth: number; newHeight: number } {
+  if (originalWidth <= maxDimension && originalHeight <= maxDimension) {
     return { isResized: false, newWidth: originalWidth, newHeight: originalHeight };
   }
 
@@ -49,14 +61,14 @@ export function getResizeInfo(originalWidth: number, originalHeight: number): { 
   let newHeight = originalHeight;
 
   if (originalWidth > originalHeight) {
-    if (originalWidth > MAX_DIMENSION) {
-      newWidth = MAX_DIMENSION;
-      newHeight = (originalHeight * MAX_DIMENSION) / originalWidth;
+    if (originalWidth > maxDimension) {
+      newWidth = maxDimension;
+      newHeight = (originalHeight * maxDimension) / originalWidth;
     }
   } else {
-    if (originalHeight > MAX_DIMENSION) {
-      newHeight = MAX_DIMENSION;
-      newWidth = (originalWidth * MAX_DIMENSION) / originalHeight;
+    if (originalHeight > maxDimension) {
+      newHeight = maxDimension;
+      newWidth = (originalWidth * maxDimension) / originalHeight;
     }
   }
 

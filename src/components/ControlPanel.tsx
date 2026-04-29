@@ -3,6 +3,7 @@ import { ChevronDown, RotateCcw, Zap, RefreshCw } from 'lucide-react';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ModulationPreset } from '../types';
 import { PREDEFINED_PALETTES } from '../utils/palettes';
 import { CreativePresetConfig } from '../utils/smartDefaults';
+import { useT } from '../i18n/use-i18n';
 
 interface ControlPanelProps {
   algorithm: DitheringAlgorithm;
@@ -30,6 +31,8 @@ interface ControlPanelProps {
   onPresetApply: (preset: CreativePresetConfig) => void;
 }
 
+// Algorithm + palette names are proper nouns / technical names — left in English
+// in all locales (designers worldwide know "Floyd-Steinberg", not a translation).
 const algorithms: { value: DitheringAlgorithm; label: string; category: string }[] = [
   { value: 'floyd-steinberg', label: 'Floyd-Steinberg', category: 'Error Diffusion' },
   { value: 'atkinson', label: 'Atkinson', category: 'Error Diffusion' },
@@ -58,23 +61,10 @@ const algorithms: { value: DitheringAlgorithm; label: string; category: string }
   { value: 'none', label: 'None', category: 'Other' },
 ];
 
-const resamplingMethods: { value: ResamplingMethod; label: string }[] = [
-  { value: 'nearest-neighbor', label: 'Nearest Neighbor' },
-  { value: 'bilinear', label: 'Bilinear' },
-  { value: 'bicubic', label: 'Bicubic' },
-];
+const RESAMPLING_VALUES: ResamplingMethod[] = ['nearest-neighbor', 'bilinear', 'bicubic'];
+const COLOR_MODE_VALUES: ColorMode[] = ['mono', 'indexed', 'rgb', 'duo-tone', 'tri-tone', 'tonal', 'rgb-split', 'modulation'];
 
-const colorModes: { value: ColorMode; label: string }[] = [
-  { value: 'mono', label: 'Mono' },
-  { value: 'indexed', label: 'Indexed' },
-  { value: 'rgb', label: 'RGB' },
-  { value: 'duo-tone', label: 'Duo-Tone' },
-  { value: 'tri-tone', label: 'Tri-Tone' },
-  { value: 'tonal', label: 'Tonal' },
-  { value: 'rgb-split', label: 'RGB Split' },
-  { value: 'modulation', label: 'Modulate' },
-];
-
+// Modulation preset labels stay in English (universal terms)
 const modulationPresets: { value: ModulationPreset; label: string }[] = [
   { value: 'none', label: 'OFF' },
   { value: 'crt', label: 'CRT' },
@@ -93,7 +83,7 @@ function Section({ title, children, defaultOpen = true, badge }: { title: string
         className="w-full flex items-center justify-between py-2.5 px-0.5 group"
       >
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.2em] group-hover:text-bz-paper transition-colors duration-240">{title}</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.2em] uppercase group-hover:text-bz-interface transition-colors duration-240">{title}</span>
           {badge}
         </div>
         <ChevronDown className={`w-3 h-3 text-bz-system transition-transform duration-240 ${isOpen ? '' : '-rotate-90'}`} />
@@ -114,7 +104,7 @@ function Slider({ label, value, min, max, step = 1, onChange, display }: {
   return (
     <div className="space-y-1">
       <div className="flex justify-between items-center">
-        <span className="text-[11px] text-bz-paper">{label}</span>
+        <span className="text-[11px] text-bz-interface">{label}</span>
         <span className="text-[10px] font-mono-ui text-bz-cyan tabular-nums">{display ?? value}</span>
       </div>
       <input
@@ -129,7 +119,7 @@ function Slider({ label, value, min, max, step = 1, onChange, display }: {
 function ColorRow({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[11px] text-bz-paper flex-1">{label}</span>
+      <span className="text-[11px] text-bz-interface flex-1">{label}</span>
       <input
         type="color" value={value} onChange={(e) => onChange(e.target.value)}
         className="w-6 h-6 border border-bz-grid bg-transparent cursor-pointer appearance-none [&::-webkit-color-swatch-wrapper]:p-0.5 [&::-webkit-color-swatch]:rounded-none"
@@ -148,6 +138,7 @@ export default function ControlPanel({
   postProcessing, onPostProcessingChange,
   isAutoTuned, onReAnalyze, creativePresets, activePreset, onPresetApply,
 }: ControlPanelProps) {
+  const t = useT();
 
   const applyModulationPreset = (preset: ModulationPreset) => {
     const presets: Record<ModulationPreset, typeof colorModeSettings.modulation> = {
@@ -171,7 +162,7 @@ export default function ControlPanel({
   const autoBadge = isAutoTuned ? (
     <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-bz-cyan/10 border border-bz-cyan animate-auto-badge">
       <Zap className="w-2 h-2 text-bz-cyan" />
-      <span className="text-[8px] font-mono-ui text-bz-cyan tracking-widest">AUTO</span>
+      <span className="text-[8px] font-mono-ui text-bz-cyan tracking-widest uppercase">{t('controlPanel.label.auto')}</span>
     </span>
   ) : null;
 
@@ -179,11 +170,11 @@ export default function ControlPanel({
     <div className="panel p-3 max-h-[calc(100vh-7rem)] overflow-y-auto control-panel-scroll">
       <div className="pb-2.5 mb-1 border-b border-bz-grid">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.2em]">PRESETS</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-[0.2em] uppercase">{t('controlPanel.section.presets')}</span>
           {isAutoTuned && (
             <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-bz-cyan/10 border border-bz-cyan">
               <Zap className="w-2 h-2 text-bz-cyan" />
-              <span className="text-[8px] font-mono-ui text-bz-cyan tracking-widest">AUTO-TUNED</span>
+              <span className="text-[8px] font-mono-ui text-bz-cyan tracking-widest uppercase">{t('controlPanel.label.autoTuned')}</span>
             </span>
           )}
         </div>
@@ -192,10 +183,10 @@ export default function ControlPanel({
             <button
               key={preset.id}
               onClick={() => onPresetApply(preset)}
-              className={`py-1.5 text-[9px] font-mono-ui tracking-widest transition-colors duration-240 border ${
+              className={`py-1.5 text-[9px] font-mono-ui tracking-widest uppercase transition-colors duration-240 border ${
                 activePreset === preset.id
                   ? 'bg-bz-cyan/10 text-bz-cyan border-bz-cyan'
-                  : 'bg-transparent text-bz-system border-bz-grid hover:border-bz-system hover:text-bz-paper'
+                  : 'bg-transparent text-bz-system border-bz-grid hover:border-bz-system hover:text-bz-interface'
               }`}
             >
               {preset.label}
@@ -204,9 +195,9 @@ export default function ControlPanel({
         </div>
       </div>
 
-      <Section title="DITHER" defaultOpen={true} badge={autoBadge}>
+      <Section title={t('controlPanel.section.dither')} defaultOpen={true} badge={autoBadge}>
         <div>
-          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest block mb-1">ALGORITHM</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest uppercase block mb-1">{t('controlPanel.label.algorithm')}</span>
           <select
             value={algorithm}
             onChange={(e) => onAlgorithmChange(e.target.value as DitheringAlgorithm)}
@@ -229,106 +220,106 @@ export default function ControlPanel({
         </div>
 
         <div>
-          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest block mb-1">COLOR MODE</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest uppercase block mb-1">{t('controlPanel.label.colorMode')}</span>
           <select
             value={colorMode}
             onChange={(e) => onColorModeChange(e.target.value as ColorMode)}
             className="custom-select w-full"
           >
-            {colorModes.map((m) => (
-              <option key={m.value} value={m.value}>{m.label}</option>
+            {COLOR_MODE_VALUES.map((m) => (
+              <option key={m} value={m}>{t(`controlPanel.colorMode.${m}`)}</option>
             ))}
           </select>
         </div>
 
         {colorMode === 'indexed' && (
-          <Slider label="Color Count" value={colorCount} min={2} max={64} onChange={onColorCountChange} />
+          <Slider label={t('controlPanel.label.colorCount')} value={colorCount} min={2} max={64} onChange={onColorCountChange} />
         )}
       </Section>
 
       {colorMode === 'duo-tone' && (
-        <Section title="DUO-TONE" defaultOpen={true}>
-          <ColorRow label="Shadow" value={colorModeSettings.duoTone.shadowColor}
+        <Section title={t('controlPanel.section.duoTone')} defaultOpen={true}>
+          <ColorRow label={t('controlPanel.slider.shadow')} value={colorModeSettings.duoTone.shadowColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, duoTone: { ...colorModeSettings.duoTone, shadowColor: v } })} />
-          <ColorRow label="Highlight" value={colorModeSettings.duoTone.highlightColor}
+          <ColorRow label={t('controlPanel.slider.highlight')} value={colorModeSettings.duoTone.highlightColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, duoTone: { ...colorModeSettings.duoTone, highlightColor: v } })} />
         </Section>
       )}
 
       {colorMode === 'tri-tone' && (
-        <Section title="TRI-TONE" defaultOpen={true}>
-          <ColorRow label="Shadow" value={colorModeSettings.triTone.shadowColor}
+        <Section title={t('controlPanel.section.triTone')} defaultOpen={true}>
+          <ColorRow label={t('controlPanel.slider.shadow')} value={colorModeSettings.triTone.shadowColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, triTone: { ...colorModeSettings.triTone, shadowColor: v } })} />
-          <ColorRow label="Midtone" value={colorModeSettings.triTone.midtoneColor}
+          <ColorRow label={t('controlPanel.slider.midtone')} value={colorModeSettings.triTone.midtoneColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, triTone: { ...colorModeSettings.triTone, midtoneColor: v } })} />
-          <ColorRow label="Highlight" value={colorModeSettings.triTone.highlightColor}
+          <ColorRow label={t('controlPanel.slider.highlight')} value={colorModeSettings.triTone.highlightColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, triTone: { ...colorModeSettings.triTone, highlightColor: v } })} />
         </Section>
       )}
 
       {colorMode === 'tonal' && (
-        <Section title="TONAL MAPPING" defaultOpen={true}>
-          <ColorRow label="Shadow" value={colorModeSettings.tonalMapping.shadowColor}
+        <Section title={t('controlPanel.section.tonalMapping')} defaultOpen={true}>
+          <ColorRow label={t('controlPanel.slider.shadow')} value={colorModeSettings.tonalMapping.shadowColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, tonalMapping: { ...colorModeSettings.tonalMapping, shadowColor: v } })} />
-          <ColorRow label="Midtone" value={colorModeSettings.tonalMapping.midtoneColor}
+          <ColorRow label={t('controlPanel.slider.midtone')} value={colorModeSettings.tonalMapping.midtoneColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, tonalMapping: { ...colorModeSettings.tonalMapping, midtoneColor: v } })} />
-          <ColorRow label="Highlight" value={colorModeSettings.tonalMapping.highlightColor}
+          <ColorRow label={t('controlPanel.slider.highlight')} value={colorModeSettings.tonalMapping.highlightColor}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, tonalMapping: { ...colorModeSettings.tonalMapping, highlightColor: v } })} />
-          <Slider label="Preserve Original" value={colorModeSettings.tonalMapping.preserveOriginal} min={0} max={100}
+          <Slider label={t('controlPanel.slider.preserveOriginal')} value={colorModeSettings.tonalMapping.preserveOriginal} min={0} max={100}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, tonalMapping: { ...colorModeSettings.tonalMapping, preserveOriginal: v } })}
             display={`${colorModeSettings.tonalMapping.preserveOriginal}%`} />
         </Section>
       )}
 
       {colorMode === 'rgb-split' && (
-        <Section title="RGB SPLIT" defaultOpen={true}>
-          <Slider label="Red X" value={colorModeSettings.rgbSplit.redOffsetX} min={-20} max={20}
+        <Section title={t('controlPanel.section.rgbSplit')} defaultOpen={true}>
+          <Slider label={t('controlPanel.slider.redX')} value={colorModeSettings.rgbSplit.redOffsetX} min={-20} max={20}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, rgbSplit: { ...colorModeSettings.rgbSplit, redOffsetX: v } })} />
-          <Slider label="Red Y" value={colorModeSettings.rgbSplit.redOffsetY} min={-20} max={20}
+          <Slider label={t('controlPanel.slider.redY')} value={colorModeSettings.rgbSplit.redOffsetY} min={-20} max={20}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, rgbSplit: { ...colorModeSettings.rgbSplit, redOffsetY: v } })} />
-          <Slider label="Blue X" value={colorModeSettings.rgbSplit.blueOffsetX} min={-20} max={20}
+          <Slider label={t('controlPanel.slider.blueX')} value={colorModeSettings.rgbSplit.blueOffsetX} min={-20} max={20}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, rgbSplit: { ...colorModeSettings.rgbSplit, blueOffsetX: v } })} />
-          <Slider label="Blue Y" value={colorModeSettings.rgbSplit.blueOffsetY} min={-20} max={20}
+          <Slider label={t('controlPanel.slider.blueY')} value={colorModeSettings.rgbSplit.blueOffsetY} min={-20} max={20}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, rgbSplit: { ...colorModeSettings.rgbSplit, blueOffsetY: v } })} />
-          <Slider label="Intensity" value={colorModeSettings.rgbSplit.intensity} min={0} max={100}
+          <Slider label={t('controlPanel.slider.intensity')} value={colorModeSettings.rgbSplit.intensity} min={0} max={100}
             onChange={(v) => onColorModeSettingsChange({ ...colorModeSettings, rgbSplit: { ...colorModeSettings.rgbSplit, intensity: v } })}
             display={`${colorModeSettings.rgbSplit.intensity}%`} />
         </Section>
       )}
 
       {colorMode === 'modulation' && (
-        <Section title="MODULATION" defaultOpen={true}>
+        <Section title={t('controlPanel.section.modulation')} defaultOpen={true}>
           <div className="grid grid-cols-3 gap-1">
             {modulationPresets.map((p) => (
               <button key={p.value} onClick={() => applyModulationPreset(p.value)}
-                className={`py-1.5 text-[9px] font-mono-ui tracking-widest transition-colors duration-240 border ${
+                className={`py-1.5 text-[9px] font-mono-ui tracking-widest uppercase transition-colors duration-240 border ${
                   colorModeSettings.modulation.preset === p.value
                     ? 'bg-bz-cyan/10 text-bz-cyan border-bz-cyan'
-                    : 'bg-transparent text-bz-system border-bz-grid hover:border-bz-system hover:text-bz-paper'
+                    : 'bg-transparent text-bz-system border-bz-grid hover:border-bz-system hover:text-bz-interface'
                 }`}
               >
                 {p.label}
               </button>
             ))}
           </div>
-          <Slider label="Scanlines" value={colorModeSettings.modulation.scanlineIntensity} min={0} max={100}
+          <Slider label={t('controlPanel.slider.scanlines')} value={colorModeSettings.modulation.scanlineIntensity} min={0} max={100}
             onChange={(v) => updateMod({ scanlineIntensity: v })} display={`${colorModeSettings.modulation.scanlineIntensity}%`} />
-          <Slider label="Scanline Gap" value={colorModeSettings.modulation.scanlineGap} min={2} max={10}
+          <Slider label={t('controlPanel.slider.scanlineGap')} value={colorModeSettings.modulation.scanlineGap} min={2} max={10}
             onChange={(v) => updateMod({ scanlineGap: v })} />
-          <Slider label="Chromatic" value={colorModeSettings.modulation.chromaticOffset} min={0} max={15}
+          <Slider label={t('controlPanel.slider.chromatic')} value={colorModeSettings.modulation.chromaticOffset} min={0} max={15}
             onChange={(v) => updateMod({ chromaticOffset: v })} />
-          <Slider label="RGB Shift" value={colorModeSettings.modulation.rgbShift} min={0} max={10}
+          <Slider label={t('controlPanel.slider.rgbShift')} value={colorModeSettings.modulation.rgbShift} min={0} max={10}
             onChange={(v) => updateMod({ rgbShift: v })} />
-          <Slider label="Noise" value={colorModeSettings.modulation.noiseAmount} min={0} max={100}
+          <Slider label={t('controlPanel.slider.noise')} value={colorModeSettings.modulation.noiseAmount} min={0} max={100}
             onChange={(v) => updateMod({ noiseAmount: v })} display={`${colorModeSettings.modulation.noiseAmount}%`} />
-          <Slider label="Pixelation" value={colorModeSettings.modulation.pixelation} min={1} max={16}
+          <Slider label={t('controlPanel.slider.pixelation')} value={colorModeSettings.modulation.pixelation} min={1} max={16}
             onChange={(v) => updateMod({ pixelation: v })} />
-          <Slider label="Interference" value={colorModeSettings.modulation.interference} min={0} max={100}
+          <Slider label={t('controlPanel.slider.interference')} value={colorModeSettings.modulation.interference} min={0} max={100}
             onChange={(v) => updateMod({ interference: v })} display={`${colorModeSettings.modulation.interference}%`} />
         </Section>
       )}
 
-      <Section title="PALETTE" defaultOpen={true}>
+      <Section title={t('controlPanel.section.palette')} defaultOpen={true}>
         <select value={selectedPalette} onChange={(e) => onPaletteChange(Number(e.target.value))} className="custom-select w-full">
           {PREDEFINED_PALETTES.map((palette, index) => (
             <option key={index} value={index}>{palette.name}</option>
@@ -340,76 +331,76 @@ export default function ControlPanel({
               style={{ backgroundColor: color }} title={color} />
           ))}
         </div>
-        <Slider label="Hue Shift" value={paletteModifiers.hueShift} min={-180} max={180}
+        <Slider label={t('controlPanel.slider.hueShift')} value={paletteModifiers.hueShift} min={-180} max={180}
           onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, hueShift: v })}
           display={`${paletteModifiers.hueShift > 0 ? '+' : ''}${paletteModifiers.hueShift}`} />
-        <Slider label="Saturation" value={paletteModifiers.saturationBoost} min={-100} max={100}
+        <Slider label={t('controlPanel.slider.saturation')} value={paletteModifiers.saturationBoost} min={-100} max={100}
           onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, saturationBoost: v })}
           display={`${paletteModifiers.saturationBoost > 0 ? '+' : ''}${paletteModifiers.saturationBoost}`} />
-        <Slider label="Brightness" value={paletteModifiers.brightnessShift} min={-100} max={100}
+        <Slider label={t('controlPanel.slider.brightness')} value={paletteModifiers.brightnessShift} min={-100} max={100}
           onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, brightnessShift: v })}
           display={`${paletteModifiers.brightnessShift > 0 ? '+' : ''}${paletteModifiers.brightnessShift}`} />
-        <Slider label="Intensity" value={paletteModifiers.intensity} min={0} max={200}
+        <Slider label={t('controlPanel.slider.intensity')} value={paletteModifiers.intensity} min={0} max={200}
           onChange={(v) => onPaletteModifiersChange({ ...paletteModifiers, intensity: v })}
           display={`${paletteModifiers.intensity}%`} />
       </Section>
 
-      <Section title="POST-PROCESSING" defaultOpen={false}>
-        <Slider label="Scanlines" value={postProcessing.scanlines} min={0} max={100}
+      <Section title={t('controlPanel.section.postProcessing')} defaultOpen={false}>
+        <Slider label={t('controlPanel.slider.scanlines')} value={postProcessing.scanlines} min={0} max={100}
           onChange={(v) => onPostProcessingChange({ ...postProcessing, scanlines: v })} display={`${postProcessing.scanlines}%`} />
-        <Slider label="Chromatic Aberration" value={postProcessing.chromaticAberration} min={0} max={100}
+        <Slider label={t('controlPanel.slider.chromaticAberration')} value={postProcessing.chromaticAberration} min={0} max={100}
           onChange={(v) => onPostProcessingChange({ ...postProcessing, chromaticAberration: v })} display={`${postProcessing.chromaticAberration}%`} />
-        <Slider label="Vignette" value={postProcessing.vignette} min={0} max={100}
+        <Slider label={t('controlPanel.slider.vignette')} value={postProcessing.vignette} min={0} max={100}
           onChange={(v) => onPostProcessingChange({ ...postProcessing, vignette: v })} display={`${postProcessing.vignette}%`} />
-        <Slider label="Bloom" value={postProcessing.bloom} min={0} max={100}
+        <Slider label={t('controlPanel.slider.bloom')} value={postProcessing.bloom} min={0} max={100}
           onChange={(v) => onPostProcessingChange({ ...postProcessing, bloom: v })} display={`${postProcessing.bloom}%`} />
       </Section>
 
-      <Section title="EFFECTS" defaultOpen={false}>
-        <Slider label="Sharpen" value={adjustments.sharpen} min={0} max={100}
+      <Section title={t('controlPanel.section.effects')} defaultOpen={false}>
+        <Slider label={t('controlPanel.slider.sharpen')} value={adjustments.sharpen} min={0} max={100}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, sharpen: v })} />
-        <Slider label="Sharpen Radius" value={adjustments.sharpenRadius} min={0} max={30}
+        <Slider label={t('controlPanel.slider.sharpenRadius')} value={adjustments.sharpenRadius} min={0} max={30}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, sharpenRadius: v })} />
-        <Slider label="Blur" value={adjustments.blur} min={0} max={20}
+        <Slider label={t('controlPanel.slider.blur')} value={adjustments.blur} min={0} max={20}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, blur: v })} />
-        <Slider label="Noise" value={adjustments.noise} min={0} max={100}
+        <Slider label={t('controlPanel.slider.noise')} value={adjustments.noise} min={0} max={100}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, noise: v })} />
       </Section>
 
-      <Section title="TONAL" defaultOpen={false}>
-        <Slider label="Highlights" value={adjustments.tonalControls.highlights} min={-100} max={100}
+      <Section title={t('controlPanel.section.tonal')} defaultOpen={false}>
+        <Slider label={t('controlPanel.slider.highlights')} value={adjustments.tonalControls.highlights} min={-100} max={100}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, tonalControls: { ...adjustments.tonalControls, highlights: v } })}
           display={adjustments.tonalControls.highlights > 0 ? `+${adjustments.tonalControls.highlights}` : String(adjustments.tonalControls.highlights)} />
-        <Slider label="Midtones" value={adjustments.tonalControls.midtones} min={-100} max={100}
+        <Slider label={t('controlPanel.slider.midtones')} value={adjustments.tonalControls.midtones} min={-100} max={100}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, tonalControls: { ...adjustments.tonalControls, midtones: v } })}
           display={adjustments.tonalControls.midtones > 0 ? `+${adjustments.tonalControls.midtones}` : String(adjustments.tonalControls.midtones)} />
-        <Slider label="Shadows" value={adjustments.tonalControls.shadows} min={-100} max={100}
+        <Slider label={t('controlPanel.slider.shadows')} value={adjustments.tonalControls.shadows} min={-100} max={100}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, tonalControls: { ...adjustments.tonalControls, shadows: v } })}
           display={adjustments.tonalControls.shadows > 0 ? `+${adjustments.tonalControls.shadows}` : String(adjustments.tonalControls.shadows)} />
       </Section>
 
-      <Section title="LEVELS" defaultOpen={false}>
-        <Slider label="Input Black" value={adjustments.levels.inputBlack} min={0} max={255}
+      <Section title={t('controlPanel.section.levels')} defaultOpen={false}>
+        <Slider label={t('controlPanel.slider.inputBlack')} value={adjustments.levels.inputBlack} min={0} max={255}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, levels: { ...adjustments.levels, inputBlack: v } })} />
-        <Slider label="Input White" value={adjustments.levels.inputWhite} min={0} max={255}
+        <Slider label={t('controlPanel.slider.inputWhite')} value={adjustments.levels.inputWhite} min={0} max={255}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, levels: { ...adjustments.levels, inputWhite: v } })} />
-        <Slider label="Gamma" value={adjustments.levels.gamma} min={0.1} max={3} step={0.01}
+        <Slider label={t('controlPanel.slider.gamma')} value={adjustments.levels.gamma} min={0.1} max={3} step={0.01}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, levels: { ...adjustments.levels, gamma: v } })}
           display={adjustments.levels.gamma.toFixed(2)} />
-        <Slider label="Output Black" value={adjustments.levels.outputBlack} min={0} max={255}
+        <Slider label={t('controlPanel.slider.outputBlack')} value={adjustments.levels.outputBlack} min={0} max={255}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, levels: { ...adjustments.levels, outputBlack: v } })} />
-        <Slider label="Output White" value={adjustments.levels.outputWhite} min={0} max={255}
+        <Slider label={t('controlPanel.slider.outputWhite')} value={adjustments.levels.outputWhite} min={0} max={255}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, levels: { ...adjustments.levels, outputWhite: v } })} />
       </Section>
 
-      <Section title="ADJUSTMENTS" defaultOpen={false}>
-        <Slider label="Brightness" value={adjustments.brightness} min={-100} max={100}
+      <Section title={t('controlPanel.section.adjustments')} defaultOpen={false}>
+        <Slider label={t('controlPanel.slider.brightness')} value={adjustments.brightness} min={-100} max={100}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, brightness: v })}
           display={adjustments.brightness > 0 ? `+${adjustments.brightness}` : String(adjustments.brightness)} />
-        <Slider label="Contrast" value={adjustments.contrast} min={-100} max={100}
+        <Slider label={t('controlPanel.slider.contrast')} value={adjustments.contrast} min={-100} max={100}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, contrast: v })}
           display={adjustments.contrast > 0 ? `+${adjustments.contrast}` : String(adjustments.contrast)} />
-        <Slider label="Saturation" value={adjustments.saturation} min={0} max={200}
+        <Slider label={t('controlPanel.slider.saturation')} value={adjustments.saturation} min={0} max={200}
           onChange={(v) => onAdjustmentsChange({ ...adjustments, saturation: v })}
           display={`${adjustments.saturation}%`} />
         <div className="flex gap-1.5">
@@ -419,26 +410,26 @@ export default function ControlPanel({
             tonalControls: { highlights: 0, midtones: 0, shadows: 0 },
             levels: { inputBlack: 0, inputWhite: 255, outputBlack: 0, outputWhite: 255, gamma: 1 },
           })}
-            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-mono-ui text-bz-system border border-bz-grid hover:border-bz-system hover:text-bz-paper transition-colors duration-240 tracking-widest"
+            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-mono-ui text-bz-system border border-bz-grid hover:border-bz-system hover:text-bz-interface transition-colors duration-240 tracking-widest uppercase"
           >
             <RotateCcw className="w-2.5 h-2.5" />
-            RESET
+            {t('controlPanel.button.reset')}
           </button>
           <button onClick={onReAnalyze}
-            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-mono-ui text-bz-cyan border border-bz-grid hover:border-bz-cyan transition-colors duration-240 tracking-widest"
+            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-mono-ui text-bz-cyan border border-bz-grid hover:border-bz-cyan transition-colors duration-240 tracking-widest uppercase"
           >
             <RefreshCw className="w-2.5 h-2.5" />
-            RE-ANALYZE
+            {t('controlPanel.button.reAnalyze')}
           </button>
         </div>
       </Section>
 
-      <Section title="INPUT / OUTPUT" defaultOpen={false}>
+      <Section title={t('controlPanel.section.inputOutput')} defaultOpen={false}>
         <div>
-          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest block mb-1">RESAMPLING</span>
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest uppercase block mb-1">{t('controlPanel.label.resampling')}</span>
           <select value={resamplingMethod} onChange={(e) => onResamplingMethodChange(e.target.value as ResamplingMethod)} className="custom-select w-full">
-            {resamplingMethods.map((m) => (
-              <option key={m.value} value={m.value}>{m.label}</option>
+            {RESAMPLING_VALUES.map((m) => (
+              <option key={m} value={m}>{t(`controlPanel.resampling.${m}`)}</option>
             ))}
           </select>
         </div>
