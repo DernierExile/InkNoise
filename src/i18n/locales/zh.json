@@ -1,0 +1,236 @@
+{
+  "common": {
+    "close": "关闭",
+    "cancel": "取消",
+    "save": "保存",
+    "loading": "加载中..."
+  },
+  "header": {
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "goPro": "升级 Pro",
+    "rendering": "渲染中",
+    "studioActive": "Studio",
+    "founderActive": "Founder",
+    "signOutTooltip": "退出登录 ({email})",
+    "homeAria": "InkNoise — 返回首页",
+    "language": "语言"
+  },
+  "banner": {
+    "checkoutSuccess": "支付确认 · 欢迎加入 BEZIER ONE。计划即将激活...",
+    "checkoutCancelled": "支付已取消 — 未产生扣款。",
+    "dismiss": "关闭",
+    "resized": "已从 {orig} 调整为 {resized}",
+    "loadNewImage": "加载新图片"
+  },
+  "home": {
+    "productLabel": "Product · 001 · Live",
+    "tagline": "为数字图像设计的纹理引擎。",
+    "subtagline": "一个纹理引擎,而非滤镜。",
+    "dropToBegin": "拖入图片开始",
+    "release": "释放以处理",
+    "orBrowse": "或",
+    "browseFiles": "浏览文件",
+    "fileTypes": "PNG · JPG · GIF · WEBP",
+    "byBezier": "by BEZIER",
+    "footerTagline": "Running visual culture · MMXXVI"
+  },
+  "module": {
+    "live": "Live",
+    "dither": {
+      "title": "Dither",
+      "desc": "25 种算法 · Floyd-Steinberg、Bayer、Halftone"
+    },
+    "halftone": {
+      "title": "Halftone",
+      "desc": "印刷逻辑 · CMYK 分色 · DPI 控制"
+    },
+    "grain": {
+      "title": "Grain",
+      "desc": "设计颗粒 · 35mm 至数字 · 方向性"
+    },
+    "contrast": {
+      "title": "Contrast",
+      "desc": "图像堆栈控制 · 输出曲线 · 色带"
+    }
+  },
+  "preview": {
+    "split": "Split",
+    "compare": "Compare",
+    "dragToCompare": "拖动以对比",
+    "inputOriginal": "输入 · 原图",
+    "outputDithered": "输出 · Dithered",
+    "rendering": "渲染中...",
+    "original": "原图",
+    "dithered": "Dithered"
+  },
+  "export": {
+    "export": "导出",
+    "quality": "质量",
+    "redirecting": "跳转中..."
+  },
+  "controlPanel": {
+    "section": {
+      "presets": "预设",
+      "dither": "Dither",
+      "duoTone": "双色调",
+      "triTone": "三色调",
+      "tonalMapping": "色调映射",
+      "rgbSplit": "RGB 分离",
+      "modulation": "调制",
+      "palette": "调色板",
+      "postProcessing": "后期处理",
+      "effects": "特效",
+      "tonal": "色调",
+      "levels": "色阶",
+      "adjustments": "调整",
+      "inputOutput": "输入 / 输出"
+    },
+    "label": {
+      "algorithm": "算法",
+      "colorMode": "色彩模式",
+      "resampling": "重采样",
+      "colorCount": "颜色数",
+      "auto": "Auto",
+      "autoTuned": "Auto-tuned"
+    },
+    "slider": {
+      "shadow": "阴影",
+      "midtone": "中间调",
+      "highlight": "高光",
+      "highlights": "高光",
+      "midtones": "中间调",
+      "shadows": "阴影",
+      "preserveOriginal": "保留原图",
+      "redX": "Red X",
+      "redY": "Red Y",
+      "blueX": "Blue X",
+      "blueY": "Blue Y",
+      "intensity": "强度",
+      "hueShift": "色相偏移",
+      "saturation": "饱和度",
+      "brightness": "亮度",
+      "contrast": "对比度",
+      "scanlines": "扫描线",
+      "scanlineGap": "扫描线间隔",
+      "chromatic": "色差",
+      "chromaticAberration": "色差像差",
+      "rgbShift": "RGB 偏移",
+      "noise": "噪点",
+      "pixelation": "像素化",
+      "interference": "干扰",
+      "vignette": "暗角",
+      "bloom": "辉光",
+      "sharpen": "锐化",
+      "sharpenRadius": "锐化半径",
+      "blur": "模糊",
+      "inputBlack": "输入黑",
+      "inputWhite": "输入白",
+      "outputBlack": "输出黑",
+      "outputWhite": "输出白",
+      "gamma": "伽马"
+    },
+    "button": {
+      "reset": "重置",
+      "reAnalyze": "重新分析"
+    },
+    "colorMode": {
+      "mono": "单色",
+      "indexed": "索引色",
+      "rgb": "RGB",
+      "duo-tone": "双色调",
+      "tri-tone": "三色调",
+      "tonal": "色调",
+      "rgb-split": "RGB 分离",
+      "modulation": "调制"
+    },
+    "resampling": {
+      "nearest-neighbor": "最近邻",
+      "bilinear": "双线性",
+      "bicubic": "双三次"
+    }
+  },
+  "auth": {
+    "loginTitle": "进入 Bezier One",
+    "signupTitle": "创建账号",
+    "loginEyebrow": "Access · Login",
+    "signupEyebrow": "Access · Create account",
+    "contextSubscribe": "以订阅",
+    "contextSign": "请{context}登录。",
+    "emailPlaceholder": "you@email.com",
+    "passwordPlaceholder": "密码 (至少 8 个字符)",
+    "signInButton": "登录",
+    "createAccountButton": "创建账号",
+    "signingIn": "登录中...",
+    "creatingAccount": "创建中...",
+    "success": "成功",
+    "switchToSignup": "创建账号 →",
+    "switchToLogin": "← 改为登录",
+    "or": "或",
+    "continueWithGoogle": "使用 Google 继续",
+    "continueWithGitHub": "使用 GitHub 继续",
+    "error": {
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "passwordTooShort": "密码至少需要 8 个字符。",
+      "invalidCredentials": "邮箱或密码错误。",
+      "accountExists": "该邮箱已注册账号,请尝试登录。",
+      "rateLimit": "尝试次数过多,请稍后再试。",
+      "userNotFound": "未找到该邮箱的账号。",
+      "loginFailed": "登录失败,请检查您的凭据。",
+      "signupFailed": "创建账号失败,请重试。",
+      "oauthFailed": "无法启动登录,请重试。"
+    }
+  },
+  "email": {
+    "eyebrow": "Signal · 001",
+    "title": "保持联系",
+    "body": "登记您的邮箱以接收 InkNoise 更新 — 新算法、新模块以及 Bezier One 上线。",
+    "successTitle": "您已加入名单",
+    "successBody": "新模块发布及 Bezier One 上线时我们将通知您。",
+    "submit": "保持更新",
+    "submitting": "订阅中...",
+    "noThanks": "暂不",
+    "errorInvalid": "请输入有效的邮箱地址。",
+    "errorGeneric": "出现错误,请重试。"
+  },
+  "access": {
+    "eyebrow": "Access · BEZIER ONE",
+    "title": "一个访问。所有模块。",
+    "subtitle": "一个订阅解锁所有 BEZIER 产品、所有输出引擎、所有视觉工作流 — 全部归于一个访问层级。",
+    "studioActive": "Studio · 已激活",
+    "founderActive": "Founder · 已激活",
+    "perMonth": "/ 月",
+    "perYear": "/ 年",
+    "lifetime": "终身",
+    "tierStudio": "Studio",
+    "tierFounder": "Founder",
+    "tagSave52": "省 52%",
+    "tag500Seats": "限 500 席",
+    "feature": {
+      "noWatermark": "无水印",
+      "fourKExport": "4K 导出",
+      "batchProcessing": "批量处理",
+      "savePresets": "保存预设",
+      "allPalettes": "解锁全部调色板",
+      "everythingMonthly": "包含月度套餐全部内容",
+      "equivalent": "相当于每月 €5,75",
+      "prioritySupport": "优先支持",
+      "lifetimeBundle": "InkNoise + OUTLINE 终身使用",
+      "futureUpdates": "所有 v1.x 更新",
+      "earlyAccess": "下一批模块抢先体验",
+      "founderBadge": "Founder 徽章"
+    },
+    "cta": {
+      "monthly": "开通月度",
+      "annual": "开通年度",
+      "lifetime": "占据 Founder 席位"
+    },
+    "footer": "安全支付 · 由 Stripe 提供",
+    "error": {
+      "notAuthenticated": "请登录以继续。",
+      "missingPriceId": "支付未配置。环境中缺少 Stripe Price ID。",
+      "noUrl": "Stripe 未返回支付 URL。",
+      "generic": "支付失败,请重试。"
+    }
+  }
+}

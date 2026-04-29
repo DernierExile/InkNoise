@@ -1,0 +1,236 @@
+{
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "loading": "Loading..."
+  },
+  "header": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "goPro": "Go Pro",
+    "rendering": "Rendering",
+    "studioActive": "Studio",
+    "founderActive": "Founder",
+    "signOutTooltip": "Sign out ({email})",
+    "homeAria": "InkNoise — back to home",
+    "language": "Language"
+  },
+  "banner": {
+    "checkoutSuccess": "Payment confirmed · Welcome to BEZIER ONE. Plan unlocking shortly...",
+    "checkoutCancelled": "Checkout cancelled — no charge made.",
+    "dismiss": "Dismiss",
+    "resized": "Resized from {orig} to {resized}",
+    "loadNewImage": "Load new image"
+  },
+  "home": {
+    "productLabel": "Product · 001 · Live",
+    "tagline": "Engineered texture for digital images.",
+    "subtagline": "A texture engine, not a filter.",
+    "dropToBegin": "Drop image to begin",
+    "release": "Release to process",
+    "orBrowse": "or",
+    "browseFiles": "browse files",
+    "fileTypes": "PNG · JPG · GIF · WEBP",
+    "byBezier": "by BEZIER",
+    "footerTagline": "Running visual culture · MMXXVI"
+  },
+  "module": {
+    "live": "Live",
+    "dither": {
+      "title": "Dither",
+      "desc": "25 algorithms · Floyd-Steinberg, Bayer, Halftone"
+    },
+    "halftone": {
+      "title": "Halftone",
+      "desc": "Print logic · CMYK separation · DPI control"
+    },
+    "grain": {
+      "title": "Grain",
+      "desc": "Engineered grain · 35mm to digital · directional"
+    },
+    "contrast": {
+      "title": "Contrast",
+      "desc": "Image stack control · output curves · banding"
+    }
+  },
+  "preview": {
+    "split": "Split",
+    "compare": "Compare",
+    "dragToCompare": "Drag to compare",
+    "inputOriginal": "Input · Original",
+    "outputDithered": "Output · Dithered",
+    "rendering": "Rendering...",
+    "original": "Original",
+    "dithered": "Dithered"
+  },
+  "export": {
+    "export": "Export",
+    "quality": "Quality",
+    "redirecting": "Redirecting..."
+  },
+  "controlPanel": {
+    "section": {
+      "presets": "Presets",
+      "dither": "Dither",
+      "duoTone": "Duo-tone",
+      "triTone": "Tri-tone",
+      "tonalMapping": "Tonal mapping",
+      "rgbSplit": "RGB split",
+      "modulation": "Modulation",
+      "palette": "Palette",
+      "postProcessing": "Post-processing",
+      "effects": "Effects",
+      "tonal": "Tonal",
+      "levels": "Levels",
+      "adjustments": "Adjustments",
+      "inputOutput": "Input / Output"
+    },
+    "label": {
+      "algorithm": "Algorithm",
+      "colorMode": "Color mode",
+      "resampling": "Resampling",
+      "colorCount": "Color count",
+      "auto": "Auto",
+      "autoTuned": "Auto-tuned"
+    },
+    "slider": {
+      "shadow": "Shadow",
+      "midtone": "Midtone",
+      "highlight": "Highlight",
+      "highlights": "Highlights",
+      "midtones": "Midtones",
+      "shadows": "Shadows",
+      "preserveOriginal": "Preserve original",
+      "redX": "Red X",
+      "redY": "Red Y",
+      "blueX": "Blue X",
+      "blueY": "Blue Y",
+      "intensity": "Intensity",
+      "hueShift": "Hue shift",
+      "saturation": "Saturation",
+      "brightness": "Brightness",
+      "contrast": "Contrast",
+      "scanlines": "Scanlines",
+      "scanlineGap": "Scanline gap",
+      "chromatic": "Chromatic",
+      "chromaticAberration": "Chromatic aberration",
+      "rgbShift": "RGB shift",
+      "noise": "Noise",
+      "pixelation": "Pixelation",
+      "interference": "Interference",
+      "vignette": "Vignette",
+      "bloom": "Bloom",
+      "sharpen": "Sharpen",
+      "sharpenRadius": "Sharpen radius",
+      "blur": "Blur",
+      "inputBlack": "Input black",
+      "inputWhite": "Input white",
+      "outputBlack": "Output black",
+      "outputWhite": "Output white",
+      "gamma": "Gamma"
+    },
+    "button": {
+      "reset": "Reset",
+      "reAnalyze": "Re-analyze"
+    },
+    "colorMode": {
+      "mono": "Mono",
+      "indexed": "Indexed",
+      "rgb": "RGB",
+      "duo-tone": "Duo-tone",
+      "tri-tone": "Tri-tone",
+      "tonal": "Tonal",
+      "rgb-split": "RGB split",
+      "modulation": "Modulate"
+    },
+    "resampling": {
+      "nearest-neighbor": "Nearest neighbor",
+      "bilinear": "Bilinear",
+      "bicubic": "Bicubic"
+    }
+  },
+  "auth": {
+    "loginTitle": "Enter Bezier One",
+    "signupTitle": "Create your account",
+    "loginEyebrow": "Access · Login",
+    "signupEyebrow": "Access · Create account",
+    "contextSubscribe": "to subscribe",
+    "contextSign": "Sign in {context}.",
+    "emailPlaceholder": "you@email.com",
+    "passwordPlaceholder": "password (min 8 characters)",
+    "signInButton": "Sign in",
+    "createAccountButton": "Create account",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "success": "Success",
+    "switchToSignup": "Create an account →",
+    "switchToLogin": "← Sign in instead",
+    "or": "or",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGitHub": "Continue with GitHub",
+    "error": {
+      "invalidEmail": "Please enter a valid email address.",
+      "passwordTooShort": "Password must be at least 8 characters.",
+      "invalidCredentials": "Invalid email or password.",
+      "accountExists": "An account already exists with this email. Try signing in.",
+      "rateLimit": "Too many attempts. Please wait a few minutes.",
+      "userNotFound": "No account found with this email.",
+      "loginFailed": "Sign-in failed. Please check your credentials.",
+      "signupFailed": "Account creation failed. Please try again.",
+      "oauthFailed": "Could not start sign-in. Please try again."
+    }
+  },
+  "email": {
+    "eyebrow": "Signal · 001",
+    "title": "Stay on signal",
+    "body": "Register your address to receive InkNoise updates — new algorithms, modules, and the Bezier One launch.",
+    "successTitle": "You're on the list",
+    "successBody": "We'll signal you when new modules ship and the Bezier One offer goes live.",
+    "submit": "Keep me updated",
+    "submitting": "Subscribing...",
+    "noThanks": "No thanks",
+    "errorInvalid": "Please enter a valid email address.",
+    "errorGeneric": "Something went wrong. Please try again."
+  },
+  "access": {
+    "eyebrow": "Access · BEZIER ONE",
+    "title": "Single access. Every module.",
+    "subtitle": "One subscription unlocks every BEZIER product, every output engine, every visual workflow — under one access layer.",
+    "studioActive": "Studio · Active",
+    "founderActive": "Founder · Active",
+    "perMonth": "/ month",
+    "perYear": "/ year",
+    "lifetime": "Lifetime",
+    "tierStudio": "Studio",
+    "tierFounder": "Founder",
+    "tagSave52": "Save 52%",
+    "tag500Seats": "500 seats",
+    "feature": {
+      "noWatermark": "No watermark",
+      "fourKExport": "4K export",
+      "batchProcessing": "Batch processing",
+      "savePresets": "Save presets",
+      "allPalettes": "All palettes unlocked",
+      "everythingMonthly": "Everything in monthly",
+      "equivalent": "Equivalent €5,75/mo",
+      "prioritySupport": "Priority support",
+      "lifetimeBundle": "InkNoise + OUTLINE for life",
+      "futureUpdates": "All future v1.x updates",
+      "earlyAccess": "Early access to next modules",
+      "founderBadge": "Founder badge"
+    },
+    "cta": {
+      "monthly": "Start monthly",
+      "annual": "Start annual",
+      "lifetime": "Claim founder seat"
+    },
+    "footer": "Secure checkout · Powered by Stripe",
+    "error": {
+      "notAuthenticated": "Please sign in to continue.",
+      "missingPriceId": "Checkout not configured. Stripe price IDs missing in environment.",
+      "noUrl": "Stripe did not return a checkout URL.",
+      "generic": "Checkout failed. Please try again."
+    }
+  }
+}

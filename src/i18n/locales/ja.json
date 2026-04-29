@@ -1,0 +1,236 @@
+{
+  "common": {
+    "close": "閉じる",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "loading": "読み込み中..."
+  },
+  "header": {
+    "signIn": "サインイン",
+    "signOut": "サインアウト",
+    "goPro": "Pro にアップグレード",
+    "rendering": "レンダリング中",
+    "studioActive": "Studio",
+    "founderActive": "Founder",
+    "signOutTooltip": "サインアウト ({email})",
+    "homeAria": "InkNoise — ホームに戻る",
+    "language": "言語"
+  },
+  "banner": {
+    "checkoutSuccess": "決済が完了しました · BEZIER ONE へようこそ。プランをまもなく有効化します...",
+    "checkoutCancelled": "決済がキャンセルされました — 課金は発生していません。",
+    "dismiss": "閉じる",
+    "resized": "{orig} から {resized} にリサイズしました",
+    "loadNewImage": "新しい画像を読み込む"
+  },
+  "home": {
+    "productLabel": "Product · 001 · Live",
+    "tagline": "デジタル画像のための設計されたテクスチャ。",
+    "subtagline": "フィルターではなく、テクスチャエンジン。",
+    "dropToBegin": "画像をドロップして開始",
+    "release": "離して処理",
+    "orBrowse": "または",
+    "browseFiles": "ファイルを選択",
+    "fileTypes": "PNG · JPG · GIF · WEBP",
+    "byBezier": "by BEZIER",
+    "footerTagline": "Running visual culture · MMXXVI"
+  },
+  "module": {
+    "live": "Live",
+    "dither": {
+      "title": "Dither",
+      "desc": "25 アルゴリズム · Floyd-Steinberg、Bayer、Halftone"
+    },
+    "halftone": {
+      "title": "Halftone",
+      "desc": "印刷ロジック · CMYK 分版 · DPI 制御"
+    },
+    "grain": {
+      "title": "Grain",
+      "desc": "設計されたグレイン · 35mm からデジタルへ · 方向性"
+    },
+    "contrast": {
+      "title": "Contrast",
+      "desc": "イメージスタック制御 · 出力カーブ · バンディング"
+    }
+  },
+  "preview": {
+    "split": "Split",
+    "compare": "Compare",
+    "dragToCompare": "ドラッグして比較",
+    "inputOriginal": "入力 · オリジナル",
+    "outputDithered": "出力 · Dithered",
+    "rendering": "レンダリング中...",
+    "original": "オリジナル",
+    "dithered": "Dithered"
+  },
+  "export": {
+    "export": "エクスポート",
+    "quality": "品質",
+    "redirecting": "リダイレクト中..."
+  },
+  "controlPanel": {
+    "section": {
+      "presets": "プリセット",
+      "dither": "Dither",
+      "duoTone": "デュオトーン",
+      "triTone": "トライトーン",
+      "tonalMapping": "トーンマッピング",
+      "rgbSplit": "RGB スプリット",
+      "modulation": "モジュレーション",
+      "palette": "パレット",
+      "postProcessing": "ポストプロセス",
+      "effects": "エフェクト",
+      "tonal": "トーン",
+      "levels": "レベル",
+      "adjustments": "調整",
+      "inputOutput": "入力 / 出力"
+    },
+    "label": {
+      "algorithm": "アルゴリズム",
+      "colorMode": "カラーモード",
+      "resampling": "リサンプリング",
+      "colorCount": "カラー数",
+      "auto": "Auto",
+      "autoTuned": "Auto-tuned"
+    },
+    "slider": {
+      "shadow": "シャドウ",
+      "midtone": "ミッドトーン",
+      "highlight": "ハイライト",
+      "highlights": "ハイライト",
+      "midtones": "ミッドトーン",
+      "shadows": "シャドウ",
+      "preserveOriginal": "オリジナル保持",
+      "redX": "Red X",
+      "redY": "Red Y",
+      "blueX": "Blue X",
+      "blueY": "Blue Y",
+      "intensity": "強度",
+      "hueShift": "色相シフト",
+      "saturation": "彩度",
+      "brightness": "明度",
+      "contrast": "コントラスト",
+      "scanlines": "スキャンライン",
+      "scanlineGap": "スキャンライン間隔",
+      "chromatic": "クロマティック",
+      "chromaticAberration": "色収差",
+      "rgbShift": "RGB シフト",
+      "noise": "ノイズ",
+      "pixelation": "ピクセル化",
+      "interference": "干渉",
+      "vignette": "ビネット",
+      "bloom": "ブルーム",
+      "sharpen": "シャープ",
+      "sharpenRadius": "シャープ半径",
+      "blur": "ブラー",
+      "inputBlack": "入力ブラック",
+      "inputWhite": "入力ホワイト",
+      "outputBlack": "出力ブラック",
+      "outputWhite": "出力ホワイト",
+      "gamma": "ガンマ"
+    },
+    "button": {
+      "reset": "リセット",
+      "reAnalyze": "再解析"
+    },
+    "colorMode": {
+      "mono": "モノ",
+      "indexed": "インデックス",
+      "rgb": "RGB",
+      "duo-tone": "デュオトーン",
+      "tri-tone": "トライトーン",
+      "tonal": "トーナル",
+      "rgb-split": "RGB スプリット",
+      "modulation": "モジュレーション"
+    },
+    "resampling": {
+      "nearest-neighbor": "ニアレストネイバー",
+      "bilinear": "バイリニア",
+      "bicubic": "バイキュービック"
+    }
+  },
+  "auth": {
+    "loginTitle": "Bezier One に入る",
+    "signupTitle": "アカウントを作成",
+    "loginEyebrow": "Access · Login",
+    "signupEyebrow": "Access · Create account",
+    "contextSubscribe": "サブスクリプションに登録するため",
+    "contextSign": "{context} サインインしてください。",
+    "emailPlaceholder": "you@email.com",
+    "passwordPlaceholder": "パスワード (8文字以上)",
+    "signInButton": "サインイン",
+    "createAccountButton": "アカウントを作成",
+    "signingIn": "サインイン中...",
+    "creatingAccount": "アカウント作成中...",
+    "success": "成功",
+    "switchToSignup": "アカウントを作成 →",
+    "switchToLogin": "← サインインする",
+    "or": "または",
+    "continueWithGoogle": "Google で続ける",
+    "continueWithGitHub": "GitHub で続ける",
+    "error": {
+      "invalidEmail": "有効なメールアドレスを入力してください。",
+      "passwordTooShort": "パスワードは8文字以上で入力してください。",
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+      "accountExists": "このメールアドレスのアカウントは既に存在します。サインインしてください。",
+      "rateLimit": "試行回数が多すぎます。数分後にお試しください。",
+      "userNotFound": "このメールアドレスのアカウントが見つかりません。",
+      "loginFailed": "サインインに失敗しました。認証情報をご確認ください。",
+      "signupFailed": "アカウント作成に失敗しました。再度お試しください。",
+      "oauthFailed": "サインインを開始できませんでした。再度お試しください。"
+    }
+  },
+  "email": {
+    "eyebrow": "Signal · 001",
+    "title": "シグナルを受信",
+    "body": "メールアドレスを登録して InkNoise の最新情報をお届けします — 新しいアルゴリズム、モジュール、Bezier One ローンチ情報。",
+    "successTitle": "リストに登録されました",
+    "successBody": "新しいモジュールのリリースと Bezier One の提供開始時にお知らせします。",
+    "submit": "登録する",
+    "submitting": "登録中...",
+    "noThanks": "結構です",
+    "errorInvalid": "有効なメールアドレスを入力してください。",
+    "errorGeneric": "エラーが発生しました。再度お試しください。"
+  },
+  "access": {
+    "eyebrow": "Access · BEZIER ONE",
+    "title": "一つのアクセス。すべてのモジュール。",
+    "subtitle": "1つのサブスクリプションで、すべての BEZIER 製品、すべての出力エンジン、すべてのビジュアルワークフローが — 単一のアクセスレイヤーの下で利用可能になります。",
+    "studioActive": "Studio · 有効",
+    "founderActive": "Founder · 有効",
+    "perMonth": "/ 月",
+    "perYear": "/ 年",
+    "lifetime": "永久",
+    "tierStudio": "Studio",
+    "tierFounder": "Founder",
+    "tagSave52": "52% お得",
+    "tag500Seats": "500 席限定",
+    "feature": {
+      "noWatermark": "ウォーターマークなし",
+      "fourKExport": "4K エクスポート",
+      "batchProcessing": "バッチ処理",
+      "savePresets": "プリセット保存",
+      "allPalettes": "全パレット解放",
+      "everythingMonthly": "月額プランの全機能",
+      "equivalent": "月額 €5.75 相当",
+      "prioritySupport": "優先サポート",
+      "lifetimeBundle": "InkNoise + OUTLINE 永久利用",
+      "futureUpdates": "v1.x の全アップデート",
+      "earlyAccess": "次期モジュールへの先行アクセス",
+      "founderBadge": "Founder バッジ"
+    },
+    "cta": {
+      "monthly": "月額を開始",
+      "annual": "年額を開始",
+      "lifetime": "Founder 席を確保"
+    },
+    "footer": "安全な決済 · Stripe による提供",
+    "error": {
+      "notAuthenticated": "続行するにはサインインしてください。",
+      "missingPriceId": "決済が設定されていません。Stripe の Price ID が見つかりません。",
+      "noUrl": "Stripe から決済 URL が返されませんでした。",
+      "generic": "決済に失敗しました。再度お試しください。"
+    }
+  }
+}
