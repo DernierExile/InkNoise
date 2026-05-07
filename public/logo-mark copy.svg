@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" fill="none">
+  
+  <g stroke="currentColor" stroke-width="1" opacity="0.18">
+    <line x1="100" y1="500" x2="900" y2="500"></line>
+    <line x1="500" y1="100" x2="500" y2="900"></line>
+    <line x1="100" y1="350" x2="900" y2="350"></line>
+    <line x1="100" y1="650" x2="900" y2="650"></line>
+    <line x1="280" y1="100" x2="280" y2="900"></line>
+    <line x1="720" y1="100" x2="720" y2="900"></line>
+  </g>
+
+  
+  <circle cx="500" cy="500" r="340" stroke="currentColor" stroke-width="2" opacity="0.55"></circle>
+
+  
+  <g stroke="currentColor" stroke-width="2" opacity="0.85">
+    <line x1="380" y1="160" x2="620" y2="160"></line>
+  </g>
+  
+  <circle cx="380" cy="160" r="9" fill="currentColor"></circle>
+  <circle cx="620" cy="160" r="9" fill="currentColor"></circle>
+  <circle cx="500" cy="160" r="11" fill="none" stroke="currentColor" stroke-width="3"></circle>
+
+  
+  <g stroke="currentColor" stroke-width="2" opacity="0.85">
+    <line x1="380" y1="840" x2="620" y2="840"></line>
+  </g>
+  <circle cx="380" cy="840" r="9" fill="currentColor"></circle>
+  <circle cx="620" cy="840" r="9" fill="currentColor"></circle>
+  <circle cx="500" cy="840" r="11" fill="none" stroke="currentColor" stroke-width="3"></circle>
+
+  
+  <circle cx="160" cy="500" r="9" fill="currentColor"></circle>
+  <circle cx="840" cy="500" r="9" fill="currentColor"></circle>
+
+  
+  <g fill="currentColor">
+    
+    <path d="M 200 410&#xA;             L 200 590&#xA;             L 290 590&#xA;             C 330 590 350 575 350 545&#xA;             C 350 525 340 510 322 503&#xA;             C 336 497 344 484 344 467&#xA;             C 344 425 322 410 285 410&#xA;             Z&#xA;             M 232 437 L 282 437 C 302 437 312 444 312 460 C 312 476 302 484 282 484 L 232 484 Z&#xA;             M 232 510 L 286 510 C 308 510 320 519 320 537 C 320 556 308 563 286 563 L 232 563 Z"></path>
+
+    
+    <path d="M 380 410 L 380 590 L 488 590 L 488 562 L 412 562 L 412 514 L 478 514 L 478 487 L 412 487 L 412 438 L 488 438 L 488 410 Z"></path>
+
+    
+    <path d="M 535 425&#xA;             C 555 412 580 410 600 422&#xA;             C 612 430 615 442 608 452&#xA;             C 600 463 585 468 568 472&#xA;             C 545 478 525 488 520 510&#xA;             C 515 535 530 558 555 568&#xA;             C 580 578 605 575 622 565&#xA;             L 612 540&#xA;             C 600 548 585 550 572 545&#xA;             C 558 540 552 530 555 520&#xA;             C 558 510 572 505 590 500&#xA;             C 615 493 638 480 642 458&#xA;             C 646 432 628 412 605 405&#xA;             C 580 397 552 402 528 415 Z" opacity="0.95"></path>
+
+    
+    <path d="M 670 410 L 670 590 L 702 590 L 702 410 Z"></path>
+
+    
+    <path d="M 730 410 L 730 590 L 838 590 L 838 562 L 762 562 L 762 514 L 828 514 L 828 487 L 762 487 L 762 438 L 838 438 L 838 410 Z"></path>
+
+    
+    <path d="M 870 410 L 870 590 L 902 590 L 902 522 L 928 522 L 968 590 L 1004 590 L 960 517 C 982 510 994 493 994 467 C 994 430 972 410 935 410 Z&#xA;             M 902 437 L 932 437 C 952 437 962 447 962 467 C 962 487 952 497 932 497 L 902 497 Z"></path>
+  </g>
+
+  
+  <g stroke="currentColor" stroke-width="1.5" opacity="0.4">
+    <path d="M 80 80 L 110 80 M 80 80 L 80 110"></path>
+    <path d="M 920 80 L 890 80 M 920 80 L 920 110"></path>
+    <path d="M 80 920 L 110 920 M 80 920 L 80 890"></path>
+    <path d="M 920 920 L 890 920 M 920 920 L 920 890"></path>
+  </g>
+</svg>
