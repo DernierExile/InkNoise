@@ -8,11 +8,14 @@ import EmailCaptureModal from './components/EmailCaptureModal';
 import AuthModal from './components/AuthModal';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import PresetsManager from './components/PresetsManager';
+import BatchProcessor from './components/BatchProcessor';
 import { BZTile } from './components/brand';
 import { useAuth, useIsPro } from './contexts/use-auth';
 import { useT } from './i18n/use-i18n';
 import { redirectToCustomerPortal } from './lib/stripe';
 import type { Preset, PresetConfig } from './lib/presets';
+
+type AppMode = 'single' | 'batch';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ImageAnalysis } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo, MAX_DIMENSION_FREE, MAX_DIMENSION_PRO } from './utils/imageResize';
@@ -100,6 +103,7 @@ function App() {
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [activeUserPresetId, setActiveUserPresetId] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [mode, setMode] = useState<AppMode>('single');
 
   const getCurrentConfig = useCallback((): PresetConfig => ({
     algorithm,
@@ -127,6 +131,14 @@ function App() {
     setActivePreset(null);
     setIsAutoTuned(false);
   }, []);
+
+  const handleModeToggle = useCallback((next: AppMode) => {
+    if (next === 'batch' && !isPro) {
+      setShowProModal(true);
+      return;
+    }
+    setMode(next);
+  }, [isPro]);
 
   const workerRef = useRef<Worker | null>(null);
   const emailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -504,8 +516,36 @@ function App() {
             >
               {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
             </button>
-            <div className="relative z-10 w-full max-w-2xl">
-              <ImageUpload onImageLoad={handleImageLoad} />
+
+            {/* Mode switch · Single / Batch */}
+            <div className="relative z-10 mb-4 inline-flex border border-bz-grid bg-bz-deep/80">
+              <button
+                onClick={() => handleModeToggle('single')}
+                className={`px-4 py-2 text-[10px] font-mono-ui tracking-widest uppercase transition-colors duration-240 ${
+                  mode === 'single' ? 'text-bz-paper bg-bz-graphite' : 'text-bz-system hover:text-bz-paper'
+                }`}
+              >
+                {t('mode.single')}
+              </button>
+              <button
+                onClick={() => handleModeToggle('batch')}
+                className={`flex items-center gap-1.5 px-4 py-2 text-[10px] font-mono-ui tracking-widest uppercase transition-colors duration-240 ${
+                  mode === 'batch' ? 'text-bz-paper bg-bz-graphite' : 'text-bz-system hover:text-bz-paper'
+                }`}
+              >
+                {t('mode.batch')}
+                {!isPro && <span className="text-bz-cyan">PRO</span>}
+              </button>
+            </div>
+
+            <div className="relative z-10 w-full max-w-4xl">
+              {mode === 'single' ? (
+                <div className="max-w-2xl mx-auto">
+                  <ImageUpload onImageLoad={handleImageLoad} />
+                </div>
+              ) : (
+                <BatchProcessor config={getCurrentConfig()} />
+              )}
             </div>
           </div>
         ) : (

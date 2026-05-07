@@ -20,6 +20,32 @@
     "proHint": "将自定义设置保存为可复用预设 — Pro 功能。",
     "signInToSave": "登录"
   },
+  "mode": {
+    "single": "单张",
+    "batch": "批量"
+  },
+  "batch": {
+    "dropZone": "拖放图片进行批量处理",
+    "dropZoneHint": "{current} / {max} · 拖放或点击添加",
+    "queue": "队列 · {count}",
+    "queueDone": "完成 · {done}",
+    "queueError": "错误 · {count}",
+    "clearAll": "全部清除",
+    "removeItem": "移除 {name}",
+    "processAll": "全部处理 · {count}",
+    "cancel": "取消",
+    "downloadZip": "下载 ZIP · {count}",
+    "errorMaxReached": "已达上限（最多 {max}）。",
+    "errorUnsupported": "{count} 个文件被跳过（不支持的格式）。",
+    "errorTruncated": "{count} 个文件被丢弃 — 上限：{max}。",
+    "errorZip": "ZIP 构建失败。",
+    "status": {
+      "pending": "待处理",
+      "processing": "处理中",
+      "done": "完成",
+      "error": "错误"
+    }
+  },
   "header": {
     "signIn": "登录",
     "signOut": "退出登录",

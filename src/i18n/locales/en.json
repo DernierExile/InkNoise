@@ -20,6 +20,32 @@
     "proHint": "Save your custom settings as reusable presets — Pro feature.",
     "signInToSave": "Sign in"
   },
+  "mode": {
+    "single": "Single",
+    "batch": "Batch"
+  },
+  "batch": {
+    "dropZone": "Drop images to batch",
+    "dropZoneHint": "{current} / {max} · drop or click to add",
+    "queue": "Queue · {count}",
+    "queueDone": "Done · {done}",
+    "queueError": "Errors · {count}",
+    "clearAll": "Clear all",
+    "removeItem": "Remove {name}",
+    "processAll": "Process all · {count}",
+    "cancel": "Cancel",
+    "downloadZip": "Download ZIP · {count}",
+    "errorMaxReached": "Batch limit reached ({max} max).",
+    "errorUnsupported": "{count} file(s) skipped (unsupported format).",
+    "errorTruncated": "{count} file(s) dropped — limit is {max}.",
+    "errorZip": "Failed to build ZIP archive.",
+    "status": {
+      "pending": "Idle",
+      "processing": "Processing",
+      "done": "Done",
+      "error": "Error"
+    }
+  },
   "header": {
     "signIn": "Sign in",
     "signOut": "Sign out",

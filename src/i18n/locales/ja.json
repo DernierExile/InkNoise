@@ -20,6 +20,32 @@
     "proHint": "カスタム設定を再利用可能なプリセットとして保存 — Pro 機能。",
     "signInToSave": "サインイン"
   },
+  "mode": {
+    "single": "シングル",
+    "batch": "バッチ"
+  },
+  "batch": {
+    "dropZone": "画像をドロップしてバッチ処理",
+    "dropZoneHint": "{current} / {max} · ドロップまたはクリックで追加",
+    "queue": "キュー · {count}",
+    "queueDone": "完了 · {done}",
+    "queueError": "エラー · {count}",
+    "clearAll": "すべてクリア",
+    "removeItem": "{name} を削除",
+    "processAll": "すべて処理 · {count}",
+    "cancel": "キャンセル",
+    "downloadZip": "ZIPをダウンロード · {count}",
+    "errorMaxReached": "上限に達しました（最大 {max}）。",
+    "errorUnsupported": "{count} ファイルをスキップ（非対応形式）。",
+    "errorTruncated": "{count} ファイルを除外しました — 上限：{max}。",
+    "errorZip": "ZIP の作成に失敗しました。",
+    "status": {
+      "pending": "待機",
+      "processing": "処理中",
+      "done": "完了",
+      "error": "エラー"
+    }
+  },
   "header": {
     "signIn": "サインイン",
     "signOut": "サインアウト",

@@ -20,6 +20,32 @@
     "proHint": "Enregistrez vos réglages comme presets réutilisables — fonctionnalité Pro.",
     "signInToSave": "Se connecter"
   },
+  "mode": {
+    "single": "Image",
+    "batch": "Lot"
+  },
+  "batch": {
+    "dropZone": "Déposer des images en lot",
+    "dropZoneHint": "{current} / {max} · déposer ou cliquer pour ajouter",
+    "queue": "File · {count}",
+    "queueDone": "Terminé · {done}",
+    "queueError": "Erreurs · {count}",
+    "clearAll": "Tout effacer",
+    "removeItem": "Retirer {name}",
+    "processAll": "Traiter tout · {count}",
+    "cancel": "Annuler",
+    "downloadZip": "Télécharger ZIP · {count}",
+    "errorMaxReached": "Limite atteinte ({max} max).",
+    "errorUnsupported": "{count} fichier(s) ignoré(s) (format non supporté).",
+    "errorTruncated": "{count} fichier(s) écarté(s) — limite : {max}.",
+    "errorZip": "Échec de la création du ZIP.",
+    "status": {
+      "pending": "En attente",
+      "processing": "En cours",
+      "done": "Fait",
+      "error": "Erreur"
+    }
+  },
   "header": {
     "signIn": "Se connecter",
     "signOut": "Se déconnecter",
