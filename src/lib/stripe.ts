@@ -79,3 +79,31 @@ export async function redirectToCheckout(tier: CheckoutTier) {
   const url = await createCheckoutSession(tier);
   window.location.href = url;
 }
+
+/**
+ * Calls the customer-portal edge function and returns the Stripe-hosted
+ * Billing Portal URL where the user can manage their subscription.
+ * Throws if not authenticated or if no Stripe customer is found.
+ */
+export async function createCustomerPortalSession(): Promise<string> {
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData.session) {
+    throw new Error('not_authenticated');
+  }
+
+  const { data, error } = await supabase.functions.invoke('customer-portal', {
+    body: { origin: window.location.origin },
+  });
+
+  if (error) throw error;
+  if (!data?.url) throw new Error('no_portal_url');
+  return data.url as string;
+}
+
+/**
+ * Redirects the browser to the Stripe Billing Portal.
+ */
+export async function redirectToCustomerPortal() {
+  const url = await createCustomerPortalSession();
+  window.location.href = url;
+}

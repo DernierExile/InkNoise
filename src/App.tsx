@@ -10,6 +10,7 @@ import LanguageSwitcher from './components/LanguageSwitcher';
 import { BZTile } from './components/brand';
 import { useAuth, useIsPro } from './contexts/use-auth';
 import { useT } from './i18n/use-i18n';
+import { redirectToCustomerPortal } from './lib/stripe';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ImageAnalysis } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo, MAX_DIMENSION_FREE, MAX_DIMENSION_PRO } from './utils/imageResize';
@@ -65,6 +66,18 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [checkoutBanner, setCheckoutBanner] = useState<'success' | 'cancelled' | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  const handleAccountClick = useCallback(async () => {
+    if (portalLoading) return;
+    setPortalLoading(true);
+    try {
+      await redirectToCustomerPortal();
+    } catch (err) {
+      console.error('Failed to open customer portal', err);
+      setPortalLoading(false);
+    }
+  }, [portalLoading]);
   const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
   const [processedImageData, setProcessedImageData] = useState<ImageData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -364,11 +377,13 @@ function App() {
               <>
                 {isPro ? (
                   <button
-                    onClick={() => setShowProModal(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 border border-bz-cyan bg-bz-cyan/10 text-bz-cyan font-mono-ui text-[10px] tracking-widest hover:bg-bz-cyan/15 transition-colors duration-240 uppercase"
+                    onClick={handleAccountClick}
+                    disabled={portalLoading}
+                    className="flex items-center gap-1.5 px-3 py-1.5 border border-bz-cyan bg-bz-cyan/10 text-bz-cyan font-mono-ui text-[10px] tracking-widest hover:bg-bz-cyan/15 transition-colors duration-240 uppercase disabled:opacity-60 disabled:cursor-wait"
+                    title={plan === 'founder' ? t('header.founderActive') : t('header.studioActive')}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-bz-cyan" />
-                    {plan === 'founder' ? t('header.founderActive') : t('header.studioActive')}
+                    {portalLoading ? t('common.loading') : t('header.account')}
                   </button>
                 ) : (
                   <button
