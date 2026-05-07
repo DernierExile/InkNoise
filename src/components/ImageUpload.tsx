@@ -1,10 +1,11 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import { Upload } from 'lucide-react';
 import { InkNoiseLockup } from './brand';
 import { useT } from '../i18n/use-i18n';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
+  toolbar?: ReactNode;
 }
 
 const MODULES: { tag: string; titleKey: string; descKey: string }[] = [
@@ -14,7 +15,7 @@ const MODULES: { tag: string; titleKey: string; descKey: string }[] = [
   { tag: '04', titleKey: 'module.contrast.title', descKey: 'module.contrast.desc' },
 ];
 
-export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
+export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) {
   const t = useT();
   const [isDragging, setIsDragging] = useState(false);
 
@@ -60,6 +61,11 @@ export default function ImageUpload({ onImageLoad }: ImageUploadProps) {
           <br />
           <span className="text-bz-system">{t('home.subtagline')}</span>
         </p>
+        {toolbar && (
+          <div className="flex justify-center pt-2">
+            {toolbar}
+          </div>
+        )}
       </div>
 
       {/* Upload zone — square corners, hairline border */}

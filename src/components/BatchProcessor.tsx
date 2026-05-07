@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Upload, X, CheckCircle2, AlertCircle, Loader2, Download, Trash2 } from 'lucide-react';
+import { Upload, X, CheckCircle2, AlertCircle, Loader2, Download, Trash2, Info } from 'lucide-react';
 import { useT } from '../i18n/use-i18n';
+import ModeSwitch, { type AppMode } from './ModeSwitch';
 import {
   buildOutputName,
   downloadBlob,
@@ -18,6 +19,17 @@ import DitheringWorker from '../workers/dithering.worker?worker';
 
 interface BatchProcessorProps {
   config: PresetConfig;
+  isPro: boolean;
+  mode: AppMode;
+  onModeChange: (mode: AppMode) => void;
+}
+
+function formatAlgorithm(a: string): string {
+  return a.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function formatColorMode(m: string): string {
+  return m.toUpperCase().replace(/-/g, ' ');
 }
 
 function resolvePalette(config: PresetConfig): string[] {
@@ -67,7 +79,7 @@ function imageDataToBlob(data: ImageData): Promise<Blob> {
   });
 }
 
-export default function BatchProcessor({ config }: BatchProcessorProps) {
+export default function BatchProcessor({ config, isPro, mode, onModeChange }: BatchProcessorProps) {
   const t = useT();
   const [items, setItems] = useState<BatchItem[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -249,8 +261,62 @@ export default function BatchProcessor({ config }: BatchProcessorProps) {
   const doneCount = items.filter((i) => i.status === 'done').length;
   const errorCount = items.filter((i) => i.status === 'error').length;
 
+  const paletteName = PREDEFINED_PALETTES[config.selectedPalette]?.name ?? '—';
+
   return (
     <div className="w-full max-w-4xl mx-auto py-8 space-y-3">
+      {/* Mode switch — top, centered */}
+      <div className="flex justify-center pb-2">
+        <ModeSwitch mode={mode} isPro={isPro} onChange={onModeChange} />
+      </div>
+
+      {/* How it works panel */}
+      <div className="border border-bz-grid bg-bz-deep p-4 space-y-3">
+        <div className="flex items-start gap-2">
+          <Info className="w-3.5 h-3.5 text-bz-cyan flex-shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <p className="text-[11px] font-mono-ui text-bz-paper tracking-widest uppercase">
+              {t('batch.howTitle')}
+            </p>
+            <p className="text-[11px] text-bz-interface/80 leading-relaxed">
+              {t('batch.howBody')}
+            </p>
+          </div>
+        </div>
+
+        {/* Active settings recap */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-bz-grid">
+          <div>
+            <p className="text-[9px] font-mono-ui text-bz-system tracking-widest uppercase">
+              {t('batch.recapAlgorithm')}
+            </p>
+            <p className="text-[11px] text-bz-paper truncate">
+              {formatAlgorithm(config.algorithm)}
+            </p>
+          </div>
+          <div>
+            <p className="text-[9px] font-mono-ui text-bz-system tracking-widest uppercase">
+              {t('batch.recapColorMode')}
+            </p>
+            <p className="text-[11px] text-bz-paper truncate">
+              {formatColorMode(config.colorMode)}
+            </p>
+          </div>
+          <div>
+            <p className="text-[9px] font-mono-ui text-bz-system tracking-widest uppercase">
+              {t('batch.recapPalette')}
+            </p>
+            <p className="text-[11px] text-bz-paper truncate">{paletteName}</p>
+          </div>
+          <div>
+            <p className="text-[9px] font-mono-ui text-bz-system tracking-widest uppercase">
+              {t('batch.recapMaxRes')}
+            </p>
+            <p className="text-[11px] text-bz-paper truncate">{MAX_DIMENSION_PRO}px</p>
+          </div>
+        </div>
+      </div>
+
       {/* Drop zone */}
       <div
         onDragOver={handleDragOver}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AlertCircle, Volume2, VolumeX, LogOut, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, LogOut, CheckCircle2 } from 'lucide-react';
 import ImageUpload from './components/ImageUpload';
 import ControlPanel from './components/ControlPanel';
 import ImagePreview from './components/ImagePreview';
@@ -9,13 +9,13 @@ import AuthModal from './components/AuthModal';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import PresetsManager from './components/PresetsManager';
 import BatchProcessor from './components/BatchProcessor';
+import ModeSwitch, { type AppMode } from './components/ModeSwitch';
+import { Layers } from 'lucide-react';
 import { BZTile } from './components/brand';
 import { useAuth, useIsPro } from './contexts/use-auth';
 import { useT } from './i18n/use-i18n';
 import { redirectToCustomerPortal } from './lib/stripe';
 import type { Preset, PresetConfig } from './lib/presets';
-
-type AppMode = 'single' | 'batch';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ImageAnalysis } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo, MAX_DIMENSION_FREE, MAX_DIMENSION_PRO } from './utils/imageResize';
@@ -102,7 +102,6 @@ function App() {
   const [isAutoTuned, setIsAutoTuned] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [activeUserPresetId, setActiveUserPresetId] = useState<string | null>(null);
-  const [isMuted, setIsMuted] = useState(true);
   const [mode, setMode] = useState<AppMode>('single');
 
   const getCurrentConfig = useCallback((): PresetConfig => ({
@@ -142,7 +141,6 @@ function App() {
 
   const workerRef = useRef<Worker | null>(null);
   const emailTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     workerRef.current = new DitheringWorker();
@@ -499,52 +497,36 @@ function App() {
         {!originalImage ? (
           <div className="relative flex flex-col items-center min-h-[calc(100vh-3rem)] pt-16 pb-12 overflow-hidden">
             <video
-              ref={videoRef}
               autoPlay
               loop
               playsInline
-              muted={isMuted}
+              muted
               className="absolute inset-0 w-full h-full object-cover opacity-[0.10] pointer-events-none"
               src="https://res.cloudinary.com/djgufyqs5/video/upload/v1776296793/0416_ius7vq.mp4"
-              onLoadedMetadata={(e) => { (e.target as HTMLVideoElement).volume = 0.15; }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-bz-graphite/60 via-transparent to-bz-graphite pointer-events-none" />
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              className="absolute top-4 right-4 z-10 p-2 border border-bz-grid text-bz-system hover:text-bz-interface hover:border-bz-system transition-colors duration-240"
-              title={isMuted ? 'Unmute' : 'Mute'}
-            >
-              {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-            </button>
-
-            {/* Mode switch · Single / Batch */}
-            <div className="relative z-10 mb-4 inline-flex border border-bz-grid bg-bz-deep/80">
-              <button
-                onClick={() => handleModeToggle('single')}
-                className={`px-4 py-2 text-[10px] font-mono-ui tracking-widest uppercase transition-colors duration-240 ${
-                  mode === 'single' ? 'text-bz-paper bg-bz-graphite' : 'text-bz-system hover:text-bz-paper'
-                }`}
-              >
-                {t('mode.single')}
-              </button>
-              <button
-                onClick={() => handleModeToggle('batch')}
-                className={`flex items-center gap-1.5 px-4 py-2 text-[10px] font-mono-ui tracking-widest uppercase transition-colors duration-240 ${
-                  mode === 'batch' ? 'text-bz-paper bg-bz-graphite' : 'text-bz-system hover:text-bz-paper'
-                }`}
-              >
-                {t('mode.batch')}
-                {!isPro && <span className="text-bz-cyan">PRO</span>}
-              </button>
-            </div>
 
             <div className="relative z-10 w-full max-w-4xl">
               {mode === 'single' ? (
                 <div className="max-w-2xl mx-auto">
-                  <ImageUpload onImageLoad={handleImageLoad} />
+                  <ImageUpload
+                    onImageLoad={handleImageLoad}
+                    toolbar={
+                      <ModeSwitch
+                        mode={mode}
+                        isPro={isPro}
+                        onChange={handleModeToggle}
+                      />
+                    }
+                  />
                 </div>
               ) : (
-                <BatchProcessor config={getCurrentConfig()} />
+                <BatchProcessor
+                  config={getCurrentConfig()}
+                  isPro={isPro}
+                  mode={mode}
+                  onModeChange={handleModeToggle}
+                />
               )}
             </div>
           </div>
@@ -563,6 +545,22 @@ function App() {
                   className="w-full px-3 py-2 panel-surface text-[10px] font-mono-ui text-bz-system hover:text-bz-interface tracking-widest uppercase transition-colors duration-240"
                 >
                   {t('banner.loadNewImage')}
+                </button>
+                <button
+                  onClick={() => {
+                    if (!isPro) {
+                      setShowProModal(true);
+                      return;
+                    }
+                    goHome();
+                    setMode('batch');
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2 panel-surface text-[10px] font-mono-ui text-bz-system hover:text-bz-interface tracking-widest uppercase transition-colors duration-240"
+                  title={t('batch.switchTooltip')}
+                >
+                  <Layers className="w-3 h-3" />
+                  {t('batch.switchToBatch')}
+                  {!isPro && <span className="text-bz-cyan">PRO</span>}
                 </button>
                 <PresetsManager
                   isPro={isPro}
