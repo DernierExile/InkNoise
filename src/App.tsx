@@ -494,7 +494,7 @@ function App() {
       </header>
 
       <main className="max-w-[1400px] mx-auto px-4">
-        {!originalImage ? (
+        {!originalImage || mode === 'batch' ? (
           <div className="relative flex flex-col items-center min-h-[calc(100vh-3rem)] pt-16 pb-12 overflow-hidden">
             <video
               autoPlay
@@ -552,7 +552,6 @@ function App() {
                       setShowProModal(true);
                       return;
                     }
-                    goHome();
                     setMode('batch');
                   }}
                   className="w-full flex items-center justify-center gap-1.5 px-3 py-2 panel-surface text-[10px] font-mono-ui text-bz-system hover:text-bz-interface tracking-widest uppercase transition-colors duration-240"
