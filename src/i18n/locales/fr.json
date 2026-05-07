@@ -5,6 +5,21 @@
     "save": "Enregistrer",
     "loading": "Chargement..."
   },
+  "presets": {
+    "title": "Presets",
+    "save": "Save",
+    "saveAria": "Enregistrer les réglages actuels en preset",
+    "savePresetTitle": "Enregistrer un preset",
+    "namePlaceholder": "Nom du preset (60 car. max)",
+    "selectPlaceholder": "Choisir un preset...",
+    "empty": "Aucun preset enregistré.",
+    "deleteAria": "Supprimer le preset {name}",
+    "errorNameRequired": "Nom requis.",
+    "errorSave": "Échec de l'enregistrement : {msg}",
+    "proRequired": "Pro",
+    "proHint": "Enregistrez vos réglages comme presets réutilisables — fonctionnalité Pro.",
+    "signInToSave": "Se connecter"
+  },
   "header": {
     "signIn": "Se connecter",
     "signOut": "Se déconnecter",

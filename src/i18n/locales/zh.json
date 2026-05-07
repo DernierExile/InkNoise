@@ -5,6 +5,21 @@
     "save": "保存",
     "loading": "加载中..."
   },
+  "presets": {
+    "title": "预设",
+    "save": "保存",
+    "saveAria": "将当前设置保存为新预设",
+    "savePresetTitle": "保存预设",
+    "namePlaceholder": "预设名称（最多60字符）",
+    "selectPlaceholder": "选择预设...",
+    "empty": "暂无已保存的预设。",
+    "deleteAria": "删除预设 {name}",
+    "errorNameRequired": "需要名称。",
+    "errorSave": "保存失败：{msg}",
+    "proRequired": "Pro",
+    "proHint": "将自定义设置保存为可复用预设 — Pro 功能。",
+    "signInToSave": "登录"
+  },
   "header": {
     "signIn": "登录",
     "signOut": "退出登录",

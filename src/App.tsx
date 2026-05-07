@@ -7,10 +7,12 @@ import ProModal from './components/ProModal';
 import EmailCaptureModal from './components/EmailCaptureModal';
 import AuthModal from './components/AuthModal';
 import LanguageSwitcher from './components/LanguageSwitcher';
+import PresetsManager from './components/PresetsManager';
 import { BZTile } from './components/brand';
 import { useAuth, useIsPro } from './contexts/use-auth';
 import { useT } from './i18n/use-i18n';
 import { redirectToCustomerPortal } from './lib/stripe';
+import type { Preset, PresetConfig } from './lib/presets';
 import { DitheringAlgorithm, ColorMode, ImageAdjustments, ResamplingMethod, ColorModeSettings, PaletteModifiers, PostProcessing, ImageAnalysis } from './types';
 import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo, MAX_DIMENSION_FREE, MAX_DIMENSION_PRO } from './utils/imageResize';
@@ -78,6 +80,33 @@ function App() {
       setPortalLoading(false);
     }
   }, [portalLoading]);
+
+  const getCurrentConfig = useCallback((): PresetConfig => ({
+    algorithm,
+    colorMode,
+    selectedPalette,
+    colorCount,
+    resamplingMethod,
+    adjustments,
+    colorModeSettings,
+    paletteModifiers,
+    postProcessing,
+  }), [algorithm, colorMode, selectedPalette, colorCount, resamplingMethod, adjustments, colorModeSettings, paletteModifiers, postProcessing]);
+
+  const handleUserPresetApply = useCallback((preset: Preset) => {
+    const c = preset.config;
+    setAlgorithm(c.algorithm);
+    setColorMode(c.colorMode);
+    setSelectedPalette(c.selectedPalette);
+    setColorCount(c.colorCount);
+    setResamplingMethod(c.resamplingMethod);
+    setAdjustments(c.adjustments);
+    setColorModeSettings(c.colorModeSettings);
+    setPaletteModifiers(c.paletteModifiers);
+    setPostProcessing(c.postProcessing);
+    setActivePreset(null);
+    setIsAutoTuned(false);
+  }, []);
   const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
   const [processedImageData, setProcessedImageData] = useState<ImageData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -95,6 +124,7 @@ function App() {
   const [imageAnalysisData, setImageAnalysisData] = useState<ImageAnalysis | null>(null);
   const [isAutoTuned, setIsAutoTuned] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [activeUserPresetId, setActiveUserPresetId] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState(true);
 
   const workerRef = useRef<Worker | null>(null);
@@ -493,6 +523,16 @@ function App() {
                 >
                   {t('banner.loadNewImage')}
                 </button>
+                <PresetsManager
+                  isPro={isPro}
+                  isAuthed={!!session}
+                  currentConfig={getCurrentConfig()}
+                  activePresetId={activeUserPresetId}
+                  onApply={handleUserPresetApply}
+                  onActivePresetIdChange={setActiveUserPresetId}
+                  onUpgradeClick={() => setShowProModal(true)}
+                  onSignInClick={() => setShowAuthModal(true)}
+                />
                 <ControlPanel
                   algorithm={algorithm}
                   onAlgorithmChange={(a) => { setAlgorithm(a); setActivePreset(null); }}

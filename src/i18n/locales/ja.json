@@ -5,6 +5,21 @@
     "save": "保存",
     "loading": "読み込み中..."
   },
+  "presets": {
+    "title": "プリセット",
+    "save": "保存",
+    "saveAria": "現在の設定を新しいプリセットとして保存",
+    "savePresetTitle": "プリセットを保存",
+    "namePlaceholder": "プリセット名（最大60文字）",
+    "selectPlaceholder": "プリセットを選択...",
+    "empty": "保存されたプリセットはありません。",
+    "deleteAria": "プリセット {name} を削除",
+    "errorNameRequired": "名前を入力してください。",
+    "errorSave": "保存に失敗しました：{msg}",
+    "proRequired": "Pro",
+    "proHint": "カスタム設定を再利用可能なプリセットとして保存 — Pro 機能。",
+    "signInToSave": "サインイン"
+  },
   "header": {
     "signIn": "サインイン",
     "signOut": "サインアウト",

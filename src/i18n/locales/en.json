@@ -5,6 +5,21 @@
     "save": "Save",
     "loading": "Loading..."
   },
+  "presets": {
+    "title": "Presets",
+    "save": "Save",
+    "saveAria": "Save current settings as a new preset",
+    "savePresetTitle": "Save preset",
+    "namePlaceholder": "Preset name (max 60 chars)",
+    "selectPlaceholder": "Choose a preset...",
+    "empty": "No saved presets yet.",
+    "deleteAria": "Delete preset {name}",
+    "errorNameRequired": "Name required.",
+    "errorSave": "Save failed: {msg}",
+    "proRequired": "Pro",
+    "proHint": "Save your custom settings as reusable presets — Pro feature.",
+    "signInToSave": "Sign in"
+  },
   "header": {
     "signIn": "Sign in",
     "signOut": "Sign out",
