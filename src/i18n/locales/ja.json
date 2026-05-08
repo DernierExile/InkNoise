@@ -63,7 +63,9 @@
     "studioActive": "Studio",
     "founderActive": "Founder",
     "signOutTooltip": "サインアウト ({email})",
-    "homeAria": "InkNoise — ホームに戻る",
+    "homeAria": "InkNoise · ホームに戻る",
+    "bezierAria": "Bezier.one · エコシステムへ戻る",
+    "soonBadge": "近日",
     "language": "言語"
   },
   "banner": {
@@ -83,7 +85,23 @@
     "browseFiles": "ファイルを選択",
     "fileTypes": "PNG · JPG · GIF · WEBP",
     "byBezier": "by BEZIER",
-    "footerTagline": "Running visual culture · MMXXVI"
+    "footerTagline": "Running visual culture · MMXXVI",
+    "liveRender": "ライブレンダー · ショーリール",
+    "scale": {
+      "eyebrow": "エンジンの規模",
+      "sub": "ブラウザから利用できる独自のビジュアルレシピ。フィルタライブラリでもプリセット上限でもない。本物のエンジン。"
+    },
+    "stats": {
+      "algos":       { "name": "アルゴリズム",  "desc": "Floyd-Steinberg、Atkinson、Bayer、Riemersma、Halftone、ブルーノイズ…" },
+      "colors":      { "name": "カラーモード",  "desc": "Mono、duo-tone、tri-tone、tonal、indexed、RGB、RGB-split、modulation" },
+      "palettes":    { "name": "パレット",      "desc": "プリセット + 色相、彩度、明度シフトを備えたカスタムパレットエンジン" },
+      "modulations": { "name": "モジュレーション","desc": "CRT カーブ、スキャンライン、色収差、ビネット、ブルーム · 重ねがけ可能" }
+    },
+    "gallery": {
+      "eyebrow": "サンプル · インタラクティブ",
+      "title": "下から被写体を選択 · 右側で処理にホバー",
+      "render": "レンダー"
+    }
   },
   "module": {
     "live": "Live",

@@ -63,7 +63,9 @@
     "studioActive": "Studio",
     "founderActive": "Founder",
     "signOutTooltip": "Sign out ({email})",
-    "homeAria": "InkNoise — back to home",
+    "homeAria": "InkNoise · back to home",
+    "bezierAria": "Bezier.one · back to ecosystem",
+    "soonBadge": "Soon",
     "language": "Language"
   },
   "banner": {
@@ -83,7 +85,23 @@
     "browseFiles": "browse files",
     "fileTypes": "PNG · JPG · GIF · WEBP",
     "byBezier": "by BEZIER",
-    "footerTagline": "Running visual culture · MMXXVI"
+    "footerTagline": "Running visual culture · MMXXVI",
+    "liveRender": "Live render · showreel",
+    "scale": {
+      "eyebrow": "Scale of the engine",
+      "sub": "Distinct visual recipes accessible from your browser. No filter library, no presets cap. A real engine."
+    },
+    "stats": {
+      "algos":       { "name": "Algorithms",   "desc": "Floyd-Steinberg, Atkinson, Bayer, Riemersma, Halftone, blue noise…" },
+      "colors":      { "name": "Color Modes",  "desc": "Mono, duo-tone, tri-tone, tonal, indexed, RGB, RGB-split, modulation" },
+      "palettes":    { "name": "Palettes",     "desc": "Predefined + custom palette engine with hue, saturation, brightness shifts" },
+      "modulations": { "name": "Modulations",  "desc": "CRT curve, scanlines, chromatic aberration, vignette, bloom · stackable" }
+    },
+    "gallery": {
+      "eyebrow": "Samples · interactive",
+      "title": "Pick a subject below · hover treatments on the right",
+      "render": "Render"
+    }
   },
   "module": {
     "live": "Live",

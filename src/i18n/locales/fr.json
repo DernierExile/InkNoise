@@ -40,7 +40,7 @@
     "errorTruncated": "{count} fichier(s) écarté(s) — limite : {max}.",
     "errorZip": "Échec de la création du ZIP.",
     "howTitle": "Comment fonctionne le traitement par lot",
-    "howBody": "Toutes les images reçoivent les mêmes réglages dither affichés ci-dessous — algorithme, mode couleur, palette et ajustements. Pour personnaliser : passe en mode Image, configure sur une image test, puis reviens ici. Jusqu'à 50 images par lot.",
+    "howBody": "Toutes les images reçoivent les mêmes réglages dither affichés ci-dessous · algorithme, mode couleur, palette et ajustements. Pour personnaliser : passe en mode Image, configure sur une image test, puis reviens ici. Jusqu'à 50 images par lot.",
     "recapAlgorithm": "Algorithme",
     "recapColorMode": "Mode couleur",
     "recapPalette": "Palette",
@@ -63,7 +63,9 @@
     "studioActive": "Studio",
     "founderActive": "Founder",
     "signOutTooltip": "Se déconnecter ({email})",
-    "homeAria": "InkNoise — retour à l'accueil",
+    "homeAria": "InkNoise · retour à l'accueil",
+    "bezierAria": "Bezier.one · retour à l'écosystème",
+    "soonBadge": "Bientôt",
     "language": "Langue"
   },
   "banner": {
@@ -83,7 +85,23 @@
     "browseFiles": "parcourir les fichiers",
     "fileTypes": "PNG · JPG · GIF · WEBP",
     "byBezier": "par BEZIER",
-    "footerTagline": "Running visual culture · MMXXVI"
+    "footerTagline": "Running visual culture · MMXXVI",
+    "liveRender": "Rendu en direct · showreel",
+    "scale": {
+      "eyebrow": "Échelle du moteur",
+      "sub": "Recettes visuelles distinctes accessibles depuis votre navigateur. Pas de bibliothèque de filtres, pas de plafond de presets. Un vrai moteur."
+    },
+    "stats": {
+      "algos":       { "name": "Algorithmes",  "desc": "Floyd-Steinberg, Atkinson, Bayer, Riemersma, Halftone, blue noise…" },
+      "colors":      { "name": "Modes couleur","desc": "Mono, duo-tone, tri-tone, tonal, indexé, RGB, RGB-split, modulation" },
+      "palettes":    { "name": "Palettes",     "desc": "Prédéfinies + moteur de palette custom avec décalages teinte, saturation, luminosité" },
+      "modulations": { "name": "Modulations",  "desc": "Courbe CRT, scanlines, aberration chromatique, vignette, bloom · cumulables" }
+    },
+    "gallery": {
+      "eyebrow": "Échantillons · interactif",
+      "title": "Choisis un sujet en bas · survole les traitements à droite",
+      "render": "Rendu"
+    }
   },
   "module": {
     "live": "En ligne",

@@ -231,7 +231,6 @@ export function InkNoiseLockup({
 }) {
   const h: Record<Size, number> = { sm: 22, md: 36, lg: 60, xl: 96 };
   const heightVal = h[size];
-  const dotResolved = color === 'currentColor' ? 'var(--bz-paper)' : color;
 
   const noiseStyle: CSSProperties = {
     fontFamily: 'var(--ff-display)',
@@ -239,11 +238,8 @@ export function InkNoiseLockup({
     fontWeight: 600,
     letterSpacing: '-0.025em',
     lineHeight: 1,
-    background: `radial-gradient(circle at 1px 1px, ${dotResolved} 0.6px, transparent 1px) 0 0 / ${Math.max(3, heightVal * 0.06)}px ${Math.max(3, heightVal * 0.06)}px`,
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    color: 'transparent',
+    color,
+    opacity: 0.55,
   };
 
   const inkType = (

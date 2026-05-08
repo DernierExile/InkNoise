@@ -40,7 +40,7 @@
     "errorTruncated": "{count} 个文件被丢弃 — 上限：{max}。",
     "errorZip": "ZIP 构建失败。",
     "howTitle": "批量处理说明",
-    "howBody": "所有图片将应用下方相同的抖动设置 — 算法、色彩模式、调色板和调整。如需自定义：切换到单张模式，在一张示例图上配置后再返回。每批最多 50 张。",
+    "howBody": "所有图片将应用下方相同的抖动设置 · 算法、色彩模式、调色板和调整。如需自定义：切换到单张模式，在一张示例图上配置后再返回。每批最多 50 张。",
     "recapAlgorithm": "算法",
     "recapColorMode": "色彩模式",
     "recapPalette": "调色板",
@@ -63,7 +63,9 @@
     "studioActive": "Studio",
     "founderActive": "Founder",
     "signOutTooltip": "退出登录 ({email})",
-    "homeAria": "InkNoise — 返回首页",
+    "homeAria": "InkNoise · 返回首页",
+    "bezierAria": "Bezier.one · 返回生态系统",
+    "soonBadge": "即将推出",
     "language": "语言"
   },
   "banner": {
@@ -83,7 +85,23 @@
     "browseFiles": "浏览文件",
     "fileTypes": "PNG · JPG · GIF · WEBP",
     "byBezier": "by BEZIER",
-    "footerTagline": "Running visual culture · MMXXVI"
+    "footerTagline": "Running visual culture · MMXXVI",
+    "liveRender": "实时渲染 · 演示",
+    "scale": {
+      "eyebrow": "引擎规模",
+      "sub": "浏览器中可用的独特视觉配方。不是滤镜库，不是预设上限，而是真正的引擎。"
+    },
+    "stats": {
+      "algos":       { "name": "算法",       "desc": "Floyd-Steinberg、Atkinson、Bayer、Riemersma、Halftone、蓝噪声…" },
+      "colors":      { "name": "色彩模式",   "desc": "单色、双色调、三色调、色调、索引、RGB、RGB 分离、调制" },
+      "palettes":    { "name": "调色板",     "desc": "预设 + 自定义调色板引擎，支持色相、饱和度、亮度调整" },
+      "modulations": { "name": "调制",       "desc": "CRT 曲线、扫描线、色差、暗角、泛光 · 可叠加" }
+    },
+    "gallery": {
+      "eyebrow": "样本 · 交互式",
+      "title": "在下方选择主题 · 在右侧悬停处理",
+      "render": "渲染"
+    }
   },
   "module": {
     "live": "Live",

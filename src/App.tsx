@@ -11,7 +11,6 @@ import PresetsManager from './components/PresetsManager';
 import BatchProcessor from './components/BatchProcessor';
 import ModeSwitch, { type AppMode } from './components/ModeSwitch';
 import { Layers } from 'lucide-react';
-import { BZTile } from './components/brand';
 import { useAuth, useIsPro } from './contexts/use-auth';
 import { useT } from './i18n/use-i18n';
 import { redirectToCustomerPortal } from './lib/stripe';
@@ -393,16 +392,38 @@ function App() {
   return (
     <div className="min-h-screen bg-bz-graphite text-bz-interface">
       <header className="border-b border-bz-grid bg-bz-graphite/95 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-[1400px] mx-auto px-4 h-12 flex items-center justify-between">
-          <button onClick={goHome} className="flex items-center gap-3 group" aria-label={t('header.homeAria')}>
-            <div className="transition-opacity duration-240 group-hover:opacity-70">
-              <BZTile size={28} schematic color="var(--bz-cyan)" bg="var(--bz-graphite)" radius={5} />
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-bz-label font-semibold text-bz-paper tracking-tight">InkNoise</span>
-              <span className="text-[10px] font-mono-ui text-bz-system tracking-widest">BY BEZIER</span>
-            </div>
-          </button>
+        <div className="max-w-[1400px] mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            {/* Bezier.one · ecosystem parent link */}
+            <a
+              href="https://bezier.one"
+              className="font-semibold text-base text-bz-paper hover:text-bz-cyan transition-colors duration-240 tracking-tight relative pr-6"
+              aria-label={t('header.bezierAria')}
+            >
+              Bezier.one
+              <span
+                aria-hidden="true"
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-4 bg-bz-grid"
+              />
+            </a>
+
+            {/* Product nav · current product highlighted */}
+            <nav className="flex items-center gap-5 font-mono-ui text-[11px] tracking-[0.22em] uppercase font-medium">
+              <button
+                type="button"
+                onClick={goHome}
+                className="relative text-bz-paper transition-colors duration-240 py-4"
+                aria-label={t('header.homeAria')}
+              >
+                InkNoise
+                <span aria-hidden="true" className="absolute left-0 right-0 -bottom-px h-0.5 bg-bz-cyan" />
+              </button>
+              <span className="inline-flex items-center gap-1.5 text-bz-system cursor-default">
+                Outline
+                <span className="bg-bz-grid text-bz-paper px-1.5 py-0.5 text-[8px] tracking-[0.2em]">{t('header.soonBadge')}</span>
+              </span>
+            </nav>
+          </div>
 
           <div className="flex items-center gap-2">
             {isProcessing && (
@@ -493,45 +514,31 @@ function App() {
         )}
       </header>
 
-      <main className="max-w-[1400px] mx-auto px-4">
+      <main>
         {!originalImage || mode === 'batch' ? (
-          <div className="relative flex flex-col items-center min-h-[calc(100vh-3rem)] pt-16 pb-12 overflow-hidden">
-            <video
-              autoPlay
-              loop
-              playsInline
-              muted
-              className="absolute inset-0 w-full h-full object-cover opacity-[0.10] pointer-events-none"
-              src="https://res.cloudinary.com/djgufyqs5/video/upload/v1776296793/0416_ius7vq.mp4"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-bz-graphite/60 via-transparent to-bz-graphite pointer-events-none" />
-
-            <div className="relative z-10 w-full max-w-4xl">
-              {mode === 'single' ? (
-                <div className="max-w-2xl mx-auto">
-                  <ImageUpload
-                    onImageLoad={handleImageLoad}
-                    toolbar={
-                      <ModeSwitch
-                        mode={mode}
-                        isPro={isPro}
-                        onChange={handleModeToggle}
-                      />
-                    }
-                  />
-                </div>
-              ) : (
-                <BatchProcessor
-                  config={getCurrentConfig()}
-                  isPro={isPro}
+          mode === 'single' ? (
+            <ImageUpload
+              onImageLoad={handleImageLoad}
+              toolbar={
+                <ModeSwitch
                   mode={mode}
-                  onModeChange={handleModeToggle}
+                  isPro={isPro}
+                  onChange={handleModeToggle}
                 />
-              )}
+              }
+            />
+          ) : (
+            <div className="max-w-[1400px] mx-auto px-4">
+              <BatchProcessor
+                config={getCurrentConfig()}
+                isPro={isPro}
+                mode={mode}
+                onModeChange={handleModeToggle}
+              />
             </div>
-          </div>
+          )
         ) : (
-          <div className="py-3">
+          <div className="max-w-[1400px] mx-auto px-4 py-3">
             {resizeWarning && (
               <div className="mb-3 flex items-center gap-2 px-3 py-2 border border-bz-grid bg-bz-deep">
                 <AlertCircle className="w-3 h-3 text-bz-cyan flex-shrink-0" />
