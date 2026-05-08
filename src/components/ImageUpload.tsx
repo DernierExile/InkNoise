@@ -64,15 +64,24 @@ export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) 
 
       {/* ============================================================
           SECTION 1 · HERO SHOWREEL
+          Hero image is fixed (independent of the gallery subject selector)
+          so the cinematic backdrop never changes when the user explores
+          subjects below. Hosted at /samples/10-cityscape.jpg.
           ============================================================ */}
       <section className="relative w-full min-h-[78vh] flex flex-col items-center justify-center overflow-hidden border-b border-bz-grid">
         {/* Showreel background image — cycles through 8 treatments */}
         <img
-          src="/samples/hero copy.jpg"
+          src="/samples/10-cityscape.jpg"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover animate-showreel"
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          onError={(e) => {
+            const img = e.currentTarget as HTMLImageElement;
+            if (img.dataset.fallback !== '1') {
+              img.dataset.fallback = '1';
+              img.src = 'https://picsum.photos/seed/object-hero/2400/1500';
+            }
+          }}
         />
 
         {/* Vignette + scanline overlay */}
@@ -205,7 +214,13 @@ export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) 
                   alt={activeSubject.label}
                   className="w-full h-full object-cover transition-[filter] duration-500 ease-out"
                   style={{ filter: activeTreatment.filter }}
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = '0'; }}
+                  onError={(e) => {
+                    const img = e.currentTarget as HTMLImageElement;
+                    if (img.dataset.fallback !== '1') {
+                      img.dataset.fallback = '1';
+                      img.src = `https://picsum.photos/seed/${activeSubject.slug}/1600/1200`;
+                    }
+                  }}
                 />
                 <div
                   className="absolute inset-0 pointer-events-none mix-blend-overlay"
@@ -237,7 +252,13 @@ export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) 
                       src={subject.src}
                       alt=""
                       className="w-full h-full object-cover"
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = '0'; }}
+                      onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        if (img.dataset.fallback !== '1') {
+                          img.dataset.fallback = '1';
+                          img.src = `https://picsum.photos/seed/${subject.slug}/300/225`;
+                        }
+                      }}
                     />
                     <span
                       className={`absolute inset-x-0 bottom-0 px-1.5 py-1 font-mono-ui text-[8px] tracking-[0.18em] uppercase ${
@@ -273,7 +294,13 @@ export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) 
                     alt=""
                     className="w-full h-full object-cover"
                     style={{ filter: tr.filter }}
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = '0'; }}
+                    onError={(e) => {
+                      const img = e.currentTarget as HTMLImageElement;
+                      if (img.dataset.fallback !== '1') {
+                        img.dataset.fallback = '1';
+                        img.src = `https://picsum.photos/seed/${activeSubject.slug}/400/400`;
+                      }
+                    }}
                   />
                   <span
                     className="absolute inset-x-0 bottom-0 px-1.5 py-1 font-mono-ui text-[9px] tracking-[0.2em] uppercase text-bz-paper"
