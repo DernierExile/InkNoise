@@ -68,7 +68,7 @@ export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) 
       <section className="relative w-full min-h-[78vh] flex flex-col items-center justify-center overflow-hidden border-b border-bz-grid">
         {/* Showreel background image — cycles through 8 treatments */}
         <img
-          src={activeSubject.src}
+          src="/samples/hero copy.jpg"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover animate-showreel"
