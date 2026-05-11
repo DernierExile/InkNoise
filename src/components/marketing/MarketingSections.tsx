@@ -1,0 +1,409 @@
+// =============================================================================
+// MarketingSections · 4 marketing blocks ported from Claude Design redesign
+// (sections.jsx · Manifesto, Workflow, Ecosystem, Pricing). Adapted to our
+// Tailwind tokens and the strict Bezier lineage rule (no "invented").
+//
+// These render below the gallery, before the footer, on the home view.
+// =============================================================================
+
+import { useState } from 'react';
+import { redirectToCheckout, getTierConfig } from '../../lib/stripe';
+import { useAuth } from '../../contexts/use-auth';
+
+// ─── Manifesto ────────────────────────────────────────────────────────────────
+
+export function Manifesto() {
+  return (
+    <section className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">01</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Manifesto</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Not a filter. <span className="text-bz-system">Not a wrapper.</span> An engine.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            InkNoise sits between your source files and your output medium · Riso press, plotter, halftone newsprint, sub-pixel display. It is deterministic, parametric, and reproducible. It is the opposite of "magic mode."
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-8">
+          <ManifestoCell variant="neg" title="Instagram filter"
+            body="One opaque preset per look. No control over thresholds, kernels, palette mapping. Fine for a story. Useless for a campaign." />
+          <ManifestoCell variant="neg" title="AI texture model"
+            body="Hallucinated noise that drifts across runs. Different output every time you press render. Beautiful, occasionally. Reproducible, never." />
+          <ManifestoCell variant="neg" title="Photoshop preset"
+            body="Stacked actions with hidden state. Rebuilds break the second you open the document on another machine. Versioning is a hope." />
+          <ManifestoCell variant="pos" title="InkNoise"
+            body="One JSON preset. Twenty-five algorithms. Eight color modes. Six post-prod stacks. Same input → same output, every time, on every machine. Press save. Reproduce on 100 visuals." />
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {[
+            { k: 'Algorithms', v: '25' },
+            { k: 'Color models', v: '8' },
+            { k: 'Post stacks', v: '6' },
+            { k: 'Export', v: '4K · PNG · TIFF · SVG' },
+          ].map((cell) => (
+            <div key={cell.k} className="panel-surface px-4 py-5 flex flex-col gap-1.5">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{cell.k}</span>
+              <span className="text-bz-paper text-xl sm:text-2xl font-medium tracking-tight">{cell.v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ManifestoCell({ variant, title, body }: { variant: 'neg' | 'pos'; title: string; body: string }) {
+  const isPos = variant === 'pos';
+  return (
+    <div className={`p-5 border ${isPos ? 'border-bz-cyan bg-bz-cyan/[0.04]' : 'border-bz-grid bg-bz-deep'} flex flex-col gap-2`}>
+      <h3 className={`font-medium text-base ${isPos ? 'text-bz-paper' : 'text-bz-interface'}`}>{title}</h3>
+      <p className={`text-[13px] leading-relaxed ${isPos ? 'text-bz-interface' : 'text-bz-system'}`}>{body}</p>
+    </div>
+  );
+}
+
+// ─── Workflow ─────────────────────────────────────────────────────────────────
+
+export function Workflow() {
+  const steps = [
+    { n: 'Step 01', h: 'Drop. Preview live.', p: 'Drag a single image, or a folder of fifty. The preview canvas updates at 16ms per render · no spinner, no upload, no server.', glyph: <DropGlyph /> },
+    { n: 'Step 02', h: 'Save preset.',        p: 'Every parameter · algorithm, palette, post-stack, threshold curve · serializes to a portable JSON file. Drag it back in to restore the exact look on any machine.', glyph: <PresetGlyph /> },
+    { n: 'Step 03', h: 'Batch the campaign.', p: 'Drop the same preset on a folder of 50 images. Get a zip back with consistent texture across every visual. Same input, same output. No drift.', glyph: <BatchGlyph /> },
+  ];
+
+  return (
+    <section className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">06</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Workflow</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Single image, fifty images, same preset.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            InkNoise was built to handle a campaign · not one hero shot. Set the look once, save it, run it across every visual you ship.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          {steps.map((s) => (
+            <div key={s.n} className="panel-surface p-6 flex flex-col gap-3 min-h-[280px]">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{s.n}</span>
+              <h4 className="text-xl text-bz-paper font-medium tracking-tight">{s.h}</h4>
+              <p className="text-[13px] text-bz-interface leading-relaxed flex-1">{s.p}</p>
+              <div className="text-bz-system">{s.glyph}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DropGlyph() {
+  return (
+    <svg width="100%" height="80" viewBox="0 0 200 96" fill="none">
+      <rect x="40" y="20" width="120" height="56" rx="0" stroke="currentColor" strokeWidth="1" strokeDasharray="3 4" opacity="0.4" />
+      <path d="M100 36 L100 60 M88 50 L100 60 L112 50" stroke="var(--bz-cyan)" strokeWidth="1.5" />
+    </svg>
+  );
+}
+function PresetGlyph() {
+  return (
+    <svg width="100%" height="80" viewBox="0 0 200 96" fill="none">
+      <rect x="36" y="14" width="128" height="68" rx="0" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+      {[22, 32, 42, 52, 62, 72].map((y, i) => (
+        <line key={i} x1="44" y1={y} x2={i % 2 ? 130 : 150} y2={y}
+          stroke={i === 2 ? 'var(--bz-cyan)' : 'currentColor'} strokeWidth="1" opacity={i === 2 ? 1 : 0.4} />
+      ))}
+      <text x="160" y="18" fontSize="8" fill="currentColor" opacity="0.5">.json</text>
+    </svg>
+  );
+}
+function BatchGlyph() {
+  return (
+    <svg width="100%" height="80" viewBox="0 0 200 96" fill="none">
+      {Array.from({ length: 10 }).map((_, i) => {
+        const x = 30 + (i % 5) * 30;
+        const y = 18 + Math.floor(i / 5) * 36;
+        return (
+          <rect key={i} x={x} y={y} width="22" height="24" rx="0"
+            stroke={i === 4 ? 'var(--bz-cyan)' : 'currentColor'} strokeWidth="1"
+            opacity={i === 4 ? 1 : 0.4}
+            fill={i === 4 ? 'var(--bz-cyan)' : 'transparent'}
+            fillOpacity={i === 4 ? 0.15 : 0} />
+        );
+      })}
+      <path d="M170 50 L186 50 M178 44 L186 50 L178 56" stroke="var(--bz-cyan)" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+// ─── Ecosystem ────────────────────────────────────────────────────────────────
+// IMPORTANT · Pierre Bezier lineage rule applies. Never attribute the
+// invention of curves to Pierre publicly. Use the validated formulation:
+// "from a line of Pierres and Claudes, engineers and one PhD in mathematics,
+// who left a mark."
+
+export function Ecosystem() {
+  return (
+    <section className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">08</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Ecosystem</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Part of Bezier One.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            A suite of small, opinionated tools for image makers · built one at a time, around the same workbench philosophy. InkNoise is the first.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+          <div className="space-y-4">
+            <a href="https://bezier.one" className="inline-flex items-center gap-2 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-cyan hover:underline">
+              bezier.one <span>↗</span>
+            </a>
+            <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-bz-paper">
+              A name, not a brand.
+            </h3>
+            <p className="text-bz-interface leading-relaxed">
+              Bezier isn't a brand. It's my name. I come from a line of Pierres and Claudes · engineers and one PhD in mathematics · who left a mark. Bezier One is the suite I'm building under that name.
+            </p>
+            <p className="text-bz-system text-sm leading-relaxed">
+              Same philosophy across every app · controls you can reason about, parameters you can save, outputs you can reproduce.
+            </p>
+            <div className="pt-4">
+              <a href="https://bezier.one" className="inline-flex items-center gap-2 px-4 py-2.5 border border-bz-grid hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-paper">
+                Visit bezier.one <span>→</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <EcoItem name="InkNoise" desc="Texture engine for digital images." status="live" />
+            <EcoItem name="Outline" desc="Raster → vector. Plotter-grade SVG." status="soon" />
+            <EcoItem name="Studio · 3rd app" desc="In design. Bundled with Founder." status="q4" />
+            <EcoItem name="Studio · 4th app" desc="In design. Bundled with Founder." status="2027" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EcoItem({ name, desc, status }: { name: string; desc: string; status: 'live' | 'soon' | 'q4' | '2027' }) {
+  const statusLabel = { live: 'Live', soon: 'Soon', q4: 'Q4', '2027': '2027' }[status];
+  const statusColor = status === 'live' ? 'text-bz-cyan' : 'text-bz-system';
+  return (
+    <div className="panel-surface px-5 py-4 flex items-center justify-between">
+      <div>
+        <div className="text-bz-paper font-medium">{name}</div>
+        <div className="text-bz-system text-[13px]">{desc}</div>
+      </div>
+      <div className={`font-mono-ui text-[10px] tracking-[0.22em] uppercase ${statusColor} flex items-center gap-2`}>
+        {status === 'live' && <span className="w-1.5 h-1.5 bg-bz-cyan animate-signal-pulse" />}
+        {statusLabel}
+      </div>
+    </div>
+  );
+}
+
+// ─── Pricing (Founder + 3-tier grid) ──────────────────────────────────────────
+
+interface PricingProps {
+  onSignInNeeded: () => void;
+}
+
+export function Pricing({ onSignInNeeded }: PricingProps) {
+  const { session } = useAuth();
+  const [loadingTier, setLoadingTier] = useState<string | null>(null);
+
+  const handleCheckout = async (tierId: 'monthly' | 'annual' | 'lifetime') => {
+    if (!session) {
+      onSignInNeeded();
+      return;
+    }
+    setLoadingTier(tierId);
+    try {
+      const tiers = getTierConfig();
+      await redirectToCheckout(tiers[tierId]);
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setLoadingTier(null);
+    }
+  };
+
+  return (
+    <section id="pricing" className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">09</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Pricing</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Lifetime first. Subscription if you want it.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            One charge. Forever. The Founder pass is the early-supporter offer · capped at 500 seats, includes every Bezier One app released over the next ten years.
+          </p>
+        </div>
+
+        {/* Founder offer · highlighted card */}
+        <div className="panel-surface border-bz-cyan p-6 sm:p-10 mb-3 grid md:grid-cols-2 gap-10 items-center">
+          <div className="space-y-4">
+            <div className="inline-block font-mono-ui text-[10px] tracking-[0.22em] uppercase px-2 py-1 border border-bz-cyan text-bz-cyan">
+              Founder · Limited to 500 seats
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-bz-paper">
+              One charge. Every app, forever.
+            </h3>
+            <p className="text-bz-interface leading-relaxed">
+              Lifetime InkNoise plus every Bezier One app released through 2035. Outline (raster → vector, soon). The third and fourth Studio apps. Every parameter, every release, every export format we ever ship.
+            </p>
+            <ul className="space-y-2 text-bz-interface text-sm">
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> InkNoise · everything, no limits, lifetime</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Outline · raster → vector, on release</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Every future Bezier One app, included</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Founder discord · presets · early builds</li>
+            </ul>
+            <div className="pt-2">
+              <button
+                onClick={() => handleCheckout('lifetime')}
+                disabled={loadingTier === 'lifetime'}
+                className="inline-flex items-center gap-2 px-5 py-3 bg-bz-paper text-bz-graphite border border-bz-paper hover:bg-bz-cyan hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase font-medium disabled:opacity-60 disabled:cursor-wait"
+              >
+                {loadingTier === 'lifetime' ? 'Loading…' : 'Become a Founder'} <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-baseline gap-2 mb-4">
+              <span className="text-bz-system text-3xl font-medium">€</span>
+              <span className="text-bz-paper text-7xl sm:text-8xl font-medium tracking-[-0.04em] leading-none">79</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system ml-2">once · ever</span>
+            </div>
+
+            <FounderCounter />
+
+            <div className="mt-6 p-4 border border-bz-grid bg-bz-deep">
+              <div className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system mb-2">If you bought it on day one</div>
+              <p className="text-bz-interface text-[13px] leading-relaxed">
+                You'd get four apps over ten years for €79. Studio is €144/yr. The math is the math.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 3 tiers grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <PricingTier
+            name="Free"
+            price="€0"
+            term="/ forever"
+            blurb="Try every algorithm. Watermark applied. Capped at 1200px."
+            features={['All 25 algorithms', 'All 8 color modes', '1200px max export', 'InkNoise watermark', 'Single-image processing']}
+            cta="Start free"
+            primary={false}
+            onClick={() => session ? null : onSignInNeeded()}
+          />
+          <PricingTier
+            name="Studio · most popular"
+            price="€12"
+            term="/ month · or €69/yr"
+            blurb="For working studios. No limits, no watermark, batch enabled."
+            features={['4K export · no watermark', 'Batch processing · 50+ images', 'Preset library · cloud sync', 'SVG export · plotter mode', 'Priority support']}
+            cta={loadingTier === 'monthly' ? 'Loading…' : 'Subscribe'}
+            primary
+            highlighted
+            onClick={() => handleCheckout('monthly')}
+          />
+          <PricingTier
+            name="Founder · 500 seats"
+            price="€79"
+            term="/ once, ever"
+            blurb="Lifetime InkNoise + every Bezier One app, ever."
+            features={['Everything in Studio', 'Lifetime · no renewal', 'Outline included on release', '3rd & 4th Studio apps included', 'Founder discord · early access']}
+            cta={loadingTier === 'lifetime' ? 'Loading…' : 'Claim a seat'}
+            primary={false}
+            onClick={() => handleCheckout('lifetime')}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PricingTier({
+  name, price, term, blurb, features, cta, primary, highlighted, onClick,
+}: {
+  name: string; price: string; term: string; blurb: string;
+  features: string[]; cta: string; primary: boolean; highlighted?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <div className={`p-6 flex flex-col gap-4 ${highlighted ? 'border border-bz-cyan bg-bz-cyan/[0.04]' : 'panel-surface'}`}>
+      <div className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{name}</div>
+      <div className="flex items-baseline gap-2">
+        <span className="text-bz-paper text-4xl sm:text-5xl font-medium tracking-[-0.02em]">{price}</span>
+        <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{term}</span>
+      </div>
+      <p className="text-bz-interface text-sm leading-relaxed">{blurb}</p>
+      <ul className="space-y-2 text-[13px] text-bz-interface flex-1">
+        {features.map((f, i) => (
+          <li key={i} className="flex gap-2">
+            <span className="text-bz-cyan">·</span> {f}
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={onClick}
+        className={`mt-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 font-mono-ui text-[11px] tracking-[0.22em] uppercase border transition-colors duration-240 ${
+          primary
+            ? 'bg-bz-paper text-bz-graphite border-bz-paper hover:bg-bz-cyan hover:border-bz-cyan'
+            : 'border-bz-grid text-bz-paper hover:border-bz-cyan'
+        }`}
+      >
+        {cta} <span>→</span>
+      </button>
+    </div>
+  );
+}
+
+function FounderCounter() {
+  // Hardcoded for now · in production this reads from Supabase count of users
+  // with app_metadata.plan === 'founder'. Update when the counter goes live.
+  const claimed = 140;
+  const total = 500;
+  const pct = (claimed / total) * 100;
+  return (
+    <div className="flex items-center gap-3 font-mono-ui text-[11px] tracking-[0.18em] uppercase text-bz-system">
+      <span><span className="text-bz-paper">{claimed}</span> / {total} claimed</span>
+      <div className="flex-1 h-1 bg-bz-grid relative overflow-hidden">
+        <div className="absolute inset-y-0 left-0 bg-bz-cyan" style={{ width: `${pct}%` }} />
+      </div>
+      <span>{total - claimed} left</span>
+    </div>
+  );
+}

@@ -6,6 +6,8 @@
 
 import type { CSSProperties, ReactNode } from 'react';
 
+export { DitherMark } from './DitherMark';
+
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
 const heights: Record<Size, number> = { sm: 18, md: 28, lg: 44, xl: 72 };

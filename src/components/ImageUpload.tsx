@@ -3,13 +3,15 @@ import { Upload } from 'lucide-react';
 import { InkNoiseLockup } from './brand';
 import { useT } from '../i18n/use-i18n';
 import { SAMPLE_SUBJECTS, DITHER_TREATMENTS } from '../lib/sampleGallery';
+import { Manifesto, Workflow, Ecosystem, Pricing } from './marketing/MarketingSections';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
   toolbar?: ReactNode;
+  onSignInNeeded?: () => void;
 }
 
-export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) {
+export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: ImageUploadProps) {
   const t = useT();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -317,6 +319,14 @@ export default function ImageUpload({ onImageLoad, toolbar }: ImageUploadProps) 
           </div>
         </div>
       </section>
+
+      {/* ============================================================
+          MARKETING SECTIONS · from Claude Design redesign
+          ============================================================ */}
+      <Manifesto />
+      <Workflow />
+      <Ecosystem />
+      <Pricing onSignInNeeded={onSignInNeeded ?? (() => undefined)} />
 
       {/* ============================================================
           FOOTER · Bezier umbrella
