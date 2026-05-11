@@ -84,6 +84,26 @@ function App() {
     }
   }, [portalLoading]);
 
+  const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
+  const [processedImageData, setProcessedImageData] = useState<ImageData | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [resizeWarning, setResizeWarning] = useState<string | null>(null);
+  const [algorithm, setAlgorithm] = useState<DitheringAlgorithm>('floyd-steinberg');
+  const [colorMode, setColorMode] = useState<ColorMode>('rgb');
+  const [selectedPalette, setSelectedPalette] = useState(() => getRandomPaletteIndex());
+  const [colorCount, setColorCount] = useState(8);
+  const [resamplingMethod, setResamplingMethod] = useState<ResamplingMethod>('bilinear');
+  const [colorModeSettings, setColorModeSettings] = useState<ColorModeSettings>(DEFAULT_COLOR_MODE_SETTINGS);
+  const [paletteModifiers, setPaletteModifiers] = useState<PaletteModifiers>(DEFAULT_PALETTE_MODIFIERS);
+  const [postProcessing, setPostProcessing] = useState<PostProcessing>(DEFAULT_POST_PROCESSING);
+  const [adjustments, setAdjustments] = useState<ImageAdjustments>(DEFAULT_ADJUSTMENTS);
+
+  const [imageAnalysisData, setImageAnalysisData] = useState<ImageAnalysis | null>(null);
+  const [isAutoTuned, setIsAutoTuned] = useState(false);
+  const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [activeUserPresetId, setActiveUserPresetId] = useState<string | null>(null);
+  const [mode, setMode] = useState<AppMode>('single');
+
   const getCurrentConfig = useCallback((): PresetConfig => ({
     algorithm,
     colorMode,
@@ -110,25 +130,6 @@ function App() {
     setActivePreset(null);
     setIsAutoTuned(false);
   }, []);
-  const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
-  const [processedImageData, setProcessedImageData] = useState<ImageData | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [resizeWarning, setResizeWarning] = useState<string | null>(null);
-  const [algorithm, setAlgorithm] = useState<DitheringAlgorithm>('floyd-steinberg');
-  const [colorMode, setColorMode] = useState<ColorMode>('rgb');
-  const [selectedPalette, setSelectedPalette] = useState(() => getRandomPaletteIndex());
-  const [colorCount, setColorCount] = useState(8);
-  const [resamplingMethod, setResamplingMethod] = useState<ResamplingMethod>('bilinear');
-  const [colorModeSettings, setColorModeSettings] = useState<ColorModeSettings>(DEFAULT_COLOR_MODE_SETTINGS);
-  const [paletteModifiers, setPaletteModifiers] = useState<PaletteModifiers>(DEFAULT_PALETTE_MODIFIERS);
-  const [postProcessing, setPostProcessing] = useState<PostProcessing>(DEFAULT_POST_PROCESSING);
-  const [adjustments, setAdjustments] = useState<ImageAdjustments>(DEFAULT_ADJUSTMENTS);
-
-  const [imageAnalysisData, setImageAnalysisData] = useState<ImageAnalysis | null>(null);
-  const [isAutoTuned, setIsAutoTuned] = useState(false);
-  const [activePreset, setActivePreset] = useState<string | null>(null);
-  const [activeUserPresetId, setActiveUserPresetId] = useState<string | null>(null);
-  const [mode, setMode] = useState<AppMode>('single');
 
   const handleModeToggle = useCallback((next: AppMode) => {
     if (next === 'batch' && !isPro) {
