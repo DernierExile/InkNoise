@@ -3,7 +3,7 @@ import { Upload } from 'lucide-react';
 import { InkNoiseLockup } from './brand';
 import { useT } from '../i18n/use-i18n';
 import { SAMPLE_SUBJECTS, DITHER_TREATMENTS } from '../lib/sampleGallery';
-import { Manifesto, Workflow, Ecosystem, Pricing, Algorithms, ColorModes } from './marketing/MarketingSections';
+import { Manifesto, Workflow, Ecosystem, Pricing, Algorithms, ColorModes, PostProd, InterfaceMock, BeforeAfter } from './marketing/MarketingSections';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
@@ -328,12 +328,13 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
           add it back when we have real customer cases with proof. The
           UseCases component still exists in MarketingSections.tsx for
           re-activation later.
-          Sections 04 (PostProd), 05 (InterfaceMock), and BeforeAfter slider
-          are scheduled for Phase 3c.
           ============================================================ */}
+      <BeforeAfter />
       <Manifesto />
       <Algorithms />
       <ColorModes />
+      <PostProd />
+      <InterfaceMock />
       <Workflow />
       <Ecosystem />
       <Pricing onSignInNeeded={onSignInNeeded ?? (() => undefined)} />

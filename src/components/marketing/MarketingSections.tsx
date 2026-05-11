@@ -240,6 +240,294 @@ function ColorModeCard({ mode, source }: { mode: ColorMode; source: HTMLCanvasEl
   );
 }
 
+// ─── PostProd · 6 effect demo cards (CSS-only previews) ──────────────────────
+
+const POST_EFFECTS = [
+  { name: 'CRT Curve',           desc: 'Phosphor curvature with chromatic falloff. Old-television feel without the smear.',          cls: 'fx-crt' },
+  { name: 'Scanlines',           desc: 'Configurable density and bleed. Stack with bloom for arcade output.',                        cls: 'fx-scan' },
+  { name: 'Chromatic Aberr.',    desc: 'Per-channel offset and angle. Pull RGB apart on highlights only.',                           cls: 'fx-aber' },
+  { name: 'Vignette',            desc: 'Optical falloff. Radial or linear, hard- or soft-edged.',                                    cls: 'fx-vig' },
+  { name: 'Bloom',               desc: 'Highlight diffusion with threshold and radius. Print bleed approximation.',                  cls: 'fx-bloom' },
+  { name: 'Grain',               desc: 'Monochromatic or chroma. Driven by luminance, not uniform.',                                 cls: 'fx-grain' },
+];
+
+export function PostProd() {
+  return (
+    <section id="post" className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-10 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">04</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Post-production</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Stack effects after the dither. Or don't.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            CRT, scanlines, chromatic aberration, vignette, bloom, grain. Each effect is its own node · toggle, reorder, render. Save the chain to a preset; it travels with the algorithm.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          {POST_EFFECTS.map((p) => (
+            <div key={p.name} className="panel-surface flex flex-col">
+              <div className={`relative aspect-[16/10] ${p.cls}`} aria-hidden />
+              <div className="p-4">
+                <h4 className="text-bz-paper font-medium">{p.name}</h4>
+                <p className="text-bz-system text-[12px] leading-relaxed mt-1">{p.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── InterfaceMock · auto-cycling fake workbench screenshot ──────────────────
+
+export function InterfaceMock() {
+  const source = useSourceImage('/samples/inknoisesample.jpg', 800);
+  const catalog = typeof window !== 'undefined' && window.InkNoiseDither ? window.InkNoiseDither.CATALOG.slice(0, 8) : [];
+  const [active, setActive] = useState(1);
+  const [knobs, setKnobs] = useState({ thr: 50, ang: 30, cell: 60, str: 70 });
+
+  useEffect(() => {
+    if (catalog.length === 0) return;
+    const t = setInterval(() => setActive((a) => (a + 1) % catalog.length), 2200);
+    return () => clearInterval(t);
+  }, [catalog.length]);
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setKnobs({
+        thr: 30 + Math.random() * 50,
+        ang: Math.random() * 100,
+        cell: 30 + Math.random() * 60,
+        str: 50 + Math.random() * 40,
+      });
+    }, 2200);
+    return () => clearInterval(t);
+  }, []);
+
+  const activeAlgo = catalog[active];
+
+  return (
+    <section id="interface" className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-10 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">05</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Interface</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              A workbench. Every knob exposed.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            Three panes: catalog, canvas, controls. Keyboard-first. Monospace at every label so you can read parameters across a 27-inch screen without leaning in.
+          </p>
+        </div>
+
+        <div className="border border-bz-grid bg-bz-deep p-3">
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_200px] gap-2">
+            {/* Left pane · algorithm list */}
+            <div className="bg-bz-graphite border border-bz-grid p-3 flex flex-col gap-4">
+              <div>
+                <h5 className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system mb-2">Algorithm</h5>
+                <div className="flex flex-col gap-0.5">
+                  {catalog.map((a, i) => (
+                    <div key={i} className={`flex items-center justify-between text-[12px] px-2 py-1 ${i === active ? 'bg-bz-deep text-bz-paper' : 'text-bz-interface'}`}>
+                      <span className="truncate">{a.name}</span>
+                      <span className={i === active ? 'text-bz-cyan' : 'text-transparent'}>●</span>
+                    </div>
+                  ))}
+                  <div className="text-[12px] text-bz-system px-2 py-1 mt-1">+ 17 more</div>
+                </div>
+              </div>
+              <div>
+                <h5 className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system mb-2">Color mode</h5>
+                <div className="flex flex-col gap-0.5">
+                  {['Mono', 'Duo-tone', 'Tri-tone', 'Indexed', 'RGB-split'].map((m, i) => (
+                    <div key={m} className={`text-[12px] px-2 py-1 ${i === 0 ? 'bg-bz-deep text-bz-paper' : 'text-bz-interface'}`}>{m}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Center pane · live canvas */}
+            <div className="relative bg-bz-graphite border border-bz-grid aspect-[16/10] overflow-hidden">
+              {source && activeAlgo ? (
+                <DitherCanvas
+                  source={source}
+                  algo={activeAlgo.id}
+                  opts={{ cell: activeAlgo.cell, angle: activeAlgo.angle, threshold: activeAlgo.threshold, seed: activeAlgo.seed }}
+                />
+              ) : null}
+              {activeAlgo && (
+                <div className="absolute bottom-0 left-0 right-0 flex justify-between px-3 py-2 bg-bz-graphite/85 border-t border-bz-grid font-mono-ui text-[10px] tracking-[0.18em] uppercase text-bz-system">
+                  <span>{activeAlgo.name.toUpperCase()} · 4096×2730 · {Math.round(60 + Math.random() * 30)}ms</span>
+                  <span>preset / live.json</span>
+                </div>
+              )}
+            </div>
+
+            {/* Right pane · parameters */}
+            <div className="bg-bz-graphite border border-bz-grid p-3 flex flex-col gap-3">
+              <h5 className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">Parameters</h5>
+              {([
+                ['threshold', knobs.thr, '%'],
+                ['angle',     knobs.ang, '°'],
+                ['cell size', knobs.cell, 'px'],
+                ['strength',  knobs.str, '%'],
+              ] as const).map(([label, val, unit]) => (
+                <div key={label}>
+                  <div className="flex justify-between font-mono-ui text-[10px] tracking-[0.18em] uppercase mb-1">
+                    <span className="text-bz-system">{label}</span>
+                    <span className="text-bz-paper">{val.toFixed(0)}{unit}</span>
+                  </div>
+                  <div className="h-[2px] bg-bz-grid relative overflow-hidden">
+                    <div className="absolute inset-y-0 left-0 bg-bz-cyan transition-[width] duration-700" style={{ width: `${val}%` }} />
+                  </div>
+                </div>
+              ))}
+              <h5 className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system mt-2">Post-stack</h5>
+              <div className="flex flex-col gap-0.5">
+                {['Scanlines · 0.4', 'Bloom · 0.2', 'Vignette · 0.6'].map((p) => (
+                  <div key={p} className="flex items-center justify-between text-[12px] px-2 py-1 text-bz-interface">
+                    <span>{p}</span>
+                    <span className="text-bz-cyan">●</span>
+                  </div>
+                ))}
+                <div className="text-[12px] text-bz-system px-2 py-1">+ add effect</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── BeforeAfter · interactive split slider with algorithm chips ─────────────
+
+export function BeforeAfter() {
+  const source = useSourceImage('/samples/inknoisesample.jpg', 1200);
+  const [split, setSplit] = useState(50);
+  const [algo, setAlgo] = useState('atkinson');
+  const draggingRef = useRef(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const leftRef = useRef<HTMLCanvasElement | null>(null);
+  const rightRef = useRef<HTMLCanvasElement | null>(null);
+
+  const algos = [
+    { id: 'atkinson',         name: 'Atkinson' },
+    { id: 'floyd-steinberg',  name: 'Floyd–Steinberg' },
+    { id: 'bayer-8',          name: 'Bayer 8×8' },
+    { id: 'halftone-circle',  name: 'Halftone' },
+    { id: 'halftone-line',    name: 'Halftone Line' },
+    { id: 'stucki',           name: 'Stucki' },
+  ];
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!draggingRef.current || !wrapRef.current) return;
+      const rect = wrapRef.current.getBoundingClientRect();
+      const cx = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const x = cx - rect.left;
+      setSplit(Math.max(2, Math.min(98, (x / rect.width) * 100)));
+    };
+    const stop = () => { draggingRef.current = false; };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', stop);
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', stop);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', stop);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', stop);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!source || !leftRef.current || !rightRef.current || typeof window === 'undefined' || !window.InkNoiseDither) return;
+    leftRef.current.width = source.width;
+    leftRef.current.height = source.height;
+    const lc = leftRef.current.getContext('2d');
+    if (!lc) return;
+    lc.drawImage(source, 0, 0);
+    const out = window.InkNoiseDither.render(source, algo);
+    rightRef.current.width = out.width;
+    rightRef.current.height = out.height;
+    const rc = rightRef.current.getContext('2d');
+    if (!rc) return;
+    rc.drawImage(out, 0, 0);
+  }, [source, algo]);
+
+  return (
+    <section className="border-t border-bz-grid pt-6 pb-16 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="flex items-baseline gap-3 mb-4">
+          <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Live demo</span>
+          <span className="text-bz-paper text-[14px]">Drag the handle. Pick an algorithm.</span>
+        </div>
+
+        <div
+          ref={wrapRef}
+          onMouseDown={() => { draggingRef.current = true; }}
+          onTouchStart={() => { draggingRef.current = true; }}
+          className="relative bg-bz-graphite border border-bz-grid aspect-[16/9] overflow-hidden cursor-ew-resize select-none"
+          style={{ ['--split' as string]: `${split}%` }}
+        >
+          <div className="absolute inset-0">
+            <canvas ref={leftRef} className="w-full h-full object-cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${split}%)` }}>
+            <canvas ref={rightRef} className="w-full h-full object-cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div
+            className="absolute top-0 bottom-0 w-px bg-bz-paper pointer-events-none"
+            style={{ left: `${split}%` }}
+          />
+          <div
+            className="absolute top-1/2 w-9 h-9 -translate-y-1/2 -translate-x-1/2 bg-bz-cyan text-bz-graphite border border-bz-paper rounded-full flex items-center justify-center font-mono-ui text-[12px] font-bold pointer-events-none"
+            style={{ left: `${split}%` }}
+          >
+            ⇆
+          </div>
+          <div className="absolute top-3 left-3 font-mono-ui text-[10px] tracking-[0.22em] uppercase bg-bz-graphite/80 border border-bz-grid px-2 py-1 text-bz-paper">
+            INPUT
+          </div>
+          <div className="absolute top-3 right-3 font-mono-ui text-[10px] tracking-[0.22em] uppercase bg-bz-graphite/80 border border-bz-cyan px-2 py-1 text-bz-cyan">
+            DITHERED · {algo.toUpperCase()}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2 mt-4">
+          {algos.map((a) => (
+            <button
+              key={a.id}
+              type="button"
+              onClick={() => setAlgo(a.id)}
+              className={`px-3 py-2 font-mono-ui text-[10px] tracking-[0.22em] uppercase border transition-colors duration-240 ${
+                a.id === algo
+                  ? 'bg-bz-paper text-bz-graphite border-bz-paper'
+                  : 'border-bz-grid text-bz-paper hover:border-bz-cyan'
+              }`}
+            >
+              {a.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function ColorModes() {
   const source = useSourceImage('/samples/eyesample.jpg', 300);
 

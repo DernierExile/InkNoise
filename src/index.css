@@ -191,6 +191,73 @@
 }
 
 /* =========================================================================
+   POSTPROD effect previews · used in MarketingSections PostProd cards.
+   CSS-only demos of each post-production effect. Each .fx-* class fills
+   its parent (parent must be position: relative with explicit dimensions).
+   ========================================================================= */
+
+.fx-crt {
+  background:
+    radial-gradient(120% 80% at 50% 50%, transparent 60%, rgba(0,0,0,.7) 100%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, #1a3a40, #0a1a20);
+}
+.fx-crt::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(60% 80% at 30% 30%, rgba(120,255,200,.4), transparent 60%);
+  pointer-events: none;
+}
+
+.fx-scan { background: linear-gradient(180deg, #221, #110); }
+.fx-scan::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0) 0 2px, rgba(0,0,0,.55) 2px 3px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.fx-scan::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(50% 70% at 50% 40%, rgba(255,200,140,.35), transparent 70%);
+  pointer-events: none;
+}
+
+.fx-aber {
+  background: #050505;
+  background-image:
+    radial-gradient(40% 60% at 48% 50%, rgba(255,40,80,.7), transparent 60%),
+    radial-gradient(40% 60% at 52% 50%, rgba(40,180,255,.7), transparent 60%),
+    radial-gradient(40% 60% at 50% 50%, rgba(255,255,255,.85), transparent 60%);
+}
+
+.fx-vig {
+  background:
+    radial-gradient(60% 80% at 50% 50%, rgba(255,235,200,.85), transparent 70%),
+    #060606;
+}
+.fx-vig::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 50%, transparent 35%, rgba(0,0,0,.85) 100%);
+  pointer-events: none;
+}
+
+.fx-bloom { background: #0a0a12; }
+.fx-bloom::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(15% 20% at 30% 40%, #fff, rgba(255,255,255,.1) 60%, transparent 70%),
+    radial-gradient(20% 30% at 65% 55%, rgba(255,180,80,.9), transparent 70%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+.fx-grain {
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='1.2' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(180deg, #2a2a30, #0a0a10);
+  background-blend-mode: overlay;
+}
+
+/* =========================================================================
    FORM CONTROLS — square corners, hairline borders, cyan signal
    ========================================================================= */
 
