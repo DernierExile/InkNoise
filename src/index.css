@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -21,8 +21,11 @@
   --bz-paper-2:   #ECECE7;   /* secondary paper */
 
   /* — SIGNAL — */
-  --bz-cyan:      #00D5FF;   /* primary signal */
-  --bz-violet:    #5361FF;   /* secondary signal (optional) */
+  /* Note: --bz-cyan name preserved for backward compat across all components */
+  /* Value switched to Riso orange (Claude Design redesign, validated 2026-05-09) */
+  --bz-cyan:      #E84A1F;   /* primary signal · Riso orange */
+  --bz-violet:    #5361FF;   /* secondary signal (optional, unused) */
+  --bz-accent:    #E84A1F;   /* alias · use this in new code */
 
   /* — ALIASES — */
   --bg:           var(--bz-graphite);
@@ -32,9 +35,10 @@
   --hairline:     var(--bz-grid);
 
   /* — TYPE STACKS — */
-  --ff-display:   'Inter', 'Söhne', 'Suisse Intl', 'Neue Haas Grotesk', system-ui, sans-serif;
-  --ff-text:      'Inter', 'Söhne', 'Suisse Intl', system-ui, sans-serif;
-  --ff-mono:      'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  /* Note: Geist preferred (2026-05-09 redesign), Inter retained as fallback */
+  --ff-display:   'Geist', 'Inter', 'Söhne', 'Suisse Intl', 'Neue Haas Grotesk', system-ui, sans-serif;
+  --ff-text:      'Geist', 'Inter', 'Söhne', 'Suisse Intl', system-ui, sans-serif;
+  --ff-mono:      'Geist Mono', 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
 
   /* — TRACKING — */
   --tr-display:   -0.03em;
