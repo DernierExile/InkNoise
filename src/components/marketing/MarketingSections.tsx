@@ -84,7 +84,10 @@ function DitherCanvas({
 // ─── Algorithms · 25 thumbs in 5×5 grid, all live rendered ──────────────────
 
 export function Algorithms() {
-  const source = useSourceImage('/samples/inknoisesample.jpg', 480);
+  // Eye detail crop · richer contrast and finer texture make algorithm
+  // signatures more legible at thumbnail scale. Source asset:
+  // public/samples/eyesample.jpg (added 2026-05-12).
+  const source = useSourceImage('/samples/eyesample.jpg', 400);
   const catalog = typeof window !== 'undefined' && window.InkNoiseDither ? window.InkNoiseDither.CATALOG : [];
 
   return (
@@ -109,7 +112,7 @@ export function Algorithms() {
           {catalog.map((a, i) => (
             <div key={i} className="panel-surface p-3 flex flex-col gap-2">
               <span className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">{String(i + 1).padStart(2, '0')}</span>
-              <div className="bg-bz-graphite border border-bz-grid aspect-[4/3] overflow-hidden">
+              <div className="bg-bz-graphite border border-bz-grid aspect-square overflow-hidden">
                 {source ? (
                   <DitherCanvas source={source} algo={a.id} opts={{ cell: a.cell, angle: a.angle, threshold: a.threshold, seed: a.seed }} />
                 ) : null}
