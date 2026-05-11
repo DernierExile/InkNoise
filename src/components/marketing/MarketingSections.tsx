@@ -423,14 +423,19 @@ export function BeforeAfter() {
   const leftRef = useRef<HTMLCanvasElement | null>(null);
   const rightRef = useRef<HTMLCanvasElement | null>(null);
 
+  // Each algo has its own duo-tone palette · rotation of brand-aligned colors
+  // so the demo never looks B&W only. The chip's swatch and the DITHERED tag
+  // both reflect the active algo's palette.
   const algos = [
-    { id: 'atkinson',         name: 'Atkinson' },
-    { id: 'floyd-steinberg',  name: 'Floyd–Steinberg' },
-    { id: 'bayer-8',          name: 'Bayer 8×8' },
-    { id: 'halftone-circle',  name: 'Halftone' },
-    { id: 'halftone-line',    name: 'Halftone Line' },
-    { id: 'stucki',           name: 'Stucki' },
+    { id: 'atkinson',         name: 'Atkinson',         fg: [244, 244, 241] as [number, number, number], bg: [5, 6, 7] as [number, number, number],         swatch: '#F4F4F1' }, // B&W
+    { id: 'floyd-steinberg',  name: 'Floyd-Steinberg',  fg: [232, 74, 31]   as [number, number, number], bg: [5, 6, 7] as [number, number, number],         swatch: '#E84A1F' }, // Riso orange
+    { id: 'bayer-8',          name: 'Bayer 8×8',        fg: [0, 213, 255]   as [number, number, number], bg: [5, 6, 7] as [number, number, number],         swatch: '#00D5FF' }, // cyan
+    { id: 'halftone-circle',  name: 'Halftone',         fg: [255, 61, 127]  as [number, number, number], bg: [5, 6, 7] as [number, number, number],         swatch: '#FF3D7F' }, // magenta
+    { id: 'halftone-line',    name: 'Halftone Line',    fg: [244, 211, 94]  as [number, number, number], bg: [5, 6, 7] as [number, number, number],         swatch: '#F4D35E' }, // gold
+    { id: 'stucki',           name: 'Stucki',           fg: [83, 97, 255]   as [number, number, number], bg: [244, 244, 241] as [number, number, number],   swatch: '#5361FF' }, // violet on paper
   ];
+
+  const activeAlgo = algos.find((a) => a.id === algo) ?? algos[0];
 
   useEffect(() => {
     const onMove = (e: MouseEvent | TouchEvent) => {
@@ -460,13 +465,13 @@ export function BeforeAfter() {
     const lc = leftRef.current.getContext('2d');
     if (!lc) return;
     lc.drawImage(source, 0, 0);
-    const out = window.InkNoiseDither.render(source, algo);
+    const out = window.InkNoiseDither.render(source, algo, { fg: activeAlgo.fg, bg: activeAlgo.bg });
     rightRef.current.width = out.width;
     rightRef.current.height = out.height;
     const rc = rightRef.current.getContext('2d');
     if (!rc) return;
     rc.drawImage(out, 0, 0);
-  }, [source, algo]);
+  }, [source, algo, activeAlgo]);
 
   return (
     <section className="border-t border-bz-grid pt-6 pb-16 px-4 sm:px-6">
@@ -502,8 +507,12 @@ export function BeforeAfter() {
           <div className="absolute top-3 left-3 font-mono-ui text-[10px] tracking-[0.22em] uppercase bg-bz-graphite/80 border border-bz-grid px-2 py-1 text-bz-paper">
             INPUT
           </div>
-          <div className="absolute top-3 right-3 font-mono-ui text-[10px] tracking-[0.22em] uppercase bg-bz-graphite/80 border border-bz-cyan px-2 py-1 text-bz-cyan">
-            DITHERED · {algo.toUpperCase()}
+          <div
+            className="absolute top-3 right-3 inline-flex items-center gap-2 font-mono-ui text-[10px] tracking-[0.22em] uppercase bg-bz-graphite/80 border px-2 py-1"
+            style={{ borderColor: activeAlgo.swatch, color: activeAlgo.swatch }}
+          >
+            <span className="w-1.5 h-1.5" style={{ background: activeAlgo.swatch }} />
+            DITHERED · {activeAlgo.name.toUpperCase()}
           </div>
         </div>
 
@@ -513,12 +522,15 @@ export function BeforeAfter() {
               key={a.id}
               type="button"
               onClick={() => setAlgo(a.id)}
-              className={`px-3 py-2 font-mono-ui text-[10px] tracking-[0.22em] uppercase border transition-colors duration-240 ${
-                a.id === algo
-                  ? 'bg-bz-paper text-bz-graphite border-bz-paper'
-                  : 'border-bz-grid text-bz-paper hover:border-bz-cyan'
+              className={`inline-flex items-center gap-2 px-3 py-2 font-mono-ui text-[10px] tracking-[0.22em] uppercase border transition-colors duration-240 ${
+                a.id === algo ? 'bg-bz-paper text-bz-graphite' : 'text-bz-paper hover:opacity-80'
               }`}
+              style={{
+                borderColor: a.id === algo ? a.swatch : 'var(--bz-grid)',
+                ...(a.id === algo ? { background: 'var(--bz-paper)' } : {}),
+              }}
             >
+              <span className="w-2 h-2" style={{ background: a.swatch }} aria-hidden />
               {a.name}
             </button>
           ))}

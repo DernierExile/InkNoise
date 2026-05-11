@@ -1,9 +1,17 @@
 import { useCallback, useRef, useState, type ReactNode } from 'react';
 import { Upload } from 'lucide-react';
-import { InkNoiseLockup } from './brand';
 import { useT } from '../i18n/use-i18n';
-import { SAMPLE_SUBJECTS, DITHER_TREATMENTS } from '../lib/sampleGallery';
-import { Manifesto, Workflow, Ecosystem, Pricing, Algorithms, ColorModes, PostProd, InterfaceMock, BeforeAfter } from './marketing/MarketingSections';
+import {
+  Manifesto,
+  Workflow,
+  Ecosystem,
+  Pricing,
+  Algorithms,
+  ColorModes,
+  PostProd,
+  InterfaceMock,
+  BeforeAfter,
+} from './marketing/MarketingSections';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
@@ -15,11 +23,6 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
   const t = useT();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [activeSubjectSlug, setActiveSubjectSlug] = useState(SAMPLE_SUBJECTS[0].slug);
-  const [activeTreatmentId, setActiveTreatmentId] = useState(DITHER_TREATMENTS[0].id);
-
-  const activeSubject = SAMPLE_SUBJECTS.find(s => s.slug === activeSubjectSlug) ?? SAMPLE_SUBJECTS[0];
-  const activeTreatment = DITHER_TREATMENTS.find(tr => tr.id === activeTreatmentId) ?? DITHER_TREATMENTS[0];
 
   const processFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) return;
@@ -65,269 +68,109 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
       />
 
       {/* ============================================================
-          SECTION 1 · HERO SHOWREEL
-          Hero image is fixed (independent of the gallery subject selector)
-          so the cinematic backdrop never changes when the user explores
-          subjects below. Hosted at /samples/10-cityscape.jpg.
+          SECTION 1 · HERO (text-first per Claude Design redesign)
+          H1 with the "digital images." span split horizontally · top half
+          paper, bottom half accent orange via linear-gradient + bg-clip.
           ============================================================ */}
-      <section className="relative w-full min-h-[78vh] flex flex-col items-center justify-center overflow-hidden border-b border-bz-grid">
-        {/* Showreel background image — cycles through 8 treatments.
-            Source: public/samples/inknoisesample.jpg (gothic portrait in
-            blue velvet · validated 2026-05-11 as the canonical hero sample) */}
-        <img
-          src="/samples/inknoisesample.jpg"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover animate-showreel"
-          onError={(e) => {
-            const img = e.currentTarget as HTMLImageElement;
-            if (img.dataset.fallback !== '1') {
-              img.dataset.fallback = '1';
-              img.src = 'https://picsum.photos/seed/inknoise-hero/2400/1500';
-            }
-          }}
-        />
+      <section className="px-4 sm:px-6 pt-12 sm:pt-16 pb-8">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="w-1.5 h-1.5 bg-bz-cyan animate-signal-pulse" />
+            <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">
+              {t('home.productLabel')}
+            </span>
+          </div>
 
-        {/* Vignette + scanline overlay */}
-        <div
-          className="absolute inset-0 z-10 pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(ellipse at center, rgba(5,6,7,0.85) 0%, rgba(5,6,7,0.55) 25%, rgba(5,6,7,0.25) 50%, rgba(5,6,7,0.55) 100%)',
-          }}
-        />
-        <div
-          className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay"
-          style={{
-            background:
-              'repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0 1px, transparent 1px 2px)',
-          }}
-        />
+          <h1
+            className="font-display font-bold text-bz-paper"
+            style={{
+              fontSize: 'clamp(48px, 7.5vw, 96px)',
+              lineHeight: 0.96,
+              letterSpacing: '-0.035em',
+              textWrap: 'balance',
+            }}
+          >
+            Engineered texture<br />
+            for{' '}
+            <span
+              style={{
+                background: 'linear-gradient(180deg, var(--bz-paper) 60%, var(--bz-cyan) 60%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                color: 'transparent',
+              }}
+            >
+              digital images.
+            </span>
+          </h1>
 
-        {/* Live badge — top-right */}
-        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 px-2.5 py-1.5 bg-bz-graphite/65 border border-bz-cyan font-mono-ui text-[10px] tracking-widest uppercase text-bz-cyan">
-          <span className="w-1.5 h-1.5 bg-bz-cyan animate-signal-pulse" />
-          {t('home.liveRender')}
-        </div>
-
-        {/* Centered text panel — readable backdrop */}
-        <div
-          className={`relative z-20 mx-6 max-w-2xl px-8 py-8 sm:px-10 sm:py-10 border flex flex-col items-center gap-5 text-center transition-colors duration-240 ${
-            isDragging ? 'border-bz-cyan' : 'border-bz-grid hover:border-bz-system'
-          }`}
-          style={{
-            background: 'rgba(5,6,7,0.55)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-          }}
-        >
-          <span className="font-mono-ui text-[11px] tracking-[0.3em] uppercase text-bz-paper">
-            {t('home.productLabel')}
-          </span>
-
-          <InkNoiseLockup size="xl" orient="vertical" color="var(--bz-paper)" />
-
-          <p className="text-base sm:text-lg text-bz-paper leading-relaxed">
-            {t('home.tagline')}
-            <br />
-            <span className="text-bz-interface">{t('home.subtagline')}</span>
+          <p className="mt-6 max-w-[60ch] text-[16px] sm:text-[18px] leading-[1.5] text-bz-interface">
+            A texture engine, not a filter. Drop a photo and combine{' '}
+            <b className="text-bz-paper font-medium">25 algorithms × 8 color modes × 6 post-stacks</b>
+            {' '}· over{' '}
+            <b className="text-bz-paper font-medium">150,000 distinct texture recipes</b>
+            , every one of them deterministic and reproducible.
           </p>
 
-          {toolbar && <div className="pt-1">{toolbar}</div>}
-
-          <div className="flex flex-col items-center gap-2.5 pt-2">
+          <div className="mt-6 flex flex-wrap items-center gap-4">
             <button
               type="button"
-              onClick={openFilePicker}
-              className={`inline-flex items-center gap-2.5 px-7 py-3.5 font-mono-ui text-xs tracking-[0.22em] uppercase font-medium transition-colors duration-240 border ${
-                isDragging
-                  ? 'bg-bz-cyan text-bz-graphite border-bz-cyan'
-                  : 'bg-bz-paper text-bz-graphite border-bz-paper hover:bg-bz-cyan hover:border-bz-cyan'
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-bz-grid hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-paper"
+            >
+              Watch demo · 90s
+            </button>
+            <span className="font-mono-ui text-[10px] tracking-[0.18em] uppercase text-bz-system">
+              v0.9 · 100% in-browser · no upload · free to try
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          SECTION 2 · DROP ZONE (full-bleed stripped pattern with
+          centered dashed frame · per Claude Design redesign).
+          ============================================================ */}
+      <section className="px-4 sm:px-6 pb-12">
+        <div className="max-w-[1400px] mx-auto">
+          <div
+            onClick={openFilePicker}
+            className={`relative aspect-[16/9] border bg-bz-deep cursor-pointer overflow-hidden transition-colors duration-240 ${
+              isDragging ? 'border-bz-cyan' : 'border-bz-grid'
+            }`}
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 10px, transparent 10px 20px)',
+            }}
+          >
+            <div
+              className={`absolute inset-6 sm:inset-12 border-2 border-dashed flex flex-col items-center justify-center gap-4 transition-colors duration-240 ${
+                isDragging ? 'border-bz-cyan' : 'border-bz-grid'
               }`}
             >
-              <Upload className="w-3.5 h-3.5" />
-              {isDragging ? t('home.release') : t('home.dropToBegin')}
-            </button>
-            <span className="font-mono-ui text-[10px] tracking-[0.3em] uppercase text-bz-system">
-              {t('home.fileTypes')}
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          SECTION 2 · ARGUMENTS / SCALE
-          ============================================================ */}
-      <section className="border-b border-bz-grid py-14 sm:py-16 px-4 sm:px-6">
-        <div className="max-w-[1400px] mx-auto grid gap-10 md:grid-cols-[320px_1fr] items-center">
-          <div className="flex flex-col gap-3">
-            <span className="font-mono-ui text-[10px] tracking-[0.3em] uppercase text-bz-system">
-              {t('home.scale.eyebrow')}
-            </span>
-            <div className="font-semibold text-5xl sm:text-6xl md:text-7xl leading-none tracking-[-0.04em] text-bz-paper">
-              150,000<span className="text-bz-cyan">+</span>
-            </div>
-            <p className="text-sm text-bz-interface leading-relaxed max-w-[280px]">
-              {t('home.scale.sub')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {[
-              { num: '25', nameKey: 'home.stats.algos.name',     descKey: 'home.stats.algos.desc' },
-              { num: '8',  nameKey: 'home.stats.colors.name',    descKey: 'home.stats.colors.desc' },
-              { num: '12', nameKey: 'home.stats.palettes.name',  descKey: 'home.stats.palettes.desc' },
-              { num: '5',  nameKey: 'home.stats.modulations.name', descKey: 'home.stats.modulations.desc' },
-            ].map((cell) => (
-              <div key={cell.nameKey} className="panel p-5 flex flex-col gap-1.5">
-                <span className="font-semibold text-4xl leading-none tracking-[-0.02em] text-bz-paper">{cell.num}</span>
-                <span className="font-mono-ui text-[10px] tracking-[0.2em] uppercase text-bz-system">
-                  {t(cell.nameKey)}
-                </span>
-                <p className="text-[11px] text-bz-interface leading-relaxed mt-1">
-                  {t(cell.descKey)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          SECTION 3 · INTERACTIVE GALLERY (9 subjects × 8 treatments)
-          ============================================================ */}
-      <section className="py-12 px-4 sm:px-6">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-wrap items-baseline gap-3 mb-5">
-            <span className="font-mono-ui text-[10px] tracking-[0.3em] uppercase text-bz-system">
-              {t('home.gallery.eyebrow')}
-            </span>
-            <span className="text-base font-medium text-bz-paper tracking-tight">
-              {t('home.gallery.title')}
-            </span>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-[1fr_320px] items-start">
-
-            {/* Left column · preview + subject selector */}
-            <div className="flex flex-col gap-2">
-              {/* Main preview */}
-              <div className="relative aspect-[4/3] bg-bz-deep border border-bz-grid overflow-hidden">
-                <img
-                  src={activeSubject.src}
-                  alt={activeSubject.label}
-                  className="w-full h-full object-cover transition-[filter] duration-500 ease-out"
-                  style={{ filter: activeTreatment.filter }}
-                  onError={(e) => {
-                    const img = e.currentTarget as HTMLImageElement;
-                    if (img.dataset.fallback !== '1') {
-                      img.dataset.fallback = '1';
-                      img.src = `https://picsum.photos/seed/${activeSubject.slug}/1600/1200`;
-                    }
-                  }}
-                />
-                <div
-                  className="absolute inset-0 pointer-events-none mix-blend-overlay"
-                  style={{
-                    background:
-                      'repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0 1px, transparent 1px 2px)',
-                  }}
-                />
-                <div className="absolute top-3 left-3 px-2.5 py-1.5 bg-bz-graphite/70 border border-bz-paper/10 font-mono-ui text-[10px] tracking-[0.2em] uppercase text-bz-paper">
-                  <span className="text-bz-system">{t('home.gallery.render')}</span>
-                  <span className="text-bz-cyan ml-2">{activeTreatment.name}</span>
+              <Upload className={`w-8 h-8 sm:w-10 sm:h-10 ${isDragging ? 'text-bz-cyan' : 'text-bz-paper'}`} />
+              <h2 className="text-2xl sm:text-3xl md:text-[40px] font-bold text-bz-paper tracking-tight text-center px-4">
+                {isDragging ? t('home.release') : t('home.dropToBegin')}
+              </h2>
+              <span className="font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-system">
+                {t('home.fileTypes')}
+              </span>
+              {toolbar && (
+                <div className="mt-2" onClick={(e) => e.stopPropagation()}>
+                  {toolbar}
                 </div>
-              </div>
-
-              {/* Subject selector — 9 thumbs, responsive grid */}
-              <div className="grid gap-1.5 grid-cols-3 sm:grid-cols-5 lg:grid-cols-9">
-                {SAMPLE_SUBJECTS.map((subject, i) => (
-                  <button
-                    key={subject.slug}
-                    type="button"
-                    onClick={() => setActiveSubjectSlug(subject.slug)}
-                    className={`relative aspect-[4/3] bg-bz-deep border overflow-hidden p-0 transition-colors duration-240 ${
-                      activeSubjectSlug === subject.slug
-                        ? 'border-bz-paper'
-                        : 'border-bz-grid hover:border-bz-cyan'
-                    }`}
-                  >
-                    <img
-                      src={subject.src}
-                      alt=""
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const img = e.currentTarget as HTMLImageElement;
-                        if (img.dataset.fallback !== '1') {
-                          img.dataset.fallback = '1';
-                          img.src = `https://picsum.photos/seed/${subject.slug}/300/225`;
-                        }
-                      }}
-                    />
-                    <span
-                      className={`absolute inset-x-0 bottom-0 px-1.5 py-1 font-mono-ui text-[8px] tracking-[0.18em] uppercase ${
-                        activeSubjectSlug === subject.slug ? 'text-bz-cyan' : 'text-bz-paper'
-                      }`}
-                      style={{
-                        background: 'linear-gradient(transparent, rgba(5,6,7,0.95))',
-                      }}
-                    >
-                      {String(i + 1).padStart(2, '0')} · {subject.label}
-                    </span>
-                  </button>
-                ))}
-              </div>
+              )}
             </div>
-
-            {/* Right column · 8 treatment thumbs */}
-            <div className="grid grid-cols-2 gap-2">
-              {DITHER_TREATMENTS.map((tr) => (
-                <button
-                  key={tr.id}
-                  type="button"
-                  onClick={() => setActiveTreatmentId(tr.id)}
-                  onMouseEnter={() => setActiveTreatmentId(tr.id)}
-                  className={`relative aspect-square bg-bz-deep border overflow-hidden p-0 transition-colors duration-240 ${
-                    activeTreatmentId === tr.id
-                      ? 'border-bz-paper'
-                      : 'border-bz-grid hover:border-bz-cyan'
-                  }`}
-                >
-                  <img
-                    src={activeSubject.src}
-                    alt=""
-                    className="w-full h-full object-cover"
-                    style={{ filter: tr.filter }}
-                    onError={(e) => {
-                      const img = e.currentTarget as HTMLImageElement;
-                      if (img.dataset.fallback !== '1') {
-                        img.dataset.fallback = '1';
-                        img.src = `https://picsum.photos/seed/${activeSubject.slug}/400/400`;
-                      }
-                    }}
-                  />
-                  <span
-                    className="absolute inset-x-0 bottom-0 px-1.5 py-1 font-mono-ui text-[9px] tracking-[0.2em] uppercase text-bz-paper"
-                    style={{
-                      background: 'linear-gradient(transparent, rgba(5,6,7,0.95))',
-                    }}
-                  >
-                    <span className="text-bz-system">{tr.num}</span> · {tr.short}
-                  </span>
-                </button>
-              ))}
-            </div>
-
           </div>
         </div>
       </section>
 
       {/* ============================================================
           MARKETING SECTIONS · from Claude Design redesign
-          Section 07 (Use cases) is intentionally NOT rendered yet · we'll
-          add it back when we have real customer cases with proof. The
-          UseCases component still exists in MarketingSections.tsx for
-          re-activation later.
+          BeforeAfter · 01 Manifesto · 02 Algorithms · 03 Color modes ·
+          04 PostProd · 05 InterfaceMock · 06 Workflow · 08 Ecosystem ·
+          09 Pricing. Section 07 (Use cases) intentionally not rendered
+          yet (no real customer proof to show).
           ============================================================ */}
       <BeforeAfter />
       <Manifesto />
