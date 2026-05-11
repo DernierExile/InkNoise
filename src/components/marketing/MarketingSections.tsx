@@ -83,12 +83,30 @@ function DitherCanvas({
 
 // ─── Algorithms · 25 thumbs in 5×5 grid, all live rendered ──────────────────
 
+// 6 color pairs in rotation, one per thumb. First slot is canonical B&W
+// (paper on graphite), then color signals follow. Designed to read at
+// thumbnail scale: each pair has strong contrast and a recognizable hue.
+const ALGO_PALETTES: Array<{ fg: [number, number, number]; bg: [number, number, number] }> = [
+  { fg: [244, 244, 241], bg: [5, 6, 7] },      // paper on graphite · canonical B&W
+  { fg: [232, 74, 31],   bg: [5, 6, 7] },      // Riso orange on graphite
+  { fg: [0, 213, 255],   bg: [5, 6, 7] },      // cyan on graphite
+  { fg: [255, 61, 127],  bg: [5, 6, 7] },      // hot magenta on graphite
+  { fg: [83, 97, 255],   bg: [244, 244, 241] },// violet on paper (inverted feel)
+  { fg: [244, 211, 94],  bg: [5, 6, 7] },      // gold on graphite
+];
+
+const ALGO_INITIAL_COUNT = 10;
+
 export function Algorithms() {
   // Eye detail crop · richer contrast and finer texture make algorithm
   // signatures more legible at thumbnail scale. Source asset:
   // public/samples/eyesample.jpg (added 2026-05-12).
   const source = useSourceImage('/samples/eyesample.jpg', 400);
   const catalog = typeof window !== 'undefined' && window.InkNoiseDither ? window.InkNoiseDither.CATALOG : [];
+  const [showAll, setShowAll] = useState(false);
+
+  const visible = showAll ? catalog : catalog.slice(0, ALGO_INITIAL_COUNT);
+  const hiddenCount = Math.max(0, catalog.length - ALGO_INITIAL_COUNT);
 
   return (
     <section id="algorithms" className="border-t border-bz-grid py-20 px-4 sm:px-6">
@@ -109,40 +127,122 @@ export function Algorithms() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-          {catalog.map((a, i) => (
-            <div key={i} className="panel-surface p-3 flex flex-col gap-2">
-              <span className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">{String(i + 1).padStart(2, '0')}</span>
-              <div className="bg-bz-graphite border border-bz-grid aspect-square overflow-hidden">
-                {source ? (
-                  <DitherCanvas source={source} algo={a.id} opts={{ cell: a.cell, angle: a.angle, threshold: a.threshold, seed: a.seed }} />
-                ) : null}
+          {visible.map((a, i) => {
+            const palette = ALGO_PALETTES[i % ALGO_PALETTES.length];
+            return (
+              <div key={i} className="panel-surface p-3 flex flex-col gap-2">
+                <span className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">{String(i + 1).padStart(2, '0')}</span>
+                <div className="bg-bz-graphite border border-bz-grid aspect-square overflow-hidden">
+                  {source ? (
+                    <DitherCanvas
+                      source={source}
+                      algo={a.id}
+                      opts={{
+                        cell: a.cell,
+                        angle: a.angle,
+                        threshold: a.threshold,
+                        seed: a.seed,
+                        fg: palette.fg,
+                        bg: palette.bg,
+                      }}
+                    />
+                  ) : null}
+                </div>
+                <div>
+                  <div className="text-bz-paper text-[12px] font-medium leading-tight">{a.name}</div>
+                  <div className="font-mono-ui text-[9px] tracking-[0.18em] uppercase text-bz-system">{a.family}</div>
+                </div>
               </div>
-              <div>
-                <div className="text-bz-paper text-[12px] font-medium leading-tight">{a.name}</div>
-                <div className="font-mono-ui text-[9px] tracking-[0.18em] uppercase text-bz-system">{a.family}</div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {hiddenCount > 0 && (
+          <div className="flex justify-center mt-8">
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 border border-bz-grid hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-paper"
+            >
+              {showAll ? `Show less · keep ${ALGO_INITIAL_COUNT}` : `View all ${catalog.length} algorithms · +${hiddenCount} more`}
+              <span aria-hidden>{showAll ? '↑' : '↓'}</span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
-// ─── Color modes · 8 cards with swatches, static ────────────────────────────
+// ─── Color modes · 8 cards with live dither preview + palette swatch ─────────
+// Each card shows the eye sample rendered as a duo-tone dither using the two
+// strongest-contrast colors from the mode's palette · then the full palette
+// swatch is rendered below for the full picture.
 
-const MODES = [
-  { name: 'Mono',       desc: 'One ink. Pure 1-bit.',                       palette: ['#0a0a0c', '#f4f4f5'] },
-  { name: 'Duo-tone',   desc: 'Two ink Riso pairings.',                     palette: ['#1a1820', '#ff3d7f', '#3d5afe'] },
-  { name: 'Tri-tone',   desc: 'Highlight, mid, shadow.',                    palette: ['#0a0a0c', '#e84a1f', '#f4d35e', '#f5f1e8'] },
-  { name: 'Tonal',      desc: 'Continuous palette ramp.',                   palette: ['#0a0a0c', '#3a3540', '#7a3a4a', '#d97757', '#f4d35e', '#f5f1e8'] },
-  { name: 'Indexed',    desc: 'Map to a fixed library.',                    palette: ['#0a0a0c', '#e84a1f', '#3d5afe', '#1f8a5b', '#f4d35e', '#f5f1e8'] },
-  { name: 'RGB-split',  desc: 'Channel-by-channel dither.',                 palette: ['#ff0040', '#00ff80', '#3060ff'] },
-  { name: 'Modulation', desc: 'Hue / sat / lum drives noise.',              palette: ['#1a1820', '#7c4dff', '#00d4ff', '#ffd54f'] },
-  { name: 'CMYK Sep.',  desc: 'Print-ready four-channel separation.',       palette: ['#00b4ff', '#ff3d7f', '#ffd83d', '#0a0a0c'] },
+function hexToRgb(hex: string): [number, number, number] {
+  const c = hex.replace('#', '');
+  return [
+    parseInt(c.slice(0, 2), 16),
+    parseInt(c.slice(2, 4), 16),
+    parseInt(c.slice(4, 6), 16),
+  ];
+}
+
+interface ColorMode {
+  name: string;
+  desc: string;
+  palette: string[];
+  /** Algorithm used for the preview render · picked to flatter each mode. */
+  algo: string;
+  /** Optional override · which palette indices to use as fg / bg for the
+   *  duo-tone preview. Defaults to first (bg) and last (fg). */
+  preview?: { fg: number; bg: number };
+}
+
+const MODES: ColorMode[] = [
+  { name: 'Mono',       desc: 'One ink. Pure 1-bit.',                       palette: ['#0a0a0c', '#f4f4f5'],                                    algo: 'atkinson' },
+  { name: 'Duo-tone',   desc: 'Two ink Riso pairings.',                     palette: ['#1a1820', '#ff3d7f', '#3d5afe'],                         algo: 'halftone-circle', preview: { bg: 0, fg: 1 } },
+  { name: 'Tri-tone',   desc: 'Highlight, mid, shadow.',                    palette: ['#0a0a0c', '#e84a1f', '#f4d35e', '#f5f1e8'],              algo: 'bayer-8',         preview: { bg: 0, fg: 1 } },
+  { name: 'Tonal',      desc: 'Continuous palette ramp.',                   palette: ['#0a0a0c', '#3a3540', '#7a3a4a', '#d97757', '#f4d35e', '#f5f1e8'], algo: 'floyd-steinberg', preview: { bg: 0, fg: 5 } },
+  { name: 'Indexed',    desc: 'Map to a fixed library.',                    palette: ['#0a0a0c', '#e84a1f', '#3d5afe', '#1f8a5b', '#f4d35e', '#f5f1e8'], algo: 'stucki',          preview: { bg: 0, fg: 4 } },
+  { name: 'RGB-split',  desc: 'Channel-by-channel dither.',                 palette: ['#ff0040', '#00ff80', '#3060ff'],                         algo: 'halftone-line',   preview: { bg: 2, fg: 0 } },
+  { name: 'Modulation', desc: 'Hue / sat / lum drives noise.',              palette: ['#1a1820', '#7c4dff', '#00d4ff', '#ffd54f'],              algo: 'bayer-16',        preview: { bg: 0, fg: 2 } },
+  { name: 'CMYK Sep.',  desc: 'Print-ready four-channel separation.',       palette: ['#0a0a0c', '#00b4ff', '#ff3d7f', '#ffd83d'],              algo: 'halftone-circle', preview: { bg: 0, fg: 2 } },
 ];
 
+function ColorModeCard({ mode, source }: { mode: ColorMode; source: HTMLCanvasElement | null }) {
+  const fgIdx = mode.preview?.fg ?? mode.palette.length - 1;
+  const bgIdx = mode.preview?.bg ?? 0;
+  const fg = hexToRgb(mode.palette[fgIdx]);
+  const bg = hexToRgb(mode.palette[bgIdx]);
+
+  return (
+    <div className="panel-surface p-4 flex flex-col gap-3">
+      <div className="flex items-baseline justify-between">
+        <div className="text-bz-paper font-medium text-[15px]">{mode.name}</div>
+        <span className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">{mode.palette.length} ink</span>
+      </div>
+      <div className="bg-bz-graphite border border-bz-grid aspect-square overflow-hidden">
+        {source ? (
+          <DitherCanvas source={source} algo={mode.algo} opts={{ fg, bg, cell: 4 }} />
+        ) : null}
+      </div>
+      <div
+        className="grid h-3 border border-bz-grid"
+        style={{ gridTemplateColumns: `repeat(${mode.palette.length}, 1fr)` }}
+      >
+        {mode.palette.map((c, i) => (
+          <div key={i} style={{ background: c }} />
+        ))}
+      </div>
+      <p className="text-bz-system text-[12px] leading-relaxed">{mode.desc}</p>
+    </div>
+  );
+}
+
 export function ColorModes() {
+  const source = useSourceImage('/samples/eyesample.jpg', 300);
+
   return (
     <section id="modes" className="border-t border-bz-grid py-20 px-4 sm:px-6">
       <div className="max-w-[1400px] mx-auto">
@@ -161,17 +261,9 @@ export function ColorModes() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
           {MODES.map((m) => (
-            <div key={m.name} className="panel-surface p-5 flex flex-col gap-3">
-              <div className="grid border border-bz-grid h-12" style={{ gridTemplateColumns: `repeat(${m.palette.length}, 1fr)` }}>
-                {m.palette.map((c, i) => <div key={i} style={{ background: c }} />)}
-              </div>
-              <div>
-                <div className="text-bz-paper font-medium">{m.name}</div>
-                <div className="text-bz-system text-[12px] leading-relaxed mt-1">{m.desc}</div>
-              </div>
-            </div>
+            <ColorModeCard key={m.name} mode={m} source={source} />
           ))}
         </div>
       </div>
