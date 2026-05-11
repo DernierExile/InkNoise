@@ -6,9 +6,241 @@
 // These render below the gallery, before the footer, on the home view.
 // =============================================================================
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { redirectToCheckout, getTierConfig } from '../../lib/stripe';
 import { useAuth } from '../../contexts/use-auth';
+import { supabase } from '../../lib/supabase';
+import type { DitherOptions } from '../../types/dither-preview';
+
+// =============================================================================
+// Source image hook + DitherCanvas component (used by Algorithms / ColorModes /
+// UseCases live render sections). The canonical hero sample lives at
+// /samples/inknoisesample.jpg. If absent, falls back to the procedural source
+// rendered by InkNoiseDither.renderSource().
+// =============================================================================
+
+function useSourceImage(src = '/samples/inknoisesample.jpg', w = 720): HTMLCanvasElement | null {
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const renderFallback = () => {
+      if (cancelled || typeof window === 'undefined' || !window.InkNoiseDither) return;
+      const c = window.InkNoiseDither.renderSource(w, Math.round(w * 0.5625), 7);
+      setCanvas(c);
+    };
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      if (cancelled) return;
+      const ratio = img.height / img.width;
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = Math.round(w * ratio);
+      const ctx = c.getContext('2d');
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      setCanvas(c);
+    };
+    img.onerror = renderFallback;
+    img.src = src;
+
+    return () => { cancelled = true; };
+  }, [src, w]);
+
+  return canvas;
+}
+
+function DitherCanvas({
+  source,
+  algo,
+  opts,
+  className,
+}: {
+  source: HTMLCanvasElement | null;
+  algo: string;
+  opts?: DitherOptions;
+  className?: string;
+}) {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    if (!source || !ref.current || typeof window === 'undefined' || !window.InkNoiseDither) return;
+    const out = window.InkNoiseDither.render(source, algo, opts);
+    const c = ref.current;
+    c.width = out.width;
+    c.height = out.height;
+    const ctx = c.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.drawImage(out, 0, 0);
+  }, [source, algo, opts?.cell, opts?.angle, opts?.threshold, opts?.seed]);
+
+  return <canvas ref={ref} className={className} style={{ width: '100%', height: '100%', display: 'block', imageRendering: 'auto' }} />;
+}
+
+// ─── Algorithms · 25 thumbs in 5×5 grid, all live rendered ──────────────────
+
+export function Algorithms() {
+  const source = useSourceImage('/samples/inknoisesample.jpg', 480);
+  const catalog = typeof window !== 'undefined' && window.InkNoiseDither ? window.InkNoiseDither.CATALOG : [];
+
+  return (
+    <section id="algorithms" className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-10 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">02</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Algorithms</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Twenty-five real algorithms. No reskins.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            Error diffusion (Floyd-Steinberg, Atkinson, Burkes, Stucki, Sierra family, Jarvis, Riemersma), ordered (Bayer 2×2 → 16×16, cluster dot), halftone (round, square, diamond, line, newsprint, crosshatch), stochastic (white, blue, stipple), and threshold. Each ships with its own threshold curve, palette mapping, and serpentine option.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+          {catalog.map((a, i) => (
+            <div key={i} className="panel-surface p-3 flex flex-col gap-2">
+              <span className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">{String(i + 1).padStart(2, '0')}</span>
+              <div className="bg-bz-graphite border border-bz-grid aspect-[4/3] overflow-hidden">
+                {source ? (
+                  <DitherCanvas source={source} algo={a.id} opts={{ cell: a.cell, angle: a.angle, threshold: a.threshold, seed: a.seed }} />
+                ) : null}
+              </div>
+              <div>
+                <div className="text-bz-paper text-[12px] font-medium leading-tight">{a.name}</div>
+                <div className="font-mono-ui text-[9px] tracking-[0.18em] uppercase text-bz-system">{a.family}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Color modes · 8 cards with swatches, static ────────────────────────────
+
+const MODES = [
+  { name: 'Mono',       desc: 'One ink. Pure 1-bit.',                       palette: ['#0a0a0c', '#f4f4f5'] },
+  { name: 'Duo-tone',   desc: 'Two ink Riso pairings.',                     palette: ['#1a1820', '#ff3d7f', '#3d5afe'] },
+  { name: 'Tri-tone',   desc: 'Highlight, mid, shadow.',                    palette: ['#0a0a0c', '#e84a1f', '#f4d35e', '#f5f1e8'] },
+  { name: 'Tonal',      desc: 'Continuous palette ramp.',                   palette: ['#0a0a0c', '#3a3540', '#7a3a4a', '#d97757', '#f4d35e', '#f5f1e8'] },
+  { name: 'Indexed',    desc: 'Map to a fixed library.',                    palette: ['#0a0a0c', '#e84a1f', '#3d5afe', '#1f8a5b', '#f4d35e', '#f5f1e8'] },
+  { name: 'RGB-split',  desc: 'Channel-by-channel dither.',                 palette: ['#ff0040', '#00ff80', '#3060ff'] },
+  { name: 'Modulation', desc: 'Hue / sat / lum drives noise.',              palette: ['#1a1820', '#7c4dff', '#00d4ff', '#ffd54f'] },
+  { name: 'CMYK Sep.',  desc: 'Print-ready four-channel separation.',       palette: ['#00b4ff', '#ff3d7f', '#ffd83d', '#0a0a0c'] },
+];
+
+export function ColorModes() {
+  return (
+    <section id="modes" className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-10 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">03</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Color modes</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Eight ways to push pixels through ink.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            From pure 1-bit mono to four-channel CMYK separation. Modulate hue, saturation, and brightness independently. Lock channels for plate-faithful Riso output.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {MODES.map((m) => (
+            <div key={m.name} className="panel-surface p-5 flex flex-col gap-3">
+              <div className="grid border border-bz-grid h-12" style={{ gridTemplateColumns: `repeat(${m.palette.length}, 1fr)` }}>
+                {m.palette.map((c, i) => <div key={i} style={{ background: c }} />)}
+              </div>
+              <div>
+                <div className="text-bz-paper font-medium">{m.name}</div>
+                <div className="text-bz-system text-[12px] leading-relaxed mt-1">{m.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Use cases · 4 cards with live render ───────────────────────────────────
+
+export function UseCases() {
+  const source = useSourceImage('/samples/inknoisesample.jpg', 600);
+  const cases = [
+    { name: 'Riso & screen-print pre-press',
+      desc: 'Plate-faithful 1-bit and indexed output for two-color and three-color Riso runs. Locked angle, locked density, locked palette.',
+      algo: 'halftone-circle', opts: { cell: 6, angle: 22 },
+      tags: ['Mono → 2 plate', 'Channel separation', 'CMYK direct', '1200 DPI export'] },
+    { name: 'AxiDraw, HP & plotter art',
+      desc: 'Vector-clean halftone and crosshatch output ready for plotter ingestion. Stroke-density mode for pen-up / pen-down efficiency.',
+      algo: 'halftone-line', opts: { cell: 5, angle: 45 },
+      tags: ['SVG export', 'Stroke ordering', 'AxiDraw preset', 'Pen-up min.'] },
+    { name: 'Editorial halftone',
+      desc: 'Newsprint-faithful halftone with B&W tonal mapping. Drop a press-kit, get a 50-image set with one consistent texture.',
+      algo: 'halftone-circle', opts: { cell: 4, angle: 45 },
+      tags: ['Newsprint angle', 'Tonal curve', 'Magazine', 'TIFF · 600 DPI'] },
+    { name: 'Pixel art shading',
+      desc: 'Bayer matrices and stochastic dither sized to your sprite grid. Preserve hard edges, shade gradients without banding.',
+      algo: 'bayer-4', opts: {},
+      tags: ['Snap-to-grid', '8 / 16 / 32 px', 'Palette lock', 'GIF · APNG'] },
+  ];
+
+  return (
+    <section className="border-t border-bz-grid py-20 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-10 items-baseline">
+          <div>
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">07</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Use cases</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
+              Built for designers who control every pixel.
+            </h2>
+          </div>
+          <p className="text-bz-interface leading-relaxed max-w-[560px]">
+            If your medium is plate, pen, press or pixel · InkNoise was made for the constraints you actually hit on press day.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {cases.map((c) => (
+            <div key={c.name} className="panel-surface p-5 flex flex-col sm:flex-row gap-5 items-stretch">
+              <div className="flex-shrink-0 w-full sm:w-48 bg-bz-graphite border border-bz-grid aspect-[4/3]">
+                {source ? <DitherCanvas source={source} algo={c.algo} opts={c.opts} /> : null}
+              </div>
+              <div className="flex-1 flex flex-col gap-2">
+                <h4 className="text-bz-paper font-medium">{c.name}</h4>
+                <p className="text-bz-interface text-[13px] leading-relaxed flex-1">{c.desc}</p>
+                <ul className="flex flex-wrap gap-1.5 pt-1">
+                  {c.tags.map((t, j) => (
+                    <li key={j} className="font-mono-ui text-[9px] tracking-[0.18em] uppercase text-bz-system border border-bz-grid px-2 py-0.5">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 // ─── Manifesto ────────────────────────────────────────────────────────────────
 
@@ -392,18 +624,43 @@ function PricingTier({
 }
 
 function FounderCounter() {
-  // Hardcoded for now · in production this reads from Supabase count of users
-  // with app_metadata.plan === 'founder'. Update when the counter goes live.
-  const claimed = 140;
-  const total = 500;
-  const pct = (claimed / total) * 100;
+  // Live count fetched from the founder-count edge function
+  // (deploys with --no-verify-jwt, returns { claimed, total }).
+  // Falls back to a safe default while loading or on error.
+  const [claimed, setClaimed] = useState<number | null>(null);
+  const [total, setTotal] = useState(500);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('founder-count');
+        if (cancelled) return;
+        if (error) {
+          console.warn('founder-count fetch failed:', error);
+          setClaimed(0);
+          return;
+        }
+        if (typeof data?.claimed === 'number') setClaimed(data.claimed);
+        if (typeof data?.total === 'number') setTotal(data.total);
+      } catch (e) {
+        if (!cancelled) setClaimed(0);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const displayed = claimed ?? 0;
+  const pct = (displayed / total) * 100;
+  const remaining = Math.max(0, total - displayed);
+
   return (
     <div className="flex items-center gap-3 font-mono-ui text-[11px] tracking-[0.18em] uppercase text-bz-system">
-      <span><span className="text-bz-paper">{claimed}</span> / {total} claimed</span>
+      <span><span className="text-bz-paper">{claimed === null ? '…' : displayed}</span> / {total} claimed</span>
       <div className="flex-1 h-1 bg-bz-grid relative overflow-hidden">
-        <div className="absolute inset-y-0 left-0 bg-bz-cyan" style={{ width: `${pct}%` }} />
+        <div className="absolute inset-y-0 left-0 bg-bz-cyan transition-[width] duration-500" style={{ width: `${pct}%` }} />
       </div>
-      <span>{total - claimed} left</span>
+      <span>{remaining} left</span>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Upload } from 'lucide-react';
 import { InkNoiseLockup } from './brand';
 import { useT } from '../i18n/use-i18n';
 import { SAMPLE_SUBJECTS, DITHER_TREATMENTS } from '../lib/sampleGallery';
-import { Manifesto, Workflow, Ecosystem, Pricing } from './marketing/MarketingSections';
+import { Manifesto, Workflow, Ecosystem, Pricing, Algorithms, ColorModes, UseCases } from './marketing/MarketingSections';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
@@ -71,9 +71,11 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
           subjects below. Hosted at /samples/10-cityscape.jpg.
           ============================================================ */}
       <section className="relative w-full min-h-[78vh] flex flex-col items-center justify-center overflow-hidden border-b border-bz-grid">
-        {/* Showreel background image — cycles through 8 treatments */}
+        {/* Showreel background image — cycles through 8 treatments.
+            Source: public/samples/inknoisesample.jpg (gothic portrait in
+            blue velvet · validated 2026-05-11 as the canonical hero sample) */}
         <img
-          src="/samples/10-cityscape.jpg"
+          src="/samples/inknoisesample.jpg"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover animate-showreel"
@@ -81,7 +83,7 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
             const img = e.currentTarget as HTMLImageElement;
             if (img.dataset.fallback !== '1') {
               img.dataset.fallback = '1';
-              img.src = 'https://picsum.photos/seed/object-hero/2400/1500';
+              img.src = 'https://picsum.photos/seed/inknoise-hero/2400/1500';
             }
           }}
         />
@@ -322,9 +324,16 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
 
       {/* ============================================================
           MARKETING SECTIONS · from Claude Design redesign
+          Order matches the canonical numbering (01 Manifesto, 02 Algorithms,
+          03 Color modes, 06 Workflow, 07 Use cases, 08 Ecosystem, 09 Pricing).
+          Sections 04 (PostProd), 05 (InterfaceMock), and BeforeAfter slider
+          are scheduled for Phase 3c.
           ============================================================ */}
       <Manifesto />
+      <Algorithms />
+      <ColorModes />
       <Workflow />
+      <UseCases />
       <Ecosystem />
       <Pricing onSignInNeeded={onSignInNeeded ?? (() => undefined)} />
 

@@ -4,6 +4,8 @@ import App from './App.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { I18nProvider } from './i18n/I18nProvider.tsx';
 import './index.css';
+// Side-effect import · attaches window.InkNoiseDither used by marketing sections
+import './lib/dither-preview.js';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
