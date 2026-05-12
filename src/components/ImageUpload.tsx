@@ -8,8 +8,6 @@ import {
   Pricing,
   Algorithms,
   ColorModes,
-  PostProd,
-  InterfaceMock,
   BeforeAfter,
 } from './marketing/MarketingSections';
 
@@ -69,12 +67,11 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
 
       {/* ============================================================
           SECTION 1 · HERO (text-first per Claude Design redesign)
-          H1 with the "digital images." span split horizontally · top half
-          paper, bottom half accent orange via linear-gradient + bg-clip.
+          All copy is localized via the home.hero.* keys (EN/FR/JA/ZH).
           ============================================================ */}
-      <section className="px-4 sm:px-6 pt-12 sm:pt-16 pb-8">
+      <section className="px-4 sm:px-6 pt-10 sm:pt-14 pb-6">
         <div className="max-w-[1400px] mx-auto">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-4">
             <span className="w-1.5 h-1.5 bg-bz-cyan animate-signal-pulse" />
             <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">
               {t('home.productLabel')}
@@ -84,14 +81,14 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
           <h1
             className="font-display font-bold text-bz-paper"
             style={{
-              fontSize: 'clamp(48px, 7.5vw, 96px)',
+              fontSize: 'clamp(40px, 6.5vw, 84px)',
               lineHeight: 0.96,
               letterSpacing: '-0.035em',
               textWrap: 'balance',
             }}
           >
-            Engineered texture<br />
-            for{' '}
+            {t('home.hero.h1Part1')}<br />
+            {t('home.hero.h1Part2') && <span>{t('home.hero.h1Part2')}{' '}</span>}
             <span
               style={{
                 background: 'linear-gradient(180deg, var(--bz-paper) 60%, var(--bz-cyan) 60%)',
@@ -101,41 +98,42 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
                 color: 'transparent',
               }}
             >
-              digital images.
+              {t('home.hero.h1Highlight')}
             </span>
           </h1>
 
-          <p className="mt-6 max-w-[60ch] text-[16px] sm:text-[18px] leading-[1.5] text-bz-interface">
-            A texture engine, not a filter. Drop a photo and combine{' '}
-            <b className="text-bz-paper font-medium">25 algorithms × 8 color modes × 6 post-stacks</b>
-            {' '}· over{' '}
-            <b className="text-bz-paper font-medium">150,000 distinct texture recipes</b>
-            , every one of them deterministic and reproducible.
+          <p className="mt-5 max-w-[60ch] text-[15px] sm:text-[17px] leading-[1.5] text-bz-interface">
+            {t('home.hero.subPart1')}
+            <b className="text-bz-paper font-medium">{t('home.hero.subBold1')}</b>
+            {t('home.hero.subPart2')}
+            <b className="text-bz-paper font-medium">{t('home.hero.subBold2')}</b>
+            {t('home.hero.subPart3')}
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-4">
+          <div className="mt-5 flex flex-wrap items-center gap-4">
             <button
               type="button"
               className="inline-flex items-center gap-2 px-4 py-2.5 border border-bz-grid hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-paper"
             >
-              Watch demo · 90s
+              {t('home.hero.watchDemo')}
             </button>
             <span className="font-mono-ui text-[10px] tracking-[0.18em] uppercase text-bz-system">
-              v0.9 · 100% in-browser · no upload · free to try
+              {t('home.hero.meta')}
             </span>
           </div>
         </div>
       </section>
 
       {/* ============================================================
-          SECTION 2 · DROP ZONE (full-bleed stripped pattern with
-          centered dashed frame · per Claude Design redesign).
+          SECTION 2 · DROP ZONE (compact · fits with BeforeAfter on
+          first scroll). Height capped so the live demo appears just
+          below without scrolling beyond first viewport.
           ============================================================ */}
-      <section className="px-4 sm:px-6 pb-12">
+      <section className="px-4 sm:px-6 pb-6">
         <div className="max-w-[1400px] mx-auto">
           <div
             onClick={openFilePicker}
-            className={`relative aspect-[16/9] border bg-bz-deep cursor-pointer overflow-hidden transition-colors duration-240 ${
+            className={`relative h-[220px] sm:h-[260px] border bg-bz-deep cursor-pointer overflow-hidden transition-colors duration-240 ${
               isDragging ? 'border-bz-cyan' : 'border-bz-grid'
             }`}
             style={{
@@ -144,19 +142,19 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
             }}
           >
             <div
-              className={`absolute inset-6 sm:inset-12 border-2 border-dashed flex flex-col items-center justify-center gap-4 transition-colors duration-240 ${
+              className={`absolute inset-4 sm:inset-6 border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-colors duration-240 ${
                 isDragging ? 'border-bz-cyan' : 'border-bz-grid'
               }`}
             >
-              <Upload className={`w-8 h-8 sm:w-10 sm:h-10 ${isDragging ? 'text-bz-cyan' : 'text-bz-paper'}`} />
-              <h2 className="text-2xl sm:text-3xl md:text-[40px] font-bold text-bz-paper tracking-tight text-center px-4">
+              <Upload className={`w-6 h-6 sm:w-7 sm:h-7 ${isDragging ? 'text-bz-cyan' : 'text-bz-paper'}`} />
+              <h2 className="text-xl sm:text-2xl font-bold text-bz-paper tracking-tight text-center px-4">
                 {isDragging ? t('home.release') : t('home.dropToBegin')}
               </h2>
-              <span className="font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-system">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">
                 {t('home.fileTypes')}
               </span>
               {toolbar && (
-                <div className="mt-2" onClick={(e) => e.stopPropagation()}>
+                <div className="mt-1" onClick={(e) => e.stopPropagation()}>
                   {toolbar}
                 </div>
               )}
@@ -168,16 +166,17 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
       {/* ============================================================
           MARKETING SECTIONS · from Claude Design redesign
           BeforeAfter · 01 Manifesto · 02 Algorithms · 03 Color modes ·
-          04 PostProd · 05 InterfaceMock · 06 Workflow · 08 Ecosystem ·
-          09 Pricing. Section 07 (Use cases) intentionally not rendered
-          yet (no real customer proof to show).
+          06 Workflow · 08 Ecosystem · 09 Pricing.
+          Sections 04 PostProd and 05 InterfaceMock are intentionally
+          NOT rendered (removed per user feedback 2026-05-12).
+          Section 07 UseCases also disabled (no real customer proof yet).
+          All these components remain exported from MarketingSections.tsx
+          for future reactivation.
           ============================================================ */}
       <BeforeAfter />
       <Manifesto />
       <Algorithms />
       <ColorModes />
-      <PostProd />
-      <InterfaceMock />
       <Workflow />
       <Ecosystem />
       <Pricing onSignInNeeded={onSignInNeeded ?? (() => undefined)} />

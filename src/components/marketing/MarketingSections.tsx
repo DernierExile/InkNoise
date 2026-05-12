@@ -9,6 +9,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { redirectToCheckout, getTierConfig } from '../../lib/stripe';
 import { useAuth } from '../../contexts/use-auth';
+import { useT } from '../../i18n/use-i18n';
 import { supabase } from '../../lib/supabase';
 import type { DitherOptions } from '../../types/dither-preview';
 
@@ -415,6 +416,7 @@ export function InterfaceMock() {
 // ─── BeforeAfter · interactive split slider with algorithm chips ─────────────
 
 export function BeforeAfter() {
+  const t = useT();
   const source = useSourceImage('/samples/inknoisesample.jpg', 1200);
   const [split, setSplit] = useState(50);
   const [algo, setAlgo] = useState('atkinson');
@@ -477,8 +479,8 @@ export function BeforeAfter() {
     <section className="border-t border-bz-grid pt-6 pb-16 px-4 sm:px-6">
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-baseline gap-3 mb-4">
-          <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Live demo</span>
-          <span className="text-bz-paper text-[14px]">Drag the handle. Pick an algorithm.</span>
+          <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.demo.eyebrow')}</span>
+          <span className="text-bz-paper text-[14px]">{t('home.demo.title')}</span>
         </div>
 
         <div

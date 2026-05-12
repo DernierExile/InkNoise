@@ -101,6 +101,22 @@
       "eyebrow": "Échantillons · interactif",
       "title": "Choisis un sujet en bas · survole les traitements à droite",
       "render": "Rendu"
+    },
+    "hero": {
+      "h1Part1": "Texture conçue",
+      "h1Part2": "pour les",
+      "h1Highlight": "images numériques.",
+      "subPart1": "Un moteur de texture, pas un filtre. Déposez une photo et combinez ",
+      "subBold1": "25 algorithmes × 8 modes couleur × 6 post-stacks",
+      "subPart2": " · plus de ",
+      "subBold2": "150 000 recettes de texture distinctes",
+      "subPart3": ", chacune déterministe et reproductible.",
+      "watchDemo": "Voir la démo · 90s",
+      "meta": "v0.9 · 100% dans le navigateur · aucun upload · gratuit"
+    },
+    "demo": {
+      "eyebrow": "Démo en direct",
+      "title": "Faites glisser la poignée. Choisissez un algorithme."
     }
   },
   "module": {

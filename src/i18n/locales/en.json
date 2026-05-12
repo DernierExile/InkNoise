@@ -101,6 +101,22 @@
       "eyebrow": "Samples · interactive",
       "title": "Pick a subject below · hover treatments on the right",
       "render": "Render"
+    },
+    "hero": {
+      "h1Part1": "Engineered texture",
+      "h1Part2": "for",
+      "h1Highlight": "digital images.",
+      "subPart1": "A texture engine, not a filter. Drop a photo and combine ",
+      "subBold1": "25 algorithms × 8 color modes × 6 post-stacks",
+      "subPart2": " · over ",
+      "subBold2": "150,000 distinct texture recipes",
+      "subPart3": ", every one of them deterministic and reproducible.",
+      "watchDemo": "Watch demo · 90s",
+      "meta": "v0.9 · 100% in-browser · no upload · free to try"
+    },
+    "demo": {
+      "eyebrow": "Live demo",
+      "title": "Drag the handle. Pick an algorithm."
     }
   },
   "module": {
