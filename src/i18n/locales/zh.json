@@ -116,7 +116,184 @@
     },
     "demo": {
       "eyebrow": "实时演示",
-      "title": "拖动滑块。选择一个算法。"
+      "title": "拖动滑块。选择一个算法。",
+      "input": "输入",
+      "dithered": "已抖动"
+    },
+    "marketing": {
+      "manifesto": {
+        "section": "01",
+        "eyebrow": "宣言",
+        "title": {
+          "part1": "不是滤镜。",
+          "part2Muted": "不是封装。",
+          "part3": "是引擎。"
+        },
+        "intro": "InkNoise 位于你的源文件和输出介质之间 · Riso 印刷、绘图仪、半色调报纸、亚像素显示器。确定性、参数化、可复现。它是「魔法模式」的对立面。",
+        "cells": {
+          "filter": {
+            "title": "Instagram 滤镜",
+            "body": "一个外观一个不透明预设。无法控制阈值、内核或调色板映射。够用于一条 story。对一场活动毫无用处。"
+          },
+          "ai": {
+            "title": "AI 纹理模型",
+            "body": "每次运行都会漂移的幻觉噪点。每次点击渲染都得到不同的输出。偶尔好看。从不可复现。"
+          },
+          "photoshop": {
+            "title": "Photoshop 预设",
+            "body": "堆叠了隐藏状态的动作。在另一台机器上打开文档的瞬间，重建就会失败。版本管理只是一种希望。"
+          },
+          "inknoise": {
+            "title": "InkNoise",
+            "body": "一个 JSON 预设。25 个算法。8 种颜色模式。6 套后期堆栈。相同输入，相同输出，每一次，每一台机器。按下保存。在 100 张视觉上复现。"
+          }
+        },
+        "stats": {
+          "algorithms": "算法",
+          "colorModels": "颜色模型",
+          "postStacks": "后期堆栈",
+          "export": "导出"
+        }
+      },
+      "algorithms": {
+        "section": "02",
+        "eyebrow": "02",
+        "label": "算法",
+        "title": "25 个真实算法。没有换皮。",
+        "body": "误差扩散（Floyd-Steinberg、Atkinson、Burkes、Stucki、Sierra 系列、Jarvis、Riemersma）、有序（Bayer 2×2 至 16×16、cluster dot）、半色调（圆点、方点、菱形、线、报纸、交叉影线）、随机（white、blue、stipple），以及 threshold。每个都自带阈值曲线、调色板映射和蛇形扫描选项。",
+        "viewAll": "查看全部 {count} 个算法 · 另外 +{extra}",
+        "showLess": "收起 · 保留 {count}"
+      },
+      "modes": {
+        "section": "03",
+        "label": "颜色模式",
+        "title": "用八种方式让像素穿过油墨。",
+        "body": "从纯 1-bit 单色到四通道 CMYK 分色。独立调制色相、饱和度和亮度。锁定通道，得到忠于版面的 Riso 输出。",
+        "inkLabel": "色",
+        "list": {
+          "mono":       { "name": "单色",       "desc": "一种油墨。纯 1-bit。" },
+          "duotone":    { "name": "双色调",     "desc": "两色 Riso 配对。" },
+          "tritone":    { "name": "三色调",     "desc": "高光、中间调、暗部。" },
+          "tonal":      { "name": "调性",       "desc": "连续调色板渐变。" },
+          "indexed":    { "name": "索引",       "desc": "映射到固定库。" },
+          "rgbsplit":   { "name": "RGB 分离",   "desc": "按通道抖动。" },
+          "modulation": { "name": "调制",       "desc": "色相 / 饱和度 / 亮度驱动噪点。" },
+          "cmyk":       { "name": "CMYK 分色",  "desc": "可印刷的四通道分色。" }
+        }
+      },
+      "workflow": {
+        "section": "06",
+        "label": "工作流",
+        "title": "一张图，五十张图，同一个预设。",
+        "body": "InkNoise 是为一整场活动而造的 · 而不是一张主视觉。一次设定外观，保存，应用到你交付的每一张视觉。",
+        "steps": {
+          "s1": {
+            "n": "步骤 01",
+            "h": "拖入。实时预览。",
+            "p": "拖入一张图，或一个装着五十张的文件夹。预览画布以每帧 16ms 更新 · 没有 spinner，没有上传，没有服务器。"
+          },
+          "s2": {
+            "n": "步骤 02",
+            "h": "保存预设。",
+            "p": "每个参数 · 算法、调色板、后期堆栈、阈值曲线 · 都序列化为可移植的 JSON 文件。再次拖回来，在任何机器上恢复完全相同的外观。"
+          },
+          "s3": {
+            "n": "步骤 03",
+            "h": "为活动做批处理。",
+            "p": "把同一个预设应用到 50 张图的文件夹。得到一个 zip，每张视觉都保持一致的纹理。相同输入，相同输出。无漂移。"
+          }
+        }
+      },
+      "ecosystem": {
+        "section": "08",
+        "label": "生态",
+        "title": "Bezier One 的一部分。",
+        "body": "一套面向图像创作者的小巧、有立场的工具 · 围绕同一套工作台哲学，一件一件地打造。InkNoise 是第一件。",
+        "externalLink": "bezier.one",
+        "subtitle": "是一个名字，不是一个品牌。",
+        "lineage": "Bezier 不是品牌。它是我的姓氏。我来自 Pierre 和 Claude 的传承 · 工程师们和一位数学博士 · 留下了印记的人。Bezier One 是我用这个名字搭建的套件。",
+        "philosophy": "每个 app 都遵循同一套哲学 · 可推理的控件、可保存的参数、可复现的输出。",
+        "cta": "访问 bezier.one",
+        "items": {
+          "inknoise": { "name": "InkNoise", "desc": "面向数字图像的纹理引擎。" },
+          "outline":  { "name": "Outline",  "desc": "光栅转矢量。绘图仪级 SVG。" },
+          "app3":     { "name": "Studio · 第三款 app", "desc": "设计中。Founder 套餐包含。" },
+          "app4":     { "name": "Studio · 第四款 app", "desc": "设计中。Founder 套餐包含。" }
+        },
+        "status": {
+          "live": "已上线",
+          "soon": "即将",
+          "q4": "Q4",
+          "2027": "2027"
+        }
+      },
+      "pricing": {
+        "section": "09",
+        "label": "价格",
+        "title": "终身买断优先。需要再订阅。",
+        "body": "一次付费。永远使用。Founder 通行证是面向早期支持者的方案 · 限 500 席，包含未来十年发布的每一款 Bezier One app。",
+        "founderBadge": "Founder · 限 500 席",
+        "founderTitle": "一次付费。所有 app，永久。",
+        "founderDesc": "终身 InkNoise，再加上到 2035 年发布的每一款 Bezier One app。Outline（光栅转矢量，即将）。第三款和第四款 Studio app。我们日后发布的每一个参数、每一次发布、每一种导出格式。",
+        "founderItems": {
+          "inknoise": "InkNoise · 全部功能、无限制、终身",
+          "outline": "Outline · 光栅转矢量，发布即可用",
+          "future": "未来每一款 Bezier One app 都包含",
+          "discord": "Founder Discord · 预设 · 抢先构建"
+        },
+        "ctaFounder": "成为 Founder",
+        "ctaLoading": "加载中…",
+        "priceLabel": "一次 · 永久",
+        "dayOne": {
+          "label": "如果你在第一天就购买",
+          "body": "十年内你将以 €79 拿到四款 app。Studio 是 €144/年。账就是这么算的。"
+        },
+        "counter": {
+          "claimed": "{count} / {total} 已认领",
+          "remaining": "剩余 {count}"
+        },
+        "tiers": {
+          "free": {
+            "name": "免费",
+            "term": "/ 永久",
+            "blurb": "试用每个算法。带水印。最大 1200px。",
+            "features": {
+              "f1": "全部 25 个算法",
+              "f2": "全部 8 种颜色模式",
+              "f3": "最大 1200px 导出",
+              "f4": "InkNoise 水印",
+              "f5": "单图处理"
+            },
+            "cta": "免费开始"
+          },
+          "studio": {
+            "name": "Studio · 最受欢迎",
+            "term": "/ 月 · 或 €69/年",
+            "blurb": "面向运转中的工作室。无限制，无水印，开启批处理。",
+            "features": {
+              "f1": "4K 导出 · 无水印",
+              "f2": "批处理 · 50+ 张图",
+              "f3": "预设库 · 云同步",
+              "f4": "SVG 导出 · 绘图仪模式",
+              "f5": "优先支持"
+            },
+            "cta": "订阅"
+          },
+          "founder": {
+            "name": "Founder · 500 席",
+            "term": "/ 一次，永久",
+            "blurb": "终身 InkNoise + 每一款 Bezier One app，永远。",
+            "features": {
+              "f1": "Studio 的全部",
+              "f2": "终身 · 无续费",
+              "f3": "Outline 发布即包含",
+              "f4": "包含第三、第四款 Studio app",
+              "f5": "Founder Discord · 抢先访问"
+            },
+            "cta": "占一个席位"
+          }
+        }
+      }
     }
   },
   "module": {

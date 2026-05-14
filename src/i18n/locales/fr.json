@@ -116,7 +116,184 @@
     },
     "demo": {
       "eyebrow": "Démo en direct",
-      "title": "Faites glisser la poignée. Choisissez un algorithme."
+      "title": "Faites glisser la poignée. Choisissez un algorithme.",
+      "input": "ENTRÉE",
+      "dithered": "TRAMÉ"
+    },
+    "marketing": {
+      "manifesto": {
+        "section": "01",
+        "eyebrow": "Manifeste",
+        "title": {
+          "part1": "Pas un filtre.",
+          "part2Muted": "Pas un wrapper.",
+          "part3": "Un moteur."
+        },
+        "intro": "InkNoise se place entre tes fichiers source et ton support de sortie · presse Riso, table traçante, halftone newsprint, écran sub-pixel. Déterministe, paramétrique, reproductible. L'exact opposé du « mode magique ».",
+        "cells": {
+          "filter": {
+            "title": "Filtre Instagram",
+            "body": "Un preset opaque par look. Aucun contrôle sur les seuils, les noyaux, le mapping de palette. Suffisant pour une story. Inutile pour une campagne."
+          },
+          "ai": {
+            "title": "Modèle de texture IA",
+            "body": "Du bruit halluciné qui dérive d'un rendu à l'autre. Une sortie différente à chaque pression sur render. Beau parfois. Reproductible jamais."
+          },
+          "photoshop": {
+            "title": "Preset Photoshop",
+            "body": "Des actions empilées avec de l'état caché. Le rebuild casse dès que tu ouvres le document sur une autre machine. Le versioning relève de l'espoir."
+          },
+          "inknoise": {
+            "title": "InkNoise",
+            "body": "Un preset JSON. Vingt-cinq algorithmes. Huit modes colorimétriques. Six stacks de post-prod. Même entrée, même sortie, à chaque fois, sur chaque machine. Tu sauves. Tu reproduis sur 100 visuels."
+          }
+        },
+        "stats": {
+          "algorithms": "Algorithmes",
+          "colorModels": "Modes couleur",
+          "postStacks": "Stacks post-prod",
+          "export": "Export"
+        }
+      },
+      "algorithms": {
+        "section": "02",
+        "eyebrow": "02",
+        "label": "Algorithmes",
+        "title": "Vingt-cinq vrais algorithmes. Aucun reskin.",
+        "body": "Diffusion d'erreur (Floyd-Steinberg, Atkinson, Burkes, Stucki, famille Sierra, Jarvis, Riemersma), ordonnés (Bayer 2×2 à 16×16, cluster dot), halftone (rond, carré, losange, ligne, newsprint, crosshatch), stochastiques (white, blue, stipple), et threshold. Chacun arrive avec sa propre courbe de seuil, son mapping de palette, et son option serpentine.",
+        "viewAll": "Voir les {count} algorithmes · +{extra} de plus",
+        "showLess": "Réduire · garder {count}"
+      },
+      "modes": {
+        "section": "03",
+        "label": "Modes couleur",
+        "title": "Huit façons de pousser des pixels dans l'encre.",
+        "body": "Du mono 1-bit pur à la séparation CMJN quatre canaux. Module teinte, saturation et luminosité indépendamment. Verrouille les canaux pour une sortie Riso fidèle à la plaque.",
+        "inkLabel": "encre",
+        "list": {
+          "mono":       { "name": "Mono",       "desc": "Une encre. 1-bit pur." },
+          "duotone":    { "name": "Duo-tone",   "desc": "Paires d'encres Riso." },
+          "tritone":    { "name": "Tri-tone",   "desc": "Hautes lumières, mids, ombres." },
+          "tonal":      { "name": "Tonal",      "desc": "Rampe de palette continue." },
+          "indexed":    { "name": "Indexé",     "desc": "Mapping sur une bibliothèque fixe." },
+          "rgbsplit":   { "name": "RGB-split",  "desc": "Dither canal par canal." },
+          "modulation": { "name": "Modulation", "desc": "Teinte / sat / lum pilotent le bruit." },
+          "cmyk":       { "name": "Sép. CMJN",  "desc": "Séparation quatre canaux prête à imprimer." }
+        }
+      },
+      "workflow": {
+        "section": "06",
+        "label": "Workflow",
+        "title": "Une image, cinquante images, même preset.",
+        "body": "InkNoise est conçu pour tenir une campagne · pas un seul hero shot. Règle le look une fois, sauve-le, applique-le sur chaque visuel que tu livres.",
+        "steps": {
+          "s1": {
+            "n": "Étape 01",
+            "h": "Dépose. Preview en direct.",
+            "p": "Glisse une image, ou un dossier de cinquante. Le canvas de preview se met à jour à 16ms par rendu · pas de spinner, pas d'upload, pas de serveur."
+          },
+          "s2": {
+            "n": "Étape 02",
+            "h": "Sauve ton preset.",
+            "p": "Chaque paramètre · algorithme, palette, stack post-prod, courbe de seuil · sérialisé dans un fichier JSON portable. Re-glisse-le pour restaurer le look exact sur n'importe quelle machine."
+          },
+          "s3": {
+            "n": "Étape 03",
+            "h": "Batche la campagne.",
+            "p": "Pose le même preset sur un dossier de 50 images. Récupère un zip avec une texture cohérente sur chaque visuel. Même entrée, même sortie. Zéro dérive."
+          }
+        }
+      },
+      "ecosystem": {
+        "section": "08",
+        "label": "Écosystème",
+        "title": "Membre de Bezier One.",
+        "body": "Une suite de petits outils opinionés pour les image makers · construits un par un, autour de la même philosophie d'établi. InkNoise est le premier.",
+        "externalLink": "bezier.one",
+        "subtitle": "Un nom, pas une marque.",
+        "lineage": "Bezier n'est pas une marque. C'est mon nom. Je viens d'une lignée de Pierre et de Claude · des ingénieurs et un docteur en mathématique · qui ont laissé une trace. Bezier One est la suite que je construis sous ce nom.",
+        "philosophy": "Même philosophie sur chaque app · des contrôles que tu peux raisonner, des paramètres que tu peux sauver, des sorties que tu peux reproduire.",
+        "cta": "Visiter bezier.one",
+        "items": {
+          "inknoise": { "name": "InkNoise", "desc": "Moteur de texture pour images numériques." },
+          "outline":  { "name": "Outline",  "desc": "Raster vers vecteur. SVG qualité plotter." },
+          "app3":     { "name": "Studio · 3e app", "desc": "En conception. Inclus dans Founder." },
+          "app4":     { "name": "Studio · 4e app", "desc": "En conception. Inclus dans Founder." }
+        },
+        "status": {
+          "live": "En ligne",
+          "soon": "Bientôt",
+          "q4": "T4",
+          "2027": "2027"
+        }
+      },
+      "pricing": {
+        "section": "09",
+        "label": "Tarifs",
+        "title": "Lifetime d'abord. Abonnement si tu préfères.",
+        "body": "Un seul paiement. Pour toujours. Le pass Founder est l'offre early-supporter · plafonné à 500 places, inclut chaque app Bezier One sortie sur les dix prochaines années.",
+        "founderBadge": "Founder · 500 places maximum",
+        "founderTitle": "Un paiement. Toutes les apps, à vie.",
+        "founderDesc": "InkNoise à vie plus chaque app Bezier One sortie jusqu'en 2035. Outline (raster vers vecteur, bientôt). La troisième et la quatrième app Studio. Chaque paramètre, chaque release, chaque format d'export qu'on sortira.",
+        "founderItems": {
+          "inknoise": "InkNoise · tout, sans limite, à vie",
+          "outline": "Outline · raster vers vecteur, à sa sortie",
+          "future": "Chaque future app Bezier One incluse",
+          "discord": "Discord Founder · presets · builds en avance"
+        },
+        "ctaFounder": "Devenir Founder",
+        "ctaLoading": "Chargement…",
+        "priceLabel": "une fois · pour toujours",
+        "dayOne": {
+          "label": "Si tu l'avais acheté au jour un",
+          "body": "Tu aurais quatre apps sur dix ans pour 79 €. Studio coûte 144 €/an. Le calcul est le calcul."
+        },
+        "counter": {
+          "claimed": "{count} / {total} pris",
+          "remaining": "{count} restantes"
+        },
+        "tiers": {
+          "free": {
+            "name": "Free",
+            "term": "/ pour toujours",
+            "blurb": "Essaie chaque algorithme. Watermark appliqué. Plafonné à 1200px.",
+            "features": {
+              "f1": "Les 25 algorithmes",
+              "f2": "Les 8 modes couleur",
+              "f3": "Export 1200px max",
+              "f4": "Watermark InkNoise",
+              "f5": "Traitement image unique"
+            },
+            "cta": "Commencer gratuitement"
+          },
+          "studio": {
+            "name": "Studio · le plus choisi",
+            "term": "/ mois · ou 69 €/an",
+            "blurb": "Pour les studios qui produisent. Aucune limite, aucun watermark, batch activé.",
+            "features": {
+              "f1": "Export 4K · sans watermark",
+              "f2": "Batch · 50+ images",
+              "f3": "Bibliothèque de presets · sync cloud",
+              "f4": "Export SVG · mode plotter",
+              "f5": "Support prioritaire"
+            },
+            "cta": "S'abonner"
+          },
+          "founder": {
+            "name": "Founder · 500 places",
+            "term": "/ une fois, à vie",
+            "blurb": "InkNoise à vie + chaque app Bezier One, pour toujours.",
+            "features": {
+              "f1": "Tout ce qui est dans Studio",
+              "f2": "À vie · zéro renouvellement",
+              "f3": "Outline inclus à sa sortie",
+              "f4": "3e et 4e apps Studio incluses",
+              "f5": "Discord Founder · accès anticipé"
+            },
+            "cta": "Réserver ma place"
+          }
+        }
+      }
     }
   },
   "module": {
