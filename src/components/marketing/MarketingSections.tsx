@@ -99,7 +99,6 @@ const ALGO_PALETTES: Array<{ fg: [number, number, number]; bg: [number, number, 
 const ALGO_INITIAL_COUNT = 10;
 
 export function Algorithms() {
-  const t = useT();
   // Eye detail crop · richer contrast and finer texture make algorithm
   // signatures more legible at thumbnail scale. Source asset:
   // public/samples/eyesample.jpg (added 2026-05-12).
@@ -116,15 +115,15 @@ export function Algorithms() {
         <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-10 items-baseline">
           <div>
             <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.algorithms.section')}</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.algorithms.label')}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">02</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Algorithms</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
-              {t('home.marketing.algorithms.title')}
+              Twenty-five real algorithms. No reskins.
             </h2>
           </div>
           <p className="text-bz-interface leading-relaxed max-w-[560px]">
-            {t('home.marketing.algorithms.body')}
+            Error diffusion (Floyd-Steinberg, Atkinson, Burkes, Stucki, Sierra family, Jarvis, Riemersma), ordered (Bayer 2×2 → 16×16, cluster dot), halftone (round, square, diamond, line, newsprint, crosshatch), stochastic (white, blue, stipple), and threshold. Each ships with its own threshold curve, palette mapping, and serpentine option.
           </p>
         </div>
 
@@ -166,9 +165,7 @@ export function Algorithms() {
               onClick={() => setShowAll((v) => !v)}
               className="inline-flex items-center gap-2 px-5 py-2.5 border border-bz-grid hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-paper"
             >
-              {showAll
-                ? t('home.marketing.algorithms.showLess', { count: ALGO_INITIAL_COUNT })
-                : t('home.marketing.algorithms.viewAll', { count: catalog.length, extra: hiddenCount })}
+              {showAll ? `Show less · keep ${ALGO_INITIAL_COUNT}` : `View all ${catalog.length} algorithms · +${hiddenCount} more`}
               <span aria-hidden>{showAll ? '↑' : '↓'}</span>
             </button>
           </div>
@@ -193,7 +190,8 @@ function hexToRgb(hex: string): [number, number, number] {
 }
 
 interface ColorMode {
-  key: string;
+  name: string;
+  desc: string;
   palette: string[];
   /** Algorithm used for the preview render · picked to flatter each mode. */
   algo: string;
@@ -203,31 +201,27 @@ interface ColorMode {
 }
 
 const MODES: ColorMode[] = [
-  { key: 'mono',       palette: ['#0a0a0c', '#f4f4f5'],                                    algo: 'atkinson' },
-  { key: 'duotone',    palette: ['#1a1820', '#ff3d7f', '#3d5afe'],                         algo: 'halftone-circle', preview: { bg: 0, fg: 1 } },
-  { key: 'tritone',    palette: ['#0a0a0c', '#e84a1f', '#f4d35e', '#f5f1e8'],              algo: 'bayer-8',         preview: { bg: 0, fg: 1 } },
-  { key: 'tonal',      palette: ['#0a0a0c', '#3a3540', '#7a3a4a', '#d97757', '#f4d35e', '#f5f1e8'], algo: 'floyd-steinberg', preview: { bg: 0, fg: 5 } },
-  { key: 'indexed',    palette: ['#0a0a0c', '#e84a1f', '#3d5afe', '#1f8a5b', '#f4d35e', '#f5f1e8'], algo: 'stucki',          preview: { bg: 0, fg: 4 } },
-  { key: 'rgbsplit',   palette: ['#ff0040', '#00ff80', '#3060ff'],                         algo: 'halftone-line',   preview: { bg: 2, fg: 0 } },
-  { key: 'modulation', palette: ['#1a1820', '#7c4dff', '#00d4ff', '#ffd54f'],              algo: 'bayer-16',        preview: { bg: 0, fg: 2 } },
-  { key: 'cmyk',       palette: ['#0a0a0c', '#00b4ff', '#ff3d7f', '#ffd83d'],              algo: 'halftone-circle', preview: { bg: 0, fg: 2 } },
+  { name: 'Mono',       desc: 'One ink. Pure 1-bit.',                       palette: ['#0a0a0c', '#f4f4f5'],                                    algo: 'atkinson' },
+  { name: 'Duo-tone',   desc: 'Two ink Riso pairings.',                     palette: ['#1a1820', '#ff3d7f', '#3d5afe'],                         algo: 'halftone-circle', preview: { bg: 0, fg: 1 } },
+  { name: 'Tri-tone',   desc: 'Highlight, mid, shadow.',                    palette: ['#0a0a0c', '#e84a1f', '#f4d35e', '#f5f1e8'],              algo: 'bayer-8',         preview: { bg: 0, fg: 1 } },
+  { name: 'Tonal',      desc: 'Continuous palette ramp.',                   palette: ['#0a0a0c', '#3a3540', '#7a3a4a', '#d97757', '#f4d35e', '#f5f1e8'], algo: 'floyd-steinberg', preview: { bg: 0, fg: 5 } },
+  { name: 'Indexed',    desc: 'Map to a fixed library.',                    palette: ['#0a0a0c', '#e84a1f', '#3d5afe', '#1f8a5b', '#f4d35e', '#f5f1e8'], algo: 'stucki',          preview: { bg: 0, fg: 4 } },
+  { name: 'RGB-split',  desc: 'Channel-by-channel dither.',                 palette: ['#ff0040', '#00ff80', '#3060ff'],                         algo: 'halftone-line',   preview: { bg: 2, fg: 0 } },
+  { name: 'Modulation', desc: 'Hue / sat / lum drives noise.',              palette: ['#1a1820', '#7c4dff', '#00d4ff', '#ffd54f'],              algo: 'bayer-16',        preview: { bg: 0, fg: 2 } },
+  { name: 'CMYK Sep.',  desc: 'Print-ready four-channel separation.',       palette: ['#0a0a0c', '#00b4ff', '#ff3d7f', '#ffd83d'],              algo: 'halftone-circle', preview: { bg: 0, fg: 2 } },
 ];
 
 function ColorModeCard({ mode, source }: { mode: ColorMode; source: HTMLCanvasElement | null }) {
-  const t = useT();
   const fgIdx = mode.preview?.fg ?? mode.palette.length - 1;
   const bgIdx = mode.preview?.bg ?? 0;
   const fg = hexToRgb(mode.palette[fgIdx]);
   const bg = hexToRgb(mode.palette[bgIdx]);
-  const name = t(`home.marketing.modes.list.${mode.key}.name`);
-  const desc = t(`home.marketing.modes.list.${mode.key}.desc`);
-  const inkLabel = t('home.marketing.modes.inkLabel');
 
   return (
     <div className="panel-surface p-4 flex flex-col gap-3">
       <div className="flex items-baseline justify-between">
-        <div className="text-bz-paper font-medium text-[15px]">{name}</div>
-        <span className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">{mode.palette.length} {inkLabel}</span>
+        <div className="text-bz-paper font-medium text-[15px]">{mode.name}</div>
+        <span className="font-mono-ui text-[9px] tracking-[0.22em] uppercase text-bz-system">{mode.palette.length} ink</span>
       </div>
       <div className="bg-bz-graphite border border-bz-grid aspect-square overflow-hidden">
         {source ? (
@@ -242,7 +236,7 @@ function ColorModeCard({ mode, source }: { mode: ColorMode; source: HTMLCanvasEl
           <div key={i} style={{ background: c }} />
         ))}
       </div>
-      <p className="text-bz-system text-[12px] leading-relaxed">{desc}</p>
+      <p className="text-bz-system text-[12px] leading-relaxed">{mode.desc}</p>
     </div>
   );
 }
@@ -513,14 +507,14 @@ export function BeforeAfter() {
             ⇆
           </div>
           <div className="absolute top-3 left-3 font-mono-ui text-[10px] tracking-[0.22em] uppercase bg-bz-graphite/80 border border-bz-grid px-2 py-1 text-bz-paper">
-            {t('home.demo.input')}
+            INPUT
           </div>
           <div
             className="absolute top-3 right-3 inline-flex items-center gap-2 font-mono-ui text-[10px] tracking-[0.22em] uppercase bg-bz-graphite/80 border px-2 py-1"
             style={{ borderColor: activeAlgo.swatch, color: activeAlgo.swatch }}
           >
             <span className="w-1.5 h-1.5" style={{ background: activeAlgo.swatch }} />
-            {t('home.demo.dithered')} · {activeAlgo.name.toUpperCase()}
+            DITHERED · {activeAlgo.name.toUpperCase()}
           </div>
         </div>
 
@@ -549,7 +543,6 @@ export function BeforeAfter() {
 }
 
 export function ColorModes() {
-  const t = useT();
   const source = useSourceImage('/samples/eyesample.jpg', 300);
 
   return (
@@ -558,21 +551,21 @@ export function ColorModes() {
         <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-10 items-baseline">
           <div>
             <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.modes.section')}</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.modes.label')}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">03</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Color modes</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
-              {t('home.marketing.modes.title')}
+              Eight ways to push pixels through ink.
             </h2>
           </div>
           <p className="text-bz-interface leading-relaxed max-w-[560px]">
-            {t('home.marketing.modes.body')}
+            From pure 1-bit mono to four-channel CMYK separation. Modulate hue, saturation, and brightness independently. Lock channels for plate-faithful Riso output.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
           {MODES.map((m) => (
-            <ColorModeCard key={m.key} mode={m} source={source} />
+            <ColorModeCard key={m.name} mode={m} source={source} />
           ))}
         </div>
       </div>
@@ -649,48 +642,42 @@ export function UseCases() {
 // ─── Manifesto ────────────────────────────────────────────────────────────────
 
 export function Manifesto() {
-  const t = useT();
-  const stats = [
-    { k: t('home.marketing.manifesto.stats.algorithms'),  v: '25' },
-    { k: t('home.marketing.manifesto.stats.colorModels'), v: '8' },
-    { k: t('home.marketing.manifesto.stats.postStacks'),  v: '6' },
-    { k: t('home.marketing.manifesto.stats.export'),      v: '4K · PNG · TIFF · SVG' },
-  ];
   return (
     <section className="border-t border-bz-grid py-20 px-4 sm:px-6">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
           <div>
             <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.manifesto.section')}</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.manifesto.eyebrow')}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">01</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Manifesto</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
-              {t('home.marketing.manifesto.title.part1')} <span className="text-bz-system">{t('home.marketing.manifesto.title.part2Muted')}</span> {t('home.marketing.manifesto.title.part3')}
+              Not a filter. <span className="text-bz-system">Not a wrapper.</span> An engine.
             </h2>
           </div>
           <p className="text-bz-interface leading-relaxed max-w-[560px]">
-            {t('home.marketing.manifesto.intro')}
+            InkNoise sits between your source files and your output medium · Riso press, plotter, halftone newsprint, sub-pixel display. It is deterministic, parametric, and reproducible. It is the opposite of "magic mode."
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-8">
-          <ManifestoCell variant="neg"
-            title={t('home.marketing.manifesto.cells.filter.title')}
-            body={t('home.marketing.manifesto.cells.filter.body')} />
-          <ManifestoCell variant="neg"
-            title={t('home.marketing.manifesto.cells.ai.title')}
-            body={t('home.marketing.manifesto.cells.ai.body')} />
-          <ManifestoCell variant="neg"
-            title={t('home.marketing.manifesto.cells.photoshop.title')}
-            body={t('home.marketing.manifesto.cells.photoshop.body')} />
-          <ManifestoCell variant="pos"
-            title={t('home.marketing.manifesto.cells.inknoise.title')}
-            body={t('home.marketing.manifesto.cells.inknoise.body')} />
+          <ManifestoCell variant="neg" title="Instagram filter"
+            body="One opaque preset per look. No control over thresholds, kernels, palette mapping. Fine for a story. Useless for a campaign." />
+          <ManifestoCell variant="neg" title="AI texture model"
+            body="Hallucinated noise that drifts across runs. Different output every time you press render. Beautiful, occasionally. Reproducible, never." />
+          <ManifestoCell variant="neg" title="Photoshop preset"
+            body="Stacked actions with hidden state. Rebuilds break the second you open the document on another machine. Versioning is a hope." />
+          <ManifestoCell variant="pos" title="InkNoise"
+            body="One JSON preset. Twenty-five algorithms. Eight color modes. Six post-prod stacks. Same input → same output, every time, on every machine. Press save. Reproduce on 100 visuals." />
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {stats.map((cell) => (
+          {[
+            { k: 'Algorithms', v: '25' },
+            { k: 'Color models', v: '8' },
+            { k: 'Post stacks', v: '6' },
+            { k: 'Export', v: '4K · PNG · TIFF · SVG' },
+          ].map((cell) => (
             <div key={cell.k} className="panel-surface px-4 py-5 flex flex-col gap-1.5">
               <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{cell.k}</span>
               <span className="text-bz-paper text-xl sm:text-2xl font-medium tracking-tight">{cell.v}</span>
@@ -715,11 +702,10 @@ function ManifestoCell({ variant, title, body }: { variant: 'neg' | 'pos'; title
 // ─── Workflow ─────────────────────────────────────────────────────────────────
 
 export function Workflow() {
-  const t = useT();
   const steps = [
-    { key: 's1', glyph: <DropGlyph /> },
-    { key: 's2', glyph: <PresetGlyph /> },
-    { key: 's3', glyph: <BatchGlyph /> },
+    { n: 'Step 01', h: 'Drop. Preview live.', p: 'Drag a single image, or a folder of fifty. The preview canvas updates at 16ms per render · no spinner, no upload, no server.', glyph: <DropGlyph /> },
+    { n: 'Step 02', h: 'Save preset.',        p: 'Every parameter · algorithm, palette, post-stack, threshold curve · serializes to a portable JSON file. Drag it back in to restore the exact look on any machine.', glyph: <PresetGlyph /> },
+    { n: 'Step 03', h: 'Batch the campaign.', p: 'Drop the same preset on a folder of 50 images. Get a zip back with consistent texture across every visual. Same input, same output. No drift.', glyph: <BatchGlyph /> },
   ];
 
   return (
@@ -728,24 +714,24 @@ export function Workflow() {
         <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
           <div>
             <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.workflow.section')}</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.workflow.label')}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">06</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Workflow</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
-              {t('home.marketing.workflow.title')}
+              Single image, fifty images, same preset.
             </h2>
           </div>
           <p className="text-bz-interface leading-relaxed max-w-[560px]">
-            {t('home.marketing.workflow.body')}
+            InkNoise was built to handle a campaign · not one hero shot. Set the look once, save it, run it across every visual you ship.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           {steps.map((s) => (
-            <div key={s.key} className="panel-surface p-6 flex flex-col gap-3 min-h-[280px]">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t(`home.marketing.workflow.steps.${s.key}.n`)}</span>
-              <h4 className="text-xl text-bz-paper font-medium tracking-tight">{t(`home.marketing.workflow.steps.${s.key}.h`)}</h4>
-              <p className="text-[13px] text-bz-interface leading-relaxed flex-1">{t(`home.marketing.workflow.steps.${s.key}.p`)}</p>
+            <div key={s.n} className="panel-surface p-6 flex flex-col gap-3 min-h-[280px]">
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{s.n}</span>
+              <h4 className="text-xl text-bz-paper font-medium tracking-tight">{s.h}</h4>
+              <p className="text-[13px] text-bz-interface leading-relaxed flex-1">{s.p}</p>
               <div className="text-bz-system">{s.glyph}</div>
             </div>
           ))}
@@ -801,63 +787,50 @@ function BatchGlyph() {
 // who left a mark."
 
 export function Ecosystem() {
-  const t = useT();
   return (
     <section className="border-t border-bz-grid py-20 px-4 sm:px-6">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
           <div>
             <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.ecosystem.section')}</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.ecosystem.label')}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">08</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Ecosystem</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
-              {t('home.marketing.ecosystem.title')}
+              Part of Bezier One.
             </h2>
           </div>
           <p className="text-bz-interface leading-relaxed max-w-[560px]">
-            {t('home.marketing.ecosystem.body')}
+            A suite of small, opinionated tools for image makers · built one at a time, around the same workbench philosophy. InkNoise is the first.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="space-y-4">
             <a href="https://bezier.one" className="inline-flex items-center gap-2 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-cyan hover:underline">
-              {t('home.marketing.ecosystem.externalLink')} <span>↗</span>
+              bezier.one <span>↗</span>
             </a>
             <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-bz-paper">
-              {t('home.marketing.ecosystem.subtitle')}
+              A name, not a brand.
             </h3>
             <p className="text-bz-interface leading-relaxed">
-              {t('home.marketing.ecosystem.lineage')}
+              Bezier isn't a brand. It's my name. I come from a line of Pierres and Claudes · engineers and one PhD in mathematics · who left a mark. Bezier One is the suite I'm building under that name.
             </p>
             <p className="text-bz-system text-sm leading-relaxed">
-              {t('home.marketing.ecosystem.philosophy')}
+              Same philosophy across every app · controls you can reason about, parameters you can save, outputs you can reproduce.
             </p>
             <div className="pt-4">
               <a href="https://bezier.one" className="inline-flex items-center gap-2 px-4 py-2.5 border border-bz-grid hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-paper">
-                {t('home.marketing.ecosystem.cta')} <span>→</span>
+                Visit bezier.one <span>→</span>
               </a>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <EcoItem
-              name={t('home.marketing.ecosystem.items.inknoise.name')}
-              desc={t('home.marketing.ecosystem.items.inknoise.desc')}
-              status="live" />
-            <EcoItem
-              name={t('home.marketing.ecosystem.items.outline.name')}
-              desc={t('home.marketing.ecosystem.items.outline.desc')}
-              status="soon" />
-            <EcoItem
-              name={t('home.marketing.ecosystem.items.app3.name')}
-              desc={t('home.marketing.ecosystem.items.app3.desc')}
-              status="q4" />
-            <EcoItem
-              name={t('home.marketing.ecosystem.items.app4.name')}
-              desc={t('home.marketing.ecosystem.items.app4.desc')}
-              status="2027" />
+            <EcoItem name="InkNoise" desc="Texture engine for digital images." status="live" />
+            <EcoItem name="Outline" desc="Raster → vector. Plotter-grade SVG." status="soon" />
+            <EcoItem name="Studio · 3rd app" desc="In design. Bundled with Founder." status="q4" />
+            <EcoItem name="Studio · 4th app" desc="In design. Bundled with Founder." status="2027" />
           </div>
         </div>
       </div>
@@ -866,13 +839,7 @@ export function Ecosystem() {
 }
 
 function EcoItem({ name, desc, status }: { name: string; desc: string; status: 'live' | 'soon' | 'q4' | '2027' }) {
-  const t = useT();
-  const statusLabel = {
-    live: t('home.marketing.ecosystem.status.live'),
-    soon: t('home.marketing.ecosystem.status.soon'),
-    q4:   t('home.marketing.ecosystem.status.q4'),
-    '2027': t('home.marketing.ecosystem.status.2027'),
-  }[status];
+  const statusLabel = { live: 'Live', soon: 'Soon', q4: 'Q4', '2027': '2027' }[status];
   const statusColor = status === 'live' ? 'text-bz-cyan' : 'text-bz-system';
   return (
     <div className="panel-surface px-5 py-4 flex items-center justify-between">
@@ -895,7 +862,6 @@ interface PricingProps {
 }
 
 export function Pricing({ onSignInNeeded }: PricingProps) {
-  const t = useT();
   const { session } = useAuth();
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
 
@@ -920,15 +886,15 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
         <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
           <div>
             <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.pricing.section')}</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t('home.marketing.pricing.label')}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">09</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Pricing</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
-              {t('home.marketing.pricing.title')}
+              Lifetime first. Subscription if you want it.
             </h2>
           </div>
           <p className="text-bz-interface leading-relaxed max-w-[560px]">
-            {t('home.marketing.pricing.body')}
+            One charge. Forever. The Founder pass is the early-supporter offer · capped at 500 seats, includes every Bezier One app released over the next ten years.
           </p>
         </div>
 
@@ -936,19 +902,19 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
         <div className="panel-surface border-bz-cyan p-6 sm:p-10 mb-3 grid md:grid-cols-2 gap-10 items-center">
           <div className="space-y-4">
             <div className="inline-block font-mono-ui text-[10px] tracking-[0.22em] uppercase px-2 py-1 border border-bz-cyan text-bz-cyan">
-              {t('home.marketing.pricing.founderBadge')}
+              Founder · Limited to 500 seats
             </div>
             <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-bz-paper">
-              {t('home.marketing.pricing.founderTitle')}
+              One charge. Every app, forever.
             </h3>
             <p className="text-bz-interface leading-relaxed">
-              {t('home.marketing.pricing.founderDesc')}
+              Lifetime InkNoise plus every Bezier One app released through 2035. Outline (raster → vector, soon). The third and fourth Studio apps. Every parameter, every release, every export format we ever ship.
             </p>
             <ul className="space-y-2 text-bz-interface text-sm">
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t('home.marketing.pricing.founderItems.inknoise')}</li>
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t('home.marketing.pricing.founderItems.outline')}</li>
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t('home.marketing.pricing.founderItems.future')}</li>
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t('home.marketing.pricing.founderItems.discord')}</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> InkNoise · everything, no limits, lifetime</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Outline · raster → vector, on release</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Every future Bezier One app, included</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Founder discord · presets · early builds</li>
             </ul>
             <div className="pt-2">
               <button
@@ -956,7 +922,7 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
                 disabled={loadingTier === 'lifetime'}
                 className="inline-flex items-center gap-2 px-5 py-3 bg-bz-paper text-bz-graphite border border-bz-paper hover:bg-bz-cyan hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase font-medium disabled:opacity-60 disabled:cursor-wait"
               >
-                {loadingTier === 'lifetime' ? t('home.marketing.pricing.ctaLoading') : t('home.marketing.pricing.ctaFounder')} <span>→</span>
+                {loadingTier === 'lifetime' ? 'Loading…' : 'Become a Founder'} <span>→</span>
               </button>
             </div>
           </div>
@@ -965,15 +931,15 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
             <div className="flex items-baseline gap-2 mb-4">
               <span className="text-bz-system text-3xl font-medium">€</span>
               <span className="text-bz-paper text-7xl sm:text-8xl font-medium tracking-[-0.04em] leading-none">79</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system ml-2">{t('home.marketing.pricing.priceLabel')}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system ml-2">once · ever</span>
             </div>
 
             <FounderCounter />
 
             <div className="mt-6 p-4 border border-bz-grid bg-bz-deep">
-              <div className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system mb-2">{t('home.marketing.pricing.dayOne.label')}</div>
+              <div className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system mb-2">If you bought it on day one</div>
               <p className="text-bz-interface text-[13px] leading-relaxed">
-                {t('home.marketing.pricing.dayOne.body')}
+                You'd get four apps over ten years for €79. Studio is €144/yr. The math is the math.
               </p>
             </div>
           </div>
@@ -982,51 +948,33 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
         {/* 3 tiers grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <PricingTier
-            name={t('home.marketing.pricing.tiers.free.name')}
+            name="Free"
             price="€0"
-            term={t('home.marketing.pricing.tiers.free.term')}
-            blurb={t('home.marketing.pricing.tiers.free.blurb')}
-            features={[
-              t('home.marketing.pricing.tiers.free.features.f1'),
-              t('home.marketing.pricing.tiers.free.features.f2'),
-              t('home.marketing.pricing.tiers.free.features.f3'),
-              t('home.marketing.pricing.tiers.free.features.f4'),
-              t('home.marketing.pricing.tiers.free.features.f5'),
-            ]}
-            cta={t('home.marketing.pricing.tiers.free.cta')}
+            term="/ forever"
+            blurb="Try every algorithm. Watermark applied. Capped at 1200px."
+            features={['All 25 algorithms', 'All 8 color modes', '1200px max export', 'InkNoise watermark', 'Single-image processing']}
+            cta="Start free"
             primary={false}
             onClick={() => session ? null : onSignInNeeded()}
           />
           <PricingTier
-            name={t('home.marketing.pricing.tiers.studio.name')}
+            name="Studio · most popular"
             price="€12"
-            term={t('home.marketing.pricing.tiers.studio.term')}
-            blurb={t('home.marketing.pricing.tiers.studio.blurb')}
-            features={[
-              t('home.marketing.pricing.tiers.studio.features.f1'),
-              t('home.marketing.pricing.tiers.studio.features.f2'),
-              t('home.marketing.pricing.tiers.studio.features.f3'),
-              t('home.marketing.pricing.tiers.studio.features.f4'),
-              t('home.marketing.pricing.tiers.studio.features.f5'),
-            ]}
-            cta={loadingTier === 'monthly' ? t('home.marketing.pricing.ctaLoading') : t('home.marketing.pricing.tiers.studio.cta')}
+            term="/ month · or €69/yr"
+            blurb="For working studios. No limits, no watermark, batch enabled."
+            features={['4K export · no watermark', 'Batch processing · 50+ images', 'Preset library · cloud sync', 'SVG export · plotter mode', 'Priority support']}
+            cta={loadingTier === 'monthly' ? 'Loading…' : 'Subscribe'}
             primary
             highlighted
             onClick={() => handleCheckout('monthly')}
           />
           <PricingTier
-            name={t('home.marketing.pricing.tiers.founder.name')}
+            name="Founder · 500 seats"
             price="€79"
-            term={t('home.marketing.pricing.tiers.founder.term')}
-            blurb={t('home.marketing.pricing.tiers.founder.blurb')}
-            features={[
-              t('home.marketing.pricing.tiers.founder.features.f1'),
-              t('home.marketing.pricing.tiers.founder.features.f2'),
-              t('home.marketing.pricing.tiers.founder.features.f3'),
-              t('home.marketing.pricing.tiers.founder.features.f4'),
-              t('home.marketing.pricing.tiers.founder.features.f5'),
-            ]}
-            cta={loadingTier === 'lifetime' ? t('home.marketing.pricing.ctaLoading') : t('home.marketing.pricing.tiers.founder.cta')}
+            term="/ once, ever"
+            blurb="Lifetime InkNoise + every Bezier One app, ever."
+            features={['Everything in Studio', 'Lifetime · no renewal', 'Outline included on release', '3rd & 4th Studio apps included', 'Founder discord · early access']}
+            cta={loadingTier === 'lifetime' ? 'Loading…' : 'Claim a seat'}
             primary={false}
             onClick={() => handleCheckout('lifetime')}
           />
@@ -1073,7 +1021,6 @@ function PricingTier({
 }
 
 function FounderCounter() {
-  const t = useT();
   // Live count fetched from the founder-count edge function
   // (deploys with --no-verify-jwt, returns { claimed, total }).
   // Falls back to a safe default while loading or on error.
@@ -1104,20 +1051,13 @@ function FounderCounter() {
   const pct = (displayed / total) * 100;
   const remaining = Math.max(0, total - displayed);
 
-  // Build the "{count} / {total} claimed" label by splitting around the {count}
-  // token so we can render the count in a different color while keeping the
-  // rest of the string fully translatable.
-  const claimedTemplate = t('home.marketing.pricing.counter.claimed', { count: ' COUNT ', total });
-  const [claimedBefore, claimedAfter] = claimedTemplate.split(' COUNT ');
-  const remainingLabel = t('home.marketing.pricing.counter.remaining', { count: remaining });
-
   return (
     <div className="flex items-center gap-3 font-mono-ui text-[11px] tracking-[0.18em] uppercase text-bz-system">
-      <span>{claimedBefore}<span className="text-bz-paper">{claimed === null ? '…' : displayed}</span>{claimedAfter}</span>
+      <span><span className="text-bz-paper">{claimed === null ? '…' : displayed}</span> / {total} claimed</span>
       <div className="flex-1 h-1 bg-bz-grid relative overflow-hidden">
         <div className="absolute inset-y-0 left-0 bg-bz-cyan transition-[width] duration-500" style={{ width: `${pct}%` }} />
       </div>
-      <span>{remainingLabel}</span>
+      <span>{remaining} left</span>
     </div>
   );
 }
