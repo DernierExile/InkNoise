@@ -420,10 +420,17 @@ function App() {
                 InkNoise
                 <span aria-hidden="true" className="absolute left-0 right-0 -bottom-px h-0.5 bg-bz-cyan" />
               </button>
-              <span className="inline-flex items-center gap-1.5 text-bz-system cursor-default">
+              <a
+                href="https://outline.bezier.one"
+                className="relative text-bz-system hover:text-bz-paper transition-colors duration-240 py-4 inline-flex items-center gap-2"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2 12 C2 12 4 2 7 2 C10 2 12 12 12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                  <circle cx="2" cy="12" r="1.2" fill="currentColor"/>
+                  <circle cx="12" cy="12" r="1.2" fill="currentColor"/>
+                </svg>
                 Outline
-                <span className="bg-bz-grid text-bz-paper px-1.5 py-0.5 text-[8px] tracking-[0.2em]">{t('header.soonBadge')}</span>
-              </span>
+              </a>
             </nav>
           </div>
 

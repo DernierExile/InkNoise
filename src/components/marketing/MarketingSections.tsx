@@ -828,7 +828,7 @@ export function Ecosystem() {
 
           <div className="flex flex-col gap-2">
             <EcoItem name="InkNoise" desc="Texture engine for digital images." status="live" />
-            <EcoItem name="Outline" desc="Raster → vector. Plotter-grade SVG." status="soon" />
+            <EcoItem name="Outline" desc="Raster to vector. Plotter-grade SVG." status="live" link="https://outline.bezier.one" />
             <EcoItem name="Studio · 3rd app" desc="In design. Bundled with Founder." status="q4" />
             <EcoItem name="Studio · 4th app" desc="In design. Bundled with Founder." status="2027" />
           </div>
@@ -838,13 +838,17 @@ export function Ecosystem() {
   );
 }
 
-function EcoItem({ name, desc, status }: { name: string; desc: string; status: 'live' | 'soon' | 'q4' | '2027' }) {
+function EcoItem({ name, desc, status, link }: { name: string; desc: string; status: 'live' | 'soon' | 'q4' | '2027'; link?: string }) {
   const statusLabel = { live: 'Live', soon: 'Soon', q4: 'Q4', '2027': '2027' }[status];
   const statusColor = status === 'live' ? 'text-bz-cyan' : 'text-bz-system';
   return (
     <div className="panel-surface px-5 py-4 flex items-center justify-between">
       <div>
-        <div className="text-bz-paper font-medium">{name}</div>
+        <div className="text-bz-paper font-medium">
+          {link ? (
+            <a href={link} className="hover:text-bz-cyan transition-colors duration-240">{name}</a>
+          ) : name}
+        </div>
         <div className="text-bz-system text-[13px]">{desc}</div>
       </div>
       <div className={`font-mono-ui text-[10px] tracking-[0.22em] uppercase ${statusColor} flex items-center gap-2`}>
