@@ -1,0 +1,499 @@
+{
+  "common": {
+    "close": "閉じる",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "loading": "読み込み中..."
+  },
+  "presets": {
+    "title": "プリセット",
+    "save": "保存",
+    "saveAria": "現在の設定を新しいプリセットとして保存",
+    "savePresetTitle": "プリセットを保存",
+    "namePlaceholder": "プリセット名（最大60文字）",
+    "selectPlaceholder": "プリセットを選択...",
+    "none": "なし · プリセットなし",
+    "empty": "保存されたプリセットはありません。",
+    "deleteAria": "プリセット {name} を削除",
+    "errorNameRequired": "名前を入力してください。",
+    "errorSave": "保存に失敗しました：{msg}",
+    "proRequired": "Pro",
+    "proHint": "カスタム設定を再利用可能なプリセットとして保存 — Pro 機能。",
+    "signInToSave": "サインイン"
+  },
+  "mode": {
+    "single": "シングル",
+    "batch": "バッチ"
+  },
+  "batch": {
+    "dropZone": "画像をドロップしてバッチ処理",
+    "dropZoneHint": "{current} / {max} · ドロップまたはクリックで追加",
+    "queue": "キュー · {count}",
+    "queueDone": "完了 · {done}",
+    "queueError": "エラー · {count}",
+    "clearAll": "すべてクリア",
+    "removeItem": "{name} を削除",
+    "processAll": "すべて処理 · {count}",
+    "cancel": "キャンセル",
+    "downloadZip": "ZIPをダウンロード · {count}",
+    "errorMaxReached": "上限に達しました（最大 {max}）。",
+    "errorUnsupported": "{count} ファイルをスキップ（非対応形式）。",
+    "errorTruncated": "{count} ファイルを除外しました — 上限：{max}。",
+    "errorZip": "ZIP の作成に失敗しました。",
+    "howTitle": "バッチ処理について",
+    "howBody": "下記の同じディザ設定（アルゴリズム、カラーモード、パレット、調整）がすべての画像に適用されます。カスタマイズするには：シングルモードに切り替えてサンプル画像で設定し、ここに戻ってください。1バッチあたり最大50枚。",
+    "recapAlgorithm": "アルゴリズム",
+    "recapColorMode": "カラーモード",
+    "recapPalette": "パレット",
+    "recapMaxRes": "最大解像度",
+    "switchToBatch": "バッチモード",
+    "switchTooltip": "現在の設定で複数の画像を処理",
+    "status": {
+      "pending": "待機",
+      "processing": "処理中",
+      "done": "完了",
+      "error": "エラー"
+    }
+  },
+  "header": {
+    "signIn": "サインイン",
+    "signOut": "サインアウト",
+    "goPro": "Pro にアップグレード",
+    "account": "アカウント",
+    "rendering": "レンダリング中",
+    "studioActive": "Studio",
+    "founderActive": "Founder",
+    "signOutTooltip": "サインアウト ({email})",
+    "homeAria": "InkNoise · ホームに戻る",
+    "bezierAria": "Bezier.one · エコシステムへ戻る",
+    "soonBadge": "近日",
+    "language": "言語"
+  },
+  "banner": {
+    "checkoutSuccess": "決済が完了しました · BEZIER ONE へようこそ。プランをまもなく有効化します...",
+    "checkoutCancelled": "決済がキャンセルされました — 課金は発生していません。",
+    "dismiss": "閉じる",
+    "resized": "{orig} から {resized} にリサイズしました",
+    "loadNewImage": "新しい画像を読み込む"
+  },
+  "home": {
+    "productLabel": "Product · 001 · Live",
+    "tagline": "デジタル画像のための設計されたテクスチャ。",
+    "subtagline": "フィルターではなく、テクスチャエンジン。",
+    "dropToBegin": "画像をドロップして開始",
+    "release": "離して処理",
+    "orBrowse": "または",
+    "browseFiles": "ファイルを選択",
+    "fileTypes": "PNG · JPG · GIF · WEBP",
+    "byBezier": "by BEZIER",
+    "footerTagline": "Running visual culture · MMXXVI",
+    "liveRender": "ライブレンダー · ショーリール",
+    "scale": {
+      "eyebrow": "エンジンの規模",
+      "sub": "ブラウザから利用できる独自のビジュアルレシピ。フィルタライブラリでもプリセット上限でもない。本物のエンジン。"
+    },
+    "stats": {
+      "algos":       { "name": "アルゴリズム",  "desc": "Floyd-Steinberg、Atkinson、Bayer、Riemersma、Halftone、ブルーノイズ…" },
+      "colors":      { "name": "カラーモード",  "desc": "Mono、duo-tone、tri-tone、tonal、indexed、RGB、RGB-split、modulation" },
+      "palettes":    { "name": "パレット",      "desc": "プリセット + 色相、彩度、明度シフトを備えたカスタムパレットエンジン" },
+      "modulations": { "name": "モジュレーション","desc": "CRT カーブ、スキャンライン、色収差、ビネット、ブルーム · 重ねがけ可能" }
+    },
+    "gallery": {
+      "eyebrow": "サンプル · インタラクティブ",
+      "title": "下から被写体を選択 · 右側で処理にホバー",
+      "render": "レンダー"
+    },
+    "hero": {
+      "h1Part1": "デジタル画像のための",
+      "h1Part2": "",
+      "h1Highlight": "設計されたテクスチャ。",
+      "subPart1": "フィルタではなく、テクスチャエンジン。写真をドロップして、",
+      "subBold1": "25のアルゴリズム × 8のカラーモード × 6の後処理スタック",
+      "subPart2": "を組み合わせる · ",
+      "subBold2": "150,000以上の独自のテクスチャレシピ",
+      "subPart3": "、すべて決定論的で再現可能。",
+      "watchDemo": "デモを見る · 90秒",
+      "meta": "v0.9 · 100% ブラウザ内 · アップロード不要 · 無料お試し"
+    },
+    "demo": {
+      "eyebrow": "ライブデモ",
+      "title": "ハンドルをドラッグ。アルゴリズムを選択。",
+      "input": "入力",
+      "dithered": "ディザ済"
+    },
+    "marketing": {
+      "manifesto": {
+        "section": "01",
+        "eyebrow": "マニフェスト",
+        "title": {
+          "part1": "フィルターではない。",
+          "part2Muted": "ラッパーでもない。",
+          "part3": "エンジンだ。"
+        },
+        "intro": "InkNoise は、ソースファイルと出力メディア（Riso 印刷、プロッター、ハーフトーン新聞、サブピクセル画面）の間に位置します。決定論的、パラメトリック、再現可能。「マジックモード」の対極にあります。",
+        "cells": {
+          "filter": {
+            "title": "Instagram フィルター",
+            "body": "ルックごとに不透明なプリセットが一つ。しきい値、カーネル、パレットマッピングを制御できない。ストーリー用には十分。キャンペーンには使えない。"
+          },
+          "ai": {
+            "title": "AI テクスチャモデル",
+            "body": "実行のたびにずれる幻覚ノイズ。レンダーを押すたびに異なる出力。たまに美しい。再現できることは、ない。"
+          },
+          "photoshop": {
+            "title": "Photoshop プリセット",
+            "body": "隠れた状態を持つアクションの積み重ね。別のマシンでドキュメントを開いた瞬間に再構築が壊れる。バージョン管理は希望でしかない。"
+          },
+          "inknoise": {
+            "title": "InkNoise",
+            "body": "JSON プリセット一つ。25 のアルゴリズム。8 つのカラーモード。6 つのポストプロセススタック。同じ入力、同じ出力、毎回、どのマシンでも。保存を押す。100 のビジュアルで再現する。"
+          }
+        },
+        "stats": {
+          "algorithms": "アルゴリズム",
+          "colorModels": "カラーモデル",
+          "postStacks": "ポストスタック",
+          "export": "エクスポート"
+        }
+      },
+      "algorithms": {
+        "section": "02",
+        "eyebrow": "02",
+        "label": "アルゴリズム",
+        "title": "25 の本物のアルゴリズム。リスキンなし。",
+        "body": "誤差拡散（Floyd-Steinberg, Atkinson, Burkes, Stucki, Sierra ファミリー, Jarvis, Riemersma）、整列型（Bayer 2×2 から 16×16、cluster dot）、ハーフトーン（円、四角、菱形、線、新聞、クロスハッチ）、確率的（white, blue, stipple）、そして threshold。それぞれに独自のしきい値カーブ、パレットマッピング、サーペンタインオプションが付属します。",
+        "viewAll": "全 {count} アルゴリズムを表示 · さらに +{extra}",
+        "showLess": "閉じる · {count} に戻す"
+      },
+      "modes": {
+        "section": "03",
+        "label": "カラーモード",
+        "title": "ピクセルを 8 通りの方法でインクに通す。",
+        "body": "純粋な 1-bit モノクロから 4 チャネル CMYK 分版まで。色相、彩度、明度を独立に変調。プレート忠実な Riso 出力のためにチャネルをロック。",
+        "inkLabel": "インク",
+        "list": {
+          "mono":       { "name": "モノ",       "desc": "1 インク。純粋な 1-bit。" },
+          "duotone":    { "name": "デュオトーン", "desc": "2 インクの Riso ペアリング。" },
+          "tritone":    { "name": "トライトーン", "desc": "ハイライト、ミッド、シャドウ。" },
+          "tonal":      { "name": "トーナル",    "desc": "連続パレットランプ。" },
+          "indexed":    { "name": "インデックス", "desc": "固定ライブラリへのマッピング。" },
+          "rgbsplit":   { "name": "RGB スプリット", "desc": "チャネル単位のディザ。" },
+          "modulation": { "name": "モジュレーション", "desc": "色相 / 彩度 / 明度がノイズを駆動。" },
+          "cmyk":       { "name": "CMYK 分版",   "desc": "印刷可能な 4 チャネル分版。" }
+        }
+      },
+      "workflow": {
+        "section": "06",
+        "label": "ワークフロー",
+        "title": "1 枚でも 50 枚でも、同じプリセットで。",
+        "body": "InkNoise はキャンペーン規模を捌くために作られました · ヒーローショット 1 枚のためではなく。一度ルックを決めて保存し、出すすべてのビジュアルに適用します。",
+        "steps": {
+          "s1": {
+            "n": "ステップ 01",
+            "h": "ドロップ。ライブプレビュー。",
+            "p": "1 枚の画像、または 50 枚のフォルダをドラッグ。プレビューキャンバスはレンダーごとに 16ms で更新 · スピナーなし、アップロードなし、サーバーなし。"
+          },
+          "s2": {
+            "n": "ステップ 02",
+            "h": "プリセットを保存。",
+            "p": "すべてのパラメータ · アルゴリズム、パレット、ポストスタック、しきい値カーブ · がポータブルな JSON ファイルにシリアライズされます。再度ドロップすれば、どのマシンでも同じルックを復元できます。"
+          },
+          "s3": {
+            "n": "ステップ 03",
+            "h": "キャンペーンをバッチで。",
+            "p": "同じプリセットを 50 枚のフォルダに適用。一貫したテクスチャを持つ zip が返ってきます。同じ入力、同じ出力。ドリフトなし。"
+          }
+        }
+      },
+      "ecosystem": {
+        "section": "08",
+        "label": "エコシステム",
+        "title": "Bezier One の一部。",
+        "body": "イメージメーカーのための、小さく意見を持ったツール群 · 同じワークベンチの哲学を中心に、一つずつ作っています。InkNoise はその最初です。",
+        "externalLink": "bezier.one",
+        "subtitle": "ブランドではなく、名前。",
+        "lineage": "Bezier はブランドではありません。私の名前です。私は Pierre と Claude の系譜 · 技術者たち、そして一人の数学博士 · 痕跡を残した人々の家系から来ています。Bezier One はその名のもとに私が組み立てているスイートです。",
+        "philosophy": "すべてのアプリで同じ哲学 · 推論できるコントロール、保存できるパラメータ、再現できる出力。",
+        "cta": "bezier.one を訪れる",
+        "items": {
+          "inknoise": { "name": "InkNoise", "desc": "デジタル画像のためのテクスチャエンジン。" },
+          "outline":  { "name": "Outline",  "desc": "ラスターからベクターへ。プロッターグレードの SVG。" },
+          "app3":     { "name": "Studio · 3 番目のアプリ", "desc": "設計中。Founder に同梱。" },
+          "app4":     { "name": "Studio · 4 番目のアプリ", "desc": "設計中。Founder に同梱。" }
+        },
+        "status": {
+          "live": "公開中",
+          "soon": "近日",
+          "q4": "Q4",
+          "2027": "2027"
+        }
+      },
+      "pricing": {
+        "section": "09",
+        "label": "価格",
+        "title": "まずは買い切り。サブスクは望むなら。",
+        "body": "一度の支払い。永久に。Founder パスはアーリーサポーター向けのオファー · 500 席限定、今後 10 年間にリリースされる Bezier One のすべてのアプリを含みます。",
+        "founderBadge": "Founder · 500 席限定",
+        "founderTitle": "一度の支払い。すべてのアプリを、永久に。",
+        "founderDesc": "InkNoise の永久ライセンスに加え、2035 年までにリリースされるすべての Bezier One アプリ。Outline（ラスターからベクター、近日）。3 番目と 4 番目の Studio アプリ。今後リリースするすべてのパラメータ、すべてのリリース、すべてのエクスポート形式。",
+        "founderItems": {
+          "inknoise": "InkNoise · すべて、制限なし、永久",
+          "outline": "Outline · ラスターからベクター、リリース時に",
+          "future": "Bezier One の将来のアプリすべてを同梱",
+          "discord": "Founder Discord · プリセット · 早期ビルド"
+        },
+        "ctaFounder": "Founder になる",
+        "ctaLoading": "読み込み中…",
+        "priceLabel": "一度 · 永久",
+        "dayOne": {
+          "label": "もし初日に買っていたら",
+          "body": "10 年で 4 つのアプリが 79 € で手に入る計算です。Studio は 144 €/年。数字は数字です。"
+        },
+        "counter": {
+          "claimed": "{count} / {total} 確保済",
+          "remaining": "残り {count}"
+        },
+        "tiers": {
+          "free": {
+            "name": "Free",
+            "term": "/ 永久",
+            "blurb": "すべてのアルゴリズムを試せます。ウォーターマーク付き。1200px 上限。",
+            "features": {
+              "f1": "25 アルゴリズムすべて",
+              "f2": "8 カラーモードすべて",
+              "f3": "最大 1200px エクスポート",
+              "f4": "InkNoise ウォーターマーク",
+              "f5": "シングル画像処理"
+            },
+            "cta": "無料で始める"
+          },
+          "studio": {
+            "name": "Studio · 一番人気",
+            "term": "/ 月 · または 69 €/年",
+            "blurb": "稼働中のスタジオ向け。制限なし、ウォーターマークなし、バッチ有効。",
+            "features": {
+              "f1": "4K エクスポート · ウォーターマークなし",
+              "f2": "バッチ処理 · 50 枚以上",
+              "f3": "プリセットライブラリ · クラウド同期",
+              "f4": "SVG エクスポート · プロッターモード",
+              "f5": "優先サポート"
+            },
+            "cta": "サブスクライブ"
+          },
+          "founder": {
+            "name": "Founder · 500 席",
+            "term": "/ 一度、永久",
+            "blurb": "InkNoise 永久 + すべての Bezier One アプリ、永久に。",
+            "features": {
+              "f1": "Studio のすべて",
+              "f2": "永久 · 更新なし",
+              "f3": "Outline · リリース時に同梱",
+              "f4": "3 番目と 4 番目の Studio アプリ同梱",
+              "f5": "Founder Discord · 早期アクセス"
+            },
+            "cta": "席を確保"
+          }
+        }
+      }
+    }
+  },
+  "module": {
+    "live": "Live",
+    "dither": {
+      "title": "Dither",
+      "desc": "25 アルゴリズム · Floyd-Steinberg、Bayer、Halftone"
+    },
+    "halftone": {
+      "title": "Halftone",
+      "desc": "印刷ロジック · CMYK 分版 · DPI 制御"
+    },
+    "grain": {
+      "title": "Grain",
+      "desc": "設計されたグレイン · 35mm からデジタルへ · 方向性"
+    },
+    "contrast": {
+      "title": "Contrast",
+      "desc": "イメージスタック制御 · 出力カーブ · バンディング"
+    }
+  },
+  "preview": {
+    "split": "Split",
+    "compare": "Compare",
+    "dragToCompare": "ドラッグして比較",
+    "inputOriginal": "入力 · オリジナル",
+    "outputDithered": "出力 · Dithered",
+    "rendering": "レンダリング中...",
+    "original": "オリジナル",
+    "dithered": "Dithered"
+  },
+  "export": {
+    "export": "エクスポート",
+    "quality": "品質",
+    "redirecting": "リダイレクト中..."
+  },
+  "controlPanel": {
+    "section": {
+      "presets": "プリセット",
+      "dither": "Dither",
+      "duoTone": "デュオトーン",
+      "triTone": "トライトーン",
+      "tonalMapping": "トーンマッピング",
+      "rgbSplit": "RGB スプリット",
+      "modulation": "モジュレーション",
+      "palette": "パレット",
+      "postProcessing": "ポストプロセス",
+      "effects": "エフェクト",
+      "tonal": "トーン",
+      "levels": "レベル",
+      "adjustments": "調整",
+      "inputOutput": "入力 / 出力"
+    },
+    "label": {
+      "algorithm": "アルゴリズム",
+      "colorMode": "カラーモード",
+      "resampling": "リサンプリング",
+      "colorCount": "カラー数",
+      "auto": "Auto",
+      "autoTuned": "Auto-tuned"
+    },
+    "slider": {
+      "shadow": "シャドウ",
+      "midtone": "ミッドトーン",
+      "highlight": "ハイライト",
+      "highlights": "ハイライト",
+      "midtones": "ミッドトーン",
+      "shadows": "シャドウ",
+      "preserveOriginal": "オリジナル保持",
+      "redX": "Red X",
+      "redY": "Red Y",
+      "blueX": "Blue X",
+      "blueY": "Blue Y",
+      "intensity": "強度",
+      "hueShift": "色相シフト",
+      "saturation": "彩度",
+      "brightness": "明度",
+      "contrast": "コントラスト",
+      "scanlines": "スキャンライン",
+      "scanlineGap": "スキャンライン間隔",
+      "chromatic": "クロマティック",
+      "chromaticAberration": "色収差",
+      "rgbShift": "RGB シフト",
+      "noise": "ノイズ",
+      "pixelation": "ピクセル化",
+      "interference": "干渉",
+      "vignette": "ビネット",
+      "bloom": "ブルーム",
+      "sharpen": "シャープ",
+      "sharpenRadius": "シャープ半径",
+      "blur": "ブラー",
+      "inputBlack": "入力ブラック",
+      "inputWhite": "入力ホワイト",
+      "outputBlack": "出力ブラック",
+      "outputWhite": "出力ホワイト",
+      "gamma": "ガンマ"
+    },
+    "button": {
+      "reset": "リセット",
+      "reAnalyze": "再解析",
+      "resetAll": "すべてリセット"
+    },
+    "colorMode": {
+      "mono": "モノ",
+      "indexed": "インデックス",
+      "rgb": "RGB",
+      "duo-tone": "デュオトーン",
+      "tri-tone": "トライトーン",
+      "tonal": "トーナル",
+      "rgb-split": "RGB スプリット",
+      "modulation": "モジュレーション"
+    },
+    "resampling": {
+      "nearest-neighbor": "ニアレストネイバー",
+      "bilinear": "バイリニア",
+      "bicubic": "バイキュービック"
+    }
+  },
+  "auth": {
+    "loginTitle": "Bezier One に入る",
+    "signupTitle": "アカウントを作成",
+    "loginEyebrow": "Access · Login",
+    "signupEyebrow": "Access · Create account",
+    "contextSubscribe": "サブスクリプションに登録するため",
+    "contextSign": "{context} サインインしてください。",
+    "emailPlaceholder": "you@email.com",
+    "passwordPlaceholder": "パスワード (8文字以上)",
+    "signInButton": "サインイン",
+    "createAccountButton": "アカウントを作成",
+    "signingIn": "サインイン中...",
+    "creatingAccount": "アカウント作成中...",
+    "success": "成功",
+    "switchToSignup": "アカウントを作成 →",
+    "switchToLogin": "← サインインする",
+    "or": "または",
+    "continueWithGoogle": "Google で続ける",
+    "continueWithGitHub": "GitHub で続ける",
+    "error": {
+      "invalidEmail": "有効なメールアドレスを入力してください。",
+      "passwordTooShort": "パスワードは8文字以上で入力してください。",
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+      "accountExists": "このメールアドレスのアカウントは既に存在します。サインインしてください。",
+      "rateLimit": "試行回数が多すぎます。数分後にお試しください。",
+      "userNotFound": "このメールアドレスのアカウントが見つかりません。",
+      "loginFailed": "サインインに失敗しました。認証情報をご確認ください。",
+      "signupFailed": "アカウント作成に失敗しました。再度お試しください。",
+      "oauthFailed": "サインインを開始できませんでした。再度お試しください。"
+    }
+  },
+  "email": {
+    "eyebrow": "Signal · 001",
+    "title": "シグナルを受信",
+    "body": "メールアドレスを登録して InkNoise の最新情報をお届けします — 新しいアルゴリズム、モジュール、Bezier One ローンチ情報。",
+    "successTitle": "リストに登録されました",
+    "successBody": "新しいモジュールのリリースと Bezier One の提供開始時にお知らせします。",
+    "submit": "登録する",
+    "submitting": "登録中...",
+    "noThanks": "結構です",
+    "errorInvalid": "有効なメールアドレスを入力してください。",
+    "errorGeneric": "エラーが発生しました。再度お試しください。"
+  },
+  "access": {
+    "eyebrow": "Access · BEZIER ONE",
+    "title": "一つのアクセス。すべてのモジュール。",
+    "subtitle": "1つのサブスクリプションで、すべての BEZIER 製品、すべての出力エンジン、すべてのビジュアルワークフローが — 単一のアクセスレイヤーの下で利用可能になります。",
+    "studioActive": "Studio · 有効",
+    "founderActive": "Founder · 有効",
+    "perMonth": "/ 月",
+    "perYear": "/ 年",
+    "lifetime": "永久",
+    "tierStudio": "Studio",
+    "tierFounder": "Founder",
+    "tagSave52": "52% お得",
+    "tag500Seats": "500 席限定",
+    "feature": {
+      "noWatermark": "ウォーターマークなし",
+      "fourKExport": "4K エクスポート",
+      "batchProcessing": "バッチ処理",
+      "savePresets": "プリセット保存",
+      "allPalettes": "全パレット解放",
+      "everythingMonthly": "月額プランの全機能",
+      "equivalent": "月額 €5.75 相当",
+      "prioritySupport": "優先サポート",
+      "lifetimeBundle": "InkNoise + OUTLINE 永久利用",
+      "futureUpdates": "v1.x の全アップデート",
+      "earlyAccess": "次期モジュールへの先行アクセス",
+      "founderBadge": "Founder バッジ"
+    },
+    "cta": {
+      "monthly": "月額を開始",
+      "annual": "年額を開始",
+      "lifetime": "Founder 席を確保"
+    },
+    "footer": "安全な決済 · Stripe による提供",
+    "error": {
+      "notAuthenticated": "続行するにはサインインしてください。",
+      "missingPriceId": "決済が設定されていません。Stripe の Price ID が見つかりません。",
+      "noUrl": "Stripe から決済 URL が返されませんでした。",
+      "generic": "決済に失敗しました。再度お試しください。"
+    }
+  }
+}
