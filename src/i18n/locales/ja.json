@@ -93,10 +93,22 @@
       "sub": "ブラウザから利用できる独自のビジュアルレシピ。フィルタライブラリでもプリセット上限でもない。本物のエンジン。"
     },
     "stats": {
-      "algos":       { "name": "アルゴリズム",  "desc": "Floyd-Steinberg、Atkinson、Bayer、Riemersma、Halftone、ブルーノイズ…" },
-      "colors":      { "name": "カラーモード",  "desc": "Mono、duo-tone、tri-tone、tonal、indexed、RGB、RGB-split、modulation" },
-      "palettes":    { "name": "パレット",      "desc": "プリセット + 色相、彩度、明度シフトを備えたカスタムパレットエンジン" },
-      "modulations": { "name": "モジュレーション","desc": "CRT カーブ、スキャンライン、色収差、ビネット、ブルーム · 重ねがけ可能" }
+      "algos": {
+        "name": "アルゴリズム",
+        "desc": "Floyd-Steinberg、Atkinson、Bayer、Riemersma、Halftone、ブルーノイズ…"
+      },
+      "colors": {
+        "name": "カラーモード",
+        "desc": "Mono、duo-tone、tri-tone、tonal、indexed、RGB、RGB-split、modulation"
+      },
+      "palettes": {
+        "name": "パレット",
+        "desc": "プリセット + 色相、彩度、明度シフトを備えたカスタムパレットエンジン"
+      },
+      "modulations": {
+        "name": "モジュレーション",
+        "desc": "CRT カーブ、スキャンライン、色収差、ビネット、ブルーム · 重ねがけ可能"
+      }
     },
     "gallery": {
       "eyebrow": "サンプル · インタラクティブ",
@@ -172,14 +184,38 @@
         "body": "純粋な 1-bit モノクロから 4 チャネル CMYK 分版まで。色相、彩度、明度を独立に変調。プレート忠実な Riso 出力のためにチャネルをロック。",
         "inkLabel": "インク",
         "list": {
-          "mono":       { "name": "モノ",       "desc": "1 インク。純粋な 1-bit。" },
-          "duotone":    { "name": "デュオトーン", "desc": "2 インクの Riso ペアリング。" },
-          "tritone":    { "name": "トライトーン", "desc": "ハイライト、ミッド、シャドウ。" },
-          "tonal":      { "name": "トーナル",    "desc": "連続パレットランプ。" },
-          "indexed":    { "name": "インデックス", "desc": "固定ライブラリへのマッピング。" },
-          "rgbsplit":   { "name": "RGB スプリット", "desc": "チャネル単位のディザ。" },
-          "modulation": { "name": "モジュレーション", "desc": "色相 / 彩度 / 明度がノイズを駆動。" },
-          "cmyk":       { "name": "CMYK 分版",   "desc": "印刷可能な 4 チャネル分版。" }
+          "mono": {
+            "name": "モノ",
+            "desc": "1 インク。純粋な 1-bit。"
+          },
+          "duotone": {
+            "name": "デュオトーン",
+            "desc": "2 インクの Riso ペアリング。"
+          },
+          "tritone": {
+            "name": "トライトーン",
+            "desc": "ハイライト、ミッド、シャドウ。"
+          },
+          "tonal": {
+            "name": "トーナル",
+            "desc": "連続パレットランプ。"
+          },
+          "indexed": {
+            "name": "インデックス",
+            "desc": "固定ライブラリへのマッピング。"
+          },
+          "rgbsplit": {
+            "name": "RGB スプリット",
+            "desc": "チャネル単位のディザ。"
+          },
+          "modulation": {
+            "name": "モジュレーション",
+            "desc": "色相 / 彩度 / 明度がノイズを駆動。"
+          },
+          "cmyk": {
+            "name": "CMYK 分版",
+            "desc": "印刷可能な 4 チャネル分版。"
+          }
         }
       },
       "workflow": {
@@ -216,10 +252,22 @@
         "philosophy": "すべてのアプリで同じ哲学 · 推論できるコントロール、保存できるパラメータ、再現できる出力。",
         "cta": "bezier.one を訪れる",
         "items": {
-          "inknoise": { "name": "InkNoise", "desc": "デジタル画像のためのテクスチャエンジン。" },
-          "outline":  { "name": "Outline",  "desc": "ラスターからベクターへ。プロッターグレードの SVG。" },
-          "app3":     { "name": "Studio · 3 番目のアプリ", "desc": "設計中。Founder に同梱。" },
-          "app4":     { "name": "Studio · 4 番目のアプリ", "desc": "設計中。Founder に同梱。" }
+          "inknoise": {
+            "name": "InkNoise",
+            "desc": "デジタル画像のためのテクスチャエンジン。"
+          },
+          "outline": {
+            "name": "Outline",
+            "desc": "ラスターからベクターへ。プロッターグレードの SVG。"
+          },
+          "app3": {
+            "name": "Studio · 3 番目のアプリ",
+            "desc": "設計中。Founder に同梱。"
+          },
+          "app4": {
+            "name": "Studio · 4 番目のアプリ",
+            "desc": "設計中。Founder に同梱。"
+          }
         },
         "status": {
           "live": "公開中",
@@ -234,15 +282,15 @@
         "title": "まずは買い切り。サブスクは望むなら。",
         "body": "一度の支払い。永久に。Founder パスはアーリーサポーター向けのオファー · 500 席限定、今後 10 年間にリリースされる Bezier One のすべてのアプリを含みます。",
         "founderBadge": "Founder · 500 席限定",
-        "founderTitle": "一度の支払い。すべてのアプリを、永久に。",
-        "founderDesc": "InkNoise の永久ライセンスに加え、2035 年までにリリースされるすべての Bezier One アプリ。Outline（ラスターからベクター、近日）。3 番目と 4 番目の Studio アプリ。今後リリースするすべてのパラメータ、すべてのリリース、すべてのエクスポート形式。",
+        "founderTitle": "一度支払えば、すべてのアプリが手に入る。",
+        "founderDesc": "サブスクリプションなし。アップグレード料金なし。Founder パスは Bezier.One の今日も明日も出るすべてのアプリを、一括払い、永久に解放します。500 席限定。",
         "founderItems": {
-          "inknoise": "InkNoise · すべて、制限なし、永久",
-          "outline": "Outline · ラスターからベクター、リリース時に",
-          "future": "Bezier One の将来のアプリすべてを同梱",
+          "inknoise": "InkNoise · フルアクセス · ウォーターマークなし、4K エクスポート、プリセット保存、バッチ",
+          "outline": "Outline · フルアクセス、PDF ・ DXF を含む全形式エクスポート",
+          "future": "Bezier.One の将来のアプリすべてを同梱",
           "discord": "Founder Discord · プリセット · 早期ビルド"
         },
-        "ctaFounder": "Founder になる",
+        "ctaFounder": "Founder になる · €79",
         "ctaLoading": "読み込み中…",
         "priceLabel": "一度 · 永久",
         "dayOne": {
@@ -293,7 +341,8 @@
             },
             "cta": "席を確保"
           }
-        }
+        },
+        "finePrint": "Stripe 決済 · 請求書は要望に応じて · VAT 込み。"
       }
     }
   },
@@ -494,6 +543,37 @@
       "missingPriceId": "決済が設定されていません。Stripe の Price ID が見つかりません。",
       "noUrl": "Stripe から決済 URL が返されませんでした。",
       "generic": "決済に失敗しました。再度お試しください。"
+    }
+  },
+  "footer": {
+    "tagline": "毎日制作するデザイナー、アートディレクター、ブランドチームのために設計されたビジュアルシステム。",
+    "cols": {
+      "modules": "モジュール",
+      "bezier": "Bezier",
+      "legal": "法的事項"
+    },
+    "modules": {
+      "inknoise": "InkNoise",
+      "outline": "Outline",
+      "app3": "003 · 未定",
+      "app4": "004 · 未定"
+    },
+    "bezier": {
+      "founderPass": "Founderパス",
+      "manifesto": "マニフェスト",
+      "contact": "コンタクト",
+      "bug": "バグを報告",
+      "roadmap": "ロードマップ"
+    },
+    "legal": {
+      "terms": "利用規約",
+      "privacy": "プライバシー",
+      "license": "ライセンス",
+      "cookies": "クッキー設定"
+    },
+    "bottom": {
+      "copy": "© Bezier · MMXXVI",
+      "tagline": "Running visual culture."
     }
   }
 }

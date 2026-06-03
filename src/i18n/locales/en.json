@@ -93,10 +93,22 @@
       "sub": "Distinct visual recipes accessible from your browser. No filter library, no presets cap. A real engine."
     },
     "stats": {
-      "algos":       { "name": "Algorithms",   "desc": "Floyd-Steinberg, Atkinson, Bayer, Riemersma, Halftone, blue noise…" },
-      "colors":      { "name": "Color Modes",  "desc": "Mono, duo-tone, tri-tone, tonal, indexed, RGB, RGB-split, modulation" },
-      "palettes":    { "name": "Palettes",     "desc": "Predefined + custom palette engine with hue, saturation, brightness shifts" },
-      "modulations": { "name": "Modulations",  "desc": "CRT curve, scanlines, chromatic aberration, vignette, bloom · stackable" }
+      "algos": {
+        "name": "Algorithms",
+        "desc": "Floyd-Steinberg, Atkinson, Bayer, Riemersma, Halftone, blue noise…"
+      },
+      "colors": {
+        "name": "Color Modes",
+        "desc": "Mono, duo-tone, tri-tone, tonal, indexed, RGB, RGB-split, modulation"
+      },
+      "palettes": {
+        "name": "Palettes",
+        "desc": "Predefined + custom palette engine with hue, saturation, brightness shifts"
+      },
+      "modulations": {
+        "name": "Modulations",
+        "desc": "CRT curve, scanlines, chromatic aberration, vignette, bloom · stackable"
+      }
     },
     "gallery": {
       "eyebrow": "Samples · interactive",
@@ -172,14 +184,38 @@
         "body": "From pure 1-bit mono to four-channel CMYK separation. Modulate hue, saturation, and brightness independently. Lock channels for plate-faithful Riso output.",
         "inkLabel": "ink",
         "list": {
-          "mono":       { "name": "Mono",       "desc": "One ink. Pure 1-bit." },
-          "duotone":    { "name": "Duo-tone",   "desc": "Two ink Riso pairings." },
-          "tritone":    { "name": "Tri-tone",   "desc": "Highlight, mid, shadow." },
-          "tonal":      { "name": "Tonal",      "desc": "Continuous palette ramp." },
-          "indexed":    { "name": "Indexed",    "desc": "Map to a fixed library." },
-          "rgbsplit":   { "name": "RGB-split",  "desc": "Channel-by-channel dither." },
-          "modulation": { "name": "Modulation", "desc": "Hue / sat / lum drives noise." },
-          "cmyk":       { "name": "CMYK Sep.",  "desc": "Print-ready four-channel separation." }
+          "mono": {
+            "name": "Mono",
+            "desc": "One ink. Pure 1-bit."
+          },
+          "duotone": {
+            "name": "Duo-tone",
+            "desc": "Two ink Riso pairings."
+          },
+          "tritone": {
+            "name": "Tri-tone",
+            "desc": "Highlight, mid, shadow."
+          },
+          "tonal": {
+            "name": "Tonal",
+            "desc": "Continuous palette ramp."
+          },
+          "indexed": {
+            "name": "Indexed",
+            "desc": "Map to a fixed library."
+          },
+          "rgbsplit": {
+            "name": "RGB-split",
+            "desc": "Channel-by-channel dither."
+          },
+          "modulation": {
+            "name": "Modulation",
+            "desc": "Hue / sat / lum drives noise."
+          },
+          "cmyk": {
+            "name": "CMYK Sep.",
+            "desc": "Print-ready four-channel separation."
+          }
         }
       },
       "workflow": {
@@ -216,10 +252,22 @@
         "philosophy": "Same philosophy across every app · controls you can reason about, parameters you can save, outputs you can reproduce.",
         "cta": "Visit bezier.one",
         "items": {
-          "inknoise": { "name": "InkNoise", "desc": "Texture engine for digital images." },
-          "outline":  { "name": "Outline",  "desc": "Raster to vector. Plotter-grade SVG." },
-          "app3":     { "name": "Studio · 3rd app", "desc": "In design. Bundled with Founder." },
-          "app4":     { "name": "Studio · 4th app", "desc": "In design. Bundled with Founder." }
+          "inknoise": {
+            "name": "InkNoise",
+            "desc": "Texture engine for digital images."
+          },
+          "outline": {
+            "name": "Outline",
+            "desc": "Raster to vector. Plotter-grade SVG."
+          },
+          "app3": {
+            "name": "Studio · 3rd app",
+            "desc": "In design. Bundled with Founder."
+          },
+          "app4": {
+            "name": "Studio · 4th app",
+            "desc": "In design. Bundled with Founder."
+          }
         },
         "status": {
           "live": "Live",
@@ -233,16 +281,16 @@
         "label": "Pricing",
         "title": "Lifetime first. Subscription if you want it.",
         "body": "One charge. Forever. The Founder pass is the early-supporter offer · capped at 500 seats, includes every Bezier One app released over the next ten years.",
-        "founderBadge": "Founder · Limited to 500 seats",
-        "founderTitle": "One charge. Every app, forever.",
-        "founderDesc": "Lifetime InkNoise plus every Bezier One app released through 2035. Outline (raster to vector, soon). The third and fourth Studio apps. Every parameter, every release, every export format we ever ship.",
+        "founderBadge": "Founder · 500 seats only",
+        "founderTitle": "Pay once, for all the apps.",
+        "founderDesc": "No subscription. No upgrade fee. The Founder pass unlocks every Bezier.One app shipped today and tomorrow, for one flat price, forever. Capped at 500 seats.",
         "founderItems": {
-          "inknoise": "InkNoise · everything, no limits, lifetime",
-          "outline": "Outline · raster to vector, on release",
-          "future": "Every future Bezier One app, included",
+          "inknoise": "InkNoise · full access · no watermark, 4K export, save presets, batch",
+          "outline": "Outline · full access, all export formats including PDF and DXF",
+          "future": "Every future Bezier.One app, included",
           "discord": "Founder discord · presets · early builds"
         },
-        "ctaFounder": "Become a Founder",
+        "ctaFounder": "Become a Founder · €79",
         "ctaLoading": "Loading…",
         "priceLabel": "once · ever",
         "dayOne": {
@@ -293,7 +341,8 @@
             },
             "cta": "Claim a seat"
           }
-        }
+        },
+        "finePrint": "Paid via Stripe · invoice on request · VAT incl."
       }
     }
   },
@@ -494,6 +543,37 @@
       "missingPriceId": "Checkout not configured. Stripe price IDs missing in environment.",
       "noUrl": "Stripe did not return a checkout URL.",
       "generic": "Checkout failed. Please try again."
+    }
+  },
+  "footer": {
+    "tagline": "Engineered visual systems for designers, art directors and brand teams that produce every day.",
+    "cols": {
+      "modules": "Modules",
+      "bezier": "Bezier",
+      "legal": "Legal"
+    },
+    "modules": {
+      "inknoise": "InkNoise",
+      "outline": "Outline",
+      "app3": "003 · TBA",
+      "app4": "004 · TBA"
+    },
+    "bezier": {
+      "founderPass": "Founder pass",
+      "manifesto": "Manifesto",
+      "contact": "Contact",
+      "bug": "Report a bug",
+      "roadmap": "Roadmap"
+    },
+    "legal": {
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "license": "License",
+      "cookies": "Manage cookies"
+    },
+    "bottom": {
+      "copy": "© Bezier · MMXXVI",
+      "tagline": "Running visual culture."
     }
   }
 }

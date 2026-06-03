@@ -652,24 +652,6 @@ function App() {
       />
       <EmailCaptureModal isOpen={showEmailModal} onClose={handleEmailModalClose} />
 
-      <div className="fixed bottom-2 right-2 z-50 flex items-center gap-3">
-        <a
-          href="mailto:bug@bezier.one"
-          className="text-[10px] uppercase tracking-widest text-zinc-500 hover:text-zinc-200 transition-colors duration-240 underline underline-offset-2"
-          aria-label="Report a bug"
-        >
-          Bug
-        </a>
-        <a
-          href="#"
-          data-bezier-consent-open
-          onClick={(e) => { e.preventDefault(); (window as unknown as { bezierConsent?: { open: () => void } }).bezierConsent?.open(); }}
-          className="text-[10px] uppercase tracking-widest text-zinc-500 hover:text-zinc-200 transition-colors duration-240 underline underline-offset-2"
-          aria-label="Manage cookies"
-        >
-          Cookies
-        </a>
-      </div>
     </div>
   );
 }

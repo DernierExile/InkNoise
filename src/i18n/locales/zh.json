@@ -93,10 +93,22 @@
       "sub": "浏览器中可用的独特视觉配方。不是滤镜库，不是预设上限，而是真正的引擎。"
     },
     "stats": {
-      "algos":       { "name": "算法",       "desc": "Floyd-Steinberg、Atkinson、Bayer、Riemersma、Halftone、蓝噪声…" },
-      "colors":      { "name": "色彩模式",   "desc": "单色、双色调、三色调、色调、索引、RGB、RGB 分离、调制" },
-      "palettes":    { "name": "调色板",     "desc": "预设 + 自定义调色板引擎，支持色相、饱和度、亮度调整" },
-      "modulations": { "name": "调制",       "desc": "CRT 曲线、扫描线、色差、暗角、泛光 · 可叠加" }
+      "algos": {
+        "name": "算法",
+        "desc": "Floyd-Steinberg、Atkinson、Bayer、Riemersma、Halftone、蓝噪声…"
+      },
+      "colors": {
+        "name": "色彩模式",
+        "desc": "单色、双色调、三色调、色调、索引、RGB、RGB 分离、调制"
+      },
+      "palettes": {
+        "name": "调色板",
+        "desc": "预设 + 自定义调色板引擎，支持色相、饱和度、亮度调整"
+      },
+      "modulations": {
+        "name": "调制",
+        "desc": "CRT 曲线、扫描线、色差、暗角、泛光 · 可叠加"
+      }
     },
     "gallery": {
       "eyebrow": "样本 · 交互式",
@@ -172,14 +184,38 @@
         "body": "从纯 1-bit 单色到四通道 CMYK 分色。独立调制色相、饱和度和亮度。锁定通道，得到忠于版面的 Riso 输出。",
         "inkLabel": "色",
         "list": {
-          "mono":       { "name": "单色",       "desc": "一种油墨。纯 1-bit。" },
-          "duotone":    { "name": "双色调",     "desc": "两色 Riso 配对。" },
-          "tritone":    { "name": "三色调",     "desc": "高光、中间调、暗部。" },
-          "tonal":      { "name": "调性",       "desc": "连续调色板渐变。" },
-          "indexed":    { "name": "索引",       "desc": "映射到固定库。" },
-          "rgbsplit":   { "name": "RGB 分离",   "desc": "按通道抖动。" },
-          "modulation": { "name": "调制",       "desc": "色相 / 饱和度 / 亮度驱动噪点。" },
-          "cmyk":       { "name": "CMYK 分色",  "desc": "可印刷的四通道分色。" }
+          "mono": {
+            "name": "单色",
+            "desc": "一种油墨。纯 1-bit。"
+          },
+          "duotone": {
+            "name": "双色调",
+            "desc": "两色 Riso 配对。"
+          },
+          "tritone": {
+            "name": "三色调",
+            "desc": "高光、中间调、暗部。"
+          },
+          "tonal": {
+            "name": "调性",
+            "desc": "连续调色板渐变。"
+          },
+          "indexed": {
+            "name": "索引",
+            "desc": "映射到固定库。"
+          },
+          "rgbsplit": {
+            "name": "RGB 分离",
+            "desc": "按通道抖动。"
+          },
+          "modulation": {
+            "name": "调制",
+            "desc": "色相 / 饱和度 / 亮度驱动噪点。"
+          },
+          "cmyk": {
+            "name": "CMYK 分色",
+            "desc": "可印刷的四通道分色。"
+          }
         }
       },
       "workflow": {
@@ -216,10 +252,22 @@
         "philosophy": "每个 app 都遵循同一套哲学 · 可推理的控件、可保存的参数、可复现的输出。",
         "cta": "访问 bezier.one",
         "items": {
-          "inknoise": { "name": "InkNoise", "desc": "面向数字图像的纹理引擎。" },
-          "outline":  { "name": "Outline",  "desc": "光栅转矢量。绘图仪级 SVG。" },
-          "app3":     { "name": "Studio · 第三款 app", "desc": "设计中。Founder 套餐包含。" },
-          "app4":     { "name": "Studio · 第四款 app", "desc": "设计中。Founder 套餐包含。" }
+          "inknoise": {
+            "name": "InkNoise",
+            "desc": "面向数字图像的纹理引擎。"
+          },
+          "outline": {
+            "name": "Outline",
+            "desc": "光栅转矢量。绘图仪级 SVG。"
+          },
+          "app3": {
+            "name": "Studio · 第三款 app",
+            "desc": "设计中。Founder 套餐包含。"
+          },
+          "app4": {
+            "name": "Studio · 第四款 app",
+            "desc": "设计中。Founder 套餐包含。"
+          }
         },
         "status": {
           "live": "已上线",
@@ -233,16 +281,16 @@
         "label": "价格",
         "title": "终身买断优先。需要再订阅。",
         "body": "一次付费。永远使用。Founder 通行证是面向早期支持者的方案 · 限 500 席，包含未来十年发布的每一款 Bezier One app。",
-        "founderBadge": "Founder · 限 500 席",
-        "founderTitle": "一次付费。所有 app，永久。",
-        "founderDesc": "终身 InkNoise，再加上到 2035 年发布的每一款 Bezier One app。Outline（光栅转矢量，即将）。第三款和第四款 Studio app。我们日后发布的每一个参数、每一次发布、每一种导出格式。",
+        "founderBadge": "Founder · 仅 500 席",
+        "founderTitle": "一次付费，拥有所有 app。",
+        "founderDesc": "无订阅。无升级费用。Founder pass 解锁 Bezier.One 今天和明天发布的每一款 app，一次性统一定价，永久有效。限 500 席。",
         "founderItems": {
-          "inknoise": "InkNoise · 全部功能、无限制、终身",
-          "outline": "Outline · 光栅转矢量，发布即可用",
-          "future": "未来每一款 Bezier One app 都包含",
+          "inknoise": "InkNoise · 完整访问 · 无水印、4K 导出、保存预设、批处理",
+          "outline": "Outline · 完整访问，所有导出格式含 PDF 和 DXF",
+          "future": "未来每一款 Bezier.One app 都包含",
           "discord": "Founder Discord · 预设 · 抢先构建"
         },
-        "ctaFounder": "成为 Founder",
+        "ctaFounder": "成为 Founder · €79",
         "ctaLoading": "加载中…",
         "priceLabel": "一次 · 永久",
         "dayOne": {
@@ -293,7 +341,8 @@
             },
             "cta": "占一个席位"
           }
-        }
+        },
+        "finePrint": "通过 Stripe 支付 · 可申请发票 · 含增値税。"
       }
     }
   },
@@ -494,6 +543,37 @@
       "missingPriceId": "支付未配置。环境中缺少 Stripe Price ID。",
       "noUrl": "Stripe 未返回支付 URL。",
       "generic": "支付失败,请重试。"
+    }
+  },
+  "footer": {
+    "tagline": "为每天制作的设计师、艺术总监和品牌团队设计的视觉系统。",
+    "cols": {
+      "modules": "模块",
+      "bezier": "Bezier",
+      "legal": "法律"
+    },
+    "modules": {
+      "inknoise": "InkNoise",
+      "outline": "Outline",
+      "app3": "003 · 待定",
+      "app4": "004 · 待定"
+    },
+    "bezier": {
+      "founderPass": "Founder pass",
+      "manifesto": "宣言",
+      "contact": "联系",
+      "bug": "报告错误",
+      "roadmap": "路线图"
+    },
+    "legal": {
+      "terms": "条款",
+      "privacy": "隐私",
+      "license": "许可",
+      "cookies": "管理 Cookie"
+    },
+    "bottom": {
+      "copy": "© Bezier · MMXXVI",
+      "tagline": "Running visual culture."
     }
   }
 }

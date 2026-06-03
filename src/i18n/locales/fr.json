@@ -93,10 +93,22 @@
       "sub": "Recettes visuelles distinctes accessibles depuis votre navigateur. Pas de bibliothèque de filtres, pas de plafond de presets. Un vrai moteur."
     },
     "stats": {
-      "algos":       { "name": "Algorithmes",  "desc": "Floyd-Steinberg, Atkinson, Bayer, Riemersma, Halftone, blue noise…" },
-      "colors":      { "name": "Modes couleur","desc": "Mono, duo-tone, tri-tone, tonal, indexé, RGB, RGB-split, modulation" },
-      "palettes":    { "name": "Palettes",     "desc": "Prédéfinies + moteur de palette custom avec décalages teinte, saturation, luminosité" },
-      "modulations": { "name": "Modulations",  "desc": "Courbe CRT, scanlines, aberration chromatique, vignette, bloom · cumulables" }
+      "algos": {
+        "name": "Algorithmes",
+        "desc": "Floyd-Steinberg, Atkinson, Bayer, Riemersma, Halftone, blue noise…"
+      },
+      "colors": {
+        "name": "Modes couleur",
+        "desc": "Mono, duo-tone, tri-tone, tonal, indexé, RGB, RGB-split, modulation"
+      },
+      "palettes": {
+        "name": "Palettes",
+        "desc": "Prédéfinies + moteur de palette custom avec décalages teinte, saturation, luminosité"
+      },
+      "modulations": {
+        "name": "Modulations",
+        "desc": "Courbe CRT, scanlines, aberration chromatique, vignette, bloom · cumulables"
+      }
     },
     "gallery": {
       "eyebrow": "Échantillons · interactif",
@@ -172,14 +184,38 @@
         "body": "Du mono 1-bit pur à la séparation CMJN quatre canaux. Module teinte, saturation et luminosité indépendamment. Verrouille les canaux pour une sortie Riso fidèle à la plaque.",
         "inkLabel": "encre",
         "list": {
-          "mono":       { "name": "Mono",       "desc": "Une encre. 1-bit pur." },
-          "duotone":    { "name": "Duo-tone",   "desc": "Paires d'encres Riso." },
-          "tritone":    { "name": "Tri-tone",   "desc": "Hautes lumières, mids, ombres." },
-          "tonal":      { "name": "Tonal",      "desc": "Rampe de palette continue." },
-          "indexed":    { "name": "Indexé",     "desc": "Mapping sur une bibliothèque fixe." },
-          "rgbsplit":   { "name": "RGB-split",  "desc": "Dither canal par canal." },
-          "modulation": { "name": "Modulation", "desc": "Teinte / sat / lum pilotent le bruit." },
-          "cmyk":       { "name": "Sép. CMJN",  "desc": "Séparation quatre canaux prête à imprimer." }
+          "mono": {
+            "name": "Mono",
+            "desc": "Une encre. 1-bit pur."
+          },
+          "duotone": {
+            "name": "Duo-tone",
+            "desc": "Paires d'encres Riso."
+          },
+          "tritone": {
+            "name": "Tri-tone",
+            "desc": "Hautes lumières, mids, ombres."
+          },
+          "tonal": {
+            "name": "Tonal",
+            "desc": "Rampe de palette continue."
+          },
+          "indexed": {
+            "name": "Indexé",
+            "desc": "Mapping sur une bibliothèque fixe."
+          },
+          "rgbsplit": {
+            "name": "RGB-split",
+            "desc": "Dither canal par canal."
+          },
+          "modulation": {
+            "name": "Modulation",
+            "desc": "Teinte / sat / lum pilotent le bruit."
+          },
+          "cmyk": {
+            "name": "Sép. CMJN",
+            "desc": "Séparation quatre canaux prête à imprimer."
+          }
         }
       },
       "workflow": {
@@ -216,10 +252,22 @@
         "philosophy": "Même philosophie sur chaque app · des contrôles que tu peux raisonner, des paramètres que tu peux sauver, des sorties que tu peux reproduire.",
         "cta": "Visiter bezier.one",
         "items": {
-          "inknoise": { "name": "InkNoise", "desc": "Moteur de texture pour images numériques." },
-          "outline":  { "name": "Outline",  "desc": "Raster vers vecteur. SVG qualité plotter." },
-          "app3":     { "name": "Studio · 3e app", "desc": "En conception. Inclus dans Founder." },
-          "app4":     { "name": "Studio · 4e app", "desc": "En conception. Inclus dans Founder." }
+          "inknoise": {
+            "name": "InkNoise",
+            "desc": "Moteur de texture pour images numériques."
+          },
+          "outline": {
+            "name": "Outline",
+            "desc": "Raster vers vecteur. SVG qualité plotter."
+          },
+          "app3": {
+            "name": "Studio · 3e app",
+            "desc": "En conception. Inclus dans Founder."
+          },
+          "app4": {
+            "name": "Studio · 4e app",
+            "desc": "En conception. Inclus dans Founder."
+          }
         },
         "status": {
           "live": "En ligne",
@@ -233,16 +281,16 @@
         "label": "Tarifs",
         "title": "Lifetime d'abord. Abonnement si tu préfères.",
         "body": "Un seul paiement. Pour toujours. Le pass Founder est l'offre early-supporter · plafonné à 500 places, inclut chaque app Bezier One sortie sur les dix prochaines années.",
-        "founderBadge": "Founder · 500 places maximum",
-        "founderTitle": "Un paiement. Toutes les apps, à vie.",
-        "founderDesc": "InkNoise à vie plus chaque app Bezier One sortie jusqu'en 2035. Outline (raster vers vecteur, bientôt). La troisième et la quatrième app Studio. Chaque paramètre, chaque release, chaque format d'export qu'on sortira.",
+        "founderBadge": "Founder · 500 places seulement",
+        "founderTitle": "Payer une fois, pour toutes les apps.",
+        "founderDesc": "Pas d’abonnement. Pas de frais de mise à jour. Le Founder pass débloque chaque app Bezier.One sortie aujourd’hui et demain pour un prix unique, à vie. Limité à 500 places.",
         "founderItems": {
-          "inknoise": "InkNoise · tout, sans limite, à vie",
-          "outline": "Outline · raster vers vecteur, à sa sortie",
-          "future": "Chaque future app Bezier One incluse",
+          "inknoise": "InkNoise · accès complet · sans watermark, export 4K, presets, batch",
+          "outline": "Outline · accès complet, tous les formats dont PDF et DXF",
+          "future": "Chaque future app Bezier.One incluse",
           "discord": "Discord Founder · presets · builds en avance"
         },
-        "ctaFounder": "Devenir Founder",
+        "ctaFounder": "Devenir Founder · 79€",
         "ctaLoading": "Chargement…",
         "priceLabel": "une fois · pour toujours",
         "dayOne": {
@@ -293,7 +341,8 @@
             },
             "cta": "Réserver ma place"
           }
-        }
+        },
+        "finePrint": "Paiement Stripe · facture sur demande · TVA incluse."
       }
     }
   },
@@ -494,6 +543,37 @@
       "missingPriceId": "Paiement non configuré. ID de prix Stripe manquants.",
       "noUrl": "Stripe n'a pas renvoyé d'URL de paiement.",
       "generic": "Le paiement a échoué. Veuillez réessayer."
+    }
+  },
+  "footer": {
+    "tagline": "Systèmes visuels conçus pour les designers, directeurs artistiques et équipes de marque qui produisent chaque jour.",
+    "cols": {
+      "modules": "Modules",
+      "bezier": "Bezier",
+      "legal": "Légal"
+    },
+    "modules": {
+      "inknoise": "InkNoise",
+      "outline": "Outline",
+      "app3": "003 · À VENIR",
+      "app4": "004 · À VENIR"
+    },
+    "bezier": {
+      "founderPass": "Founder pass",
+      "manifesto": "Manifesto",
+      "contact": "Contact",
+      "bug": "Signaler un bug",
+      "roadmap": "Roadmap"
+    },
+    "legal": {
+      "terms": "Conditions",
+      "privacy": "Confidentialité",
+      "license": "Licence",
+      "cookies": "Gérer les cookies"
+    },
+    "bottom": {
+      "copy": "© Bezier · MMXXVI",
+      "tagline": "Running visual culture."
     }
   }
 }

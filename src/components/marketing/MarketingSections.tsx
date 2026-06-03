@@ -867,6 +867,7 @@ interface PricingProps {
 
 export function Pricing({ onSignInNeeded }: PricingProps) {
   const { session } = useAuth();
+  const t = useT();
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
 
   const handleCheckout = async (tierId: 'monthly' | 'annual' | 'lifetime') => {
@@ -884,21 +885,23 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
     }
   };
 
+  const p = 'home.marketing.pricing';
+
   return (
     <section id="pricing" className="border-t border-bz-grid py-20 px-4 sm:px-6">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid md:grid-cols-[320px_1fr] gap-12 mb-12 items-baseline">
           <div>
             <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">09</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">Pricing</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t(`${p}.section`)}</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system">{t(`${p}.label`)}</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.02em] text-bz-paper leading-[1.1]">
-              Lifetime first. Subscription if you want it.
+              {t(`${p}.title`)}
             </h2>
           </div>
           <p className="text-bz-interface leading-relaxed max-w-[560px]">
-            One charge. Forever. The Founder pass is the early-supporter offer · capped at 500 seats, includes every Bezier One app released over the next ten years.
+            {t(`${p}.body`)}
           </p>
         </div>
 
@@ -906,28 +909,31 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
         <div className="panel-surface border-bz-cyan p-6 sm:p-10 mb-3 grid md:grid-cols-2 gap-10 items-center">
           <div className="space-y-4">
             <div className="inline-block font-mono-ui text-[10px] tracking-[0.22em] uppercase px-2 py-1 border border-bz-cyan text-bz-cyan">
-              Founder · Limited to 500 seats
+              {t(`${p}.founderBadge`)}
             </div>
             <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-bz-paper">
-              One charge. Every app, forever.
+              {t(`${p}.founderTitle`)}
             </h3>
             <p className="text-bz-interface leading-relaxed">
-              Lifetime InkNoise plus every Bezier One app released through 2035. Outline (raster → vector, soon). The third and fourth Studio apps. Every parameter, every release, every export format we ever ship.
+              {t(`${p}.founderDesc`)}
             </p>
             <ul className="space-y-2 text-bz-interface text-sm">
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> InkNoise · everything, no limits, lifetime</li>
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Outline · raster → vector, on release</li>
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Every future Bezier One app, included</li>
-              <li className="flex gap-2"><span className="text-bz-cyan">·</span> Founder discord · presets · early builds</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t(`${p}.founderItems.inknoise`)}</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t(`${p}.founderItems.outline`)}</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t(`${p}.founderItems.future`)}</li>
+              <li className="flex gap-2"><span className="text-bz-cyan">·</span> {t(`${p}.founderItems.discord`)}</li>
             </ul>
-            <div className="pt-2">
+            <div className="pt-2 space-y-3">
               <button
                 onClick={() => handleCheckout('lifetime')}
                 disabled={loadingTier === 'lifetime'}
                 className="inline-flex items-center gap-2 px-5 py-3 bg-bz-paper text-bz-graphite border border-bz-paper hover:bg-bz-cyan hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase font-medium disabled:opacity-60 disabled:cursor-wait"
               >
-                {loadingTier === 'lifetime' ? 'Loading…' : 'Become a Founder'} <span>→</span>
+                {loadingTier === 'lifetime' ? t(`${p}.ctaLoading`) : t(`${p}.ctaFounder`)} <span>→</span>
               </button>
+              <p className="text-bz-system text-[11px] font-mono-ui tracking-wide">
+                {t(`${p}.finePrint`)}
+              </p>
             </div>
           </div>
 
@@ -935,15 +941,15 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
             <div className="flex items-baseline gap-2 mb-4">
               <span className="text-bz-system text-3xl font-medium">€</span>
               <span className="text-bz-paper text-7xl sm:text-8xl font-medium tracking-[-0.04em] leading-none">79</span>
-              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system ml-2">once · ever</span>
+              <span className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system ml-2">{t(`${p}.priceLabel`)}</span>
             </div>
 
             <FounderCounter />
 
             <div className="mt-6 p-4 border border-bz-grid bg-bz-deep">
-              <div className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system mb-2">If you bought it on day one</div>
+              <div className="font-mono-ui text-[10px] tracking-[0.22em] uppercase text-bz-system mb-2">{t(`${p}.dayOne.label`)}</div>
               <p className="text-bz-interface text-[13px] leading-relaxed">
-                You'd get four apps over ten years for €79. Studio is €144/yr. The math is the math.
+                {t(`${p}.dayOne.body`)}
               </p>
             </div>
           </div>
@@ -952,33 +958,51 @@ export function Pricing({ onSignInNeeded }: PricingProps) {
         {/* 3 tiers grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <PricingTier
-            name="Free"
+            name={t(`${p}.tiers.free.name`)}
             price="€0"
-            term="/ forever"
-            blurb="Try every algorithm. Watermark applied. Capped at 1200px."
-            features={['All 25 algorithms', 'All 8 color modes', '1200px max export', 'InkNoise watermark', 'Single-image processing']}
-            cta="Start free"
+            term={t(`${p}.tiers.free.term`)}
+            blurb={t(`${p}.tiers.free.blurb`)}
+            features={[
+              t(`${p}.tiers.free.features.f1`),
+              t(`${p}.tiers.free.features.f2`),
+              t(`${p}.tiers.free.features.f3`),
+              t(`${p}.tiers.free.features.f4`),
+              t(`${p}.tiers.free.features.f5`),
+            ]}
+            cta={t(`${p}.tiers.free.cta`)}
             primary={false}
             onClick={() => session ? null : onSignInNeeded()}
           />
           <PricingTier
-            name="Studio · most popular"
+            name={t(`${p}.tiers.studio.name`)}
             price="€12"
-            term="/ month · or €69/yr"
-            blurb="For working studios. No limits, no watermark, batch enabled."
-            features={['4K export · no watermark', 'Batch processing · 50+ images', 'Preset library · cloud sync', 'SVG export · plotter mode', 'Priority support']}
-            cta={loadingTier === 'monthly' ? 'Loading…' : 'Subscribe'}
+            term={t(`${p}.tiers.studio.term`)}
+            blurb={t(`${p}.tiers.studio.blurb`)}
+            features={[
+              t(`${p}.tiers.studio.features.f1`),
+              t(`${p}.tiers.studio.features.f2`),
+              t(`${p}.tiers.studio.features.f3`),
+              t(`${p}.tiers.studio.features.f4`),
+              t(`${p}.tiers.studio.features.f5`),
+            ]}
+            cta={loadingTier === 'monthly' ? t(`${p}.ctaLoading`) : t(`${p}.tiers.studio.cta`)}
             primary
             highlighted
             onClick={() => handleCheckout('monthly')}
           />
           <PricingTier
-            name="Founder · 500 seats"
+            name={t(`${p}.tiers.founder.name`)}
             price="€79"
-            term="/ once, ever"
-            blurb="Lifetime InkNoise + every Bezier One app, ever."
-            features={['Everything in Studio', 'Lifetime · no renewal', 'Outline included on release', '3rd & 4th Studio apps included', 'Founder discord · early access']}
-            cta={loadingTier === 'lifetime' ? 'Loading…' : 'Claim a seat'}
+            term={t(`${p}.tiers.founder.term`)}
+            blurb={t(`${p}.tiers.founder.blurb`)}
+            features={[
+              t(`${p}.tiers.founder.features.f1`),
+              t(`${p}.tiers.founder.features.f2`),
+              t(`${p}.tiers.founder.features.f3`),
+              t(`${p}.tiers.founder.features.f4`),
+              t(`${p}.tiers.founder.features.f5`),
+            ]}
+            cta={loadingTier === 'lifetime' ? t(`${p}.ctaLoading`) : t(`${p}.tiers.founder.cta`)}
             primary={false}
             onClick={() => handleCheckout('lifetime')}
           />

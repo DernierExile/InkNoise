@@ -10,6 +10,7 @@ import {
   ColorModes,
   BeforeAfter,
 } from './marketing/MarketingSections';
+import SiteFooter from './SiteFooter';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
@@ -181,17 +182,7 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
       <Ecosystem />
       <Pricing onSignInNeeded={onSignInNeeded ?? (() => undefined)} />
 
-      {/* ============================================================
-          FOOTER · Bezier umbrella
-          ============================================================ */}
-      <div className="flex flex-col items-center gap-2 py-8 border-t border-bz-grid">
-        <span className="font-mono-ui text-[10px] tracking-[0.3em] uppercase text-bz-system">
-          {t('home.byBezier')}
-        </span>
-        <span className="font-mono-ui text-[9px] tracking-[0.3em] uppercase text-bz-grid">
-          {t('home.footerTagline')}
-        </span>
-      </div>
+      <SiteFooter />
     </div>
   );
 }
