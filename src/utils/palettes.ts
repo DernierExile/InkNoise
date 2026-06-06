@@ -157,7 +157,14 @@ export const PREDEFINED_PALETTES: ColorPalette[] = [
   {
     name: 'Marathon Red',
     colors: ['#000000', '#1a1a1a', '#ff0d1a', '#ea027e', '#ffffff']
-  }
+  },
+  { name: 'Neo-Tokyo', colors: ['#0A0A0A', '#E10600', '#F2EFE6'] },
+  { name: 'Replicant', colors: ['#0B1A1F', '#13C4C4', '#FF7A18', '#F2EFE6'] },
+  { name: 'Riso Zine', colors: ['#F5F0E1', '#FF48B0', '#0078BF', '#1A1A1A'] },
+  { name: 'Newsprint', colors: ['#1A1A1A', '#6B6B6B', '#A8A29A', '#D8D2C4'] },
+  { name: 'Pop', colors: ['#111111', '#E5322D', '#F2C200', '#1B6FB3', '#F2EFE6'] },
+  { name: 'Phosphor', colors: ['#001A0A', '#00A844', '#00FF66'] },
+  { name: 'Thermal', colors: ['#000018', '#5A009A', '#E5005A', '#FF8A00', '#FFE600', '#FFFFFF'] }
 ];
 
 export function hexToRgb(hex: string): [number, number, number] {

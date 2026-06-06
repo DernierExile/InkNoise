@@ -21,7 +21,7 @@ import { PREDEFINED_PALETTES } from './utils/palettes';
 import { getResizeInfo, MAX_DIMENSION_FREE, MAX_DIMENSION_PRO } from './utils/imageResize';
 import { loadWatermarkImage, drawWatermarkOnCanvas } from './utils/watermark';
 import { analyzeImage } from './utils/imageAnalysis';
-import { computeSmartDefaults, getCreativePresets, CreativePresetConfig } from './utils/smartDefaults';
+import { computeSmartDefaults, getCreativePresets, CreativePresetConfig, LOOK_PRESETS } from './utils/smartDefaults';
 import DitheringWorker from './workers/dithering.worker?worker';
 
 function getRandomPaletteIndex(): number {
@@ -285,6 +285,8 @@ function App() {
   const handlePresetApply = useCallback((preset: CreativePresetConfig) => {
     setAlgorithm(preset.algorithm);
     setColorMode(preset.colorMode);
+    if (preset.selectedPalette !== undefined) setSelectedPalette(preset.selectedPalette);
+    if (preset.colorCount !== undefined) setColorCount(preset.colorCount);
     setActivePreset(preset.id);
     setIsAutoTuned(false);
 
@@ -631,6 +633,7 @@ function App() {
                   isAutoTuned={isAutoTuned}
                   onReAnalyze={handleReAnalyze}
                   creativePresets={creativePresets}
+                  lookPresets={LOOK_PRESETS}
                   activePreset={activePreset}
                   onPresetApply={handlePresetApply}
                   onResetAll={handleResetAll}

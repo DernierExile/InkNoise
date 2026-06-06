@@ -65,6 +65,8 @@ export interface CreativePresetConfig {
   label: string;
   algorithm: DitheringAlgorithm;
   colorMode: ColorMode;
+  selectedPalette?: number;
+  colorCount?: number;
   adjustments: Partial<ImageAdjustments>;
   colorModeSettings?: Partial<ColorModeSettings>;
   paletteModifiers?: Partial<PaletteModifiers>;
@@ -236,3 +238,80 @@ export function getCreativePresets(analysis: ImageAnalysis | null): CreativePres
     },
   ];
 }
+
+export const LOOK_PRESETS: CreativePresetConfig[] = [
+  { id: 'screentone', label: 'Screentone', algorithm: 'halftone', colorMode: 'mono', selectedPalette: 0,
+    adjustments: { contrast: 8, brightness: 0, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'neo-tokyo', label: 'Neo-Tokyo', algorithm: 'atkinson', colorMode: 'indexed', selectedPalette: 39,
+    adjustments: { contrast: 6, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'neon-noir', label: 'Neon Noir', algorithm: 'blue-noise', colorMode: 'indexed', selectedPalette: 9,
+    adjustments: { contrast: -5, blur: 1, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 12, vignette: 10, bloom: 15 } },
+
+  { id: 'replicant', label: 'Replicant', algorithm: 'ordered-8x8', colorMode: 'indexed', selectedPalette: 40,
+    adjustments: { contrast: 0, blur: 1, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 10, bloom: 15 } },
+
+  { id: 'retro-console', label: 'Retro Console', algorithm: 'bayer-3x3', colorMode: 'indexed', selectedPalette: 3,
+    adjustments: { contrast: 0, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'vapor', label: 'Vapor', algorithm: 'ordered-4x4', colorMode: 'indexed', selectedPalette: 19,
+    adjustments: { brightness: 3, contrast: -5, blur: 1, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 8, vignette: 0, bloom: 8 } },
+
+  { id: 'outrun', label: 'Outrun', algorithm: 'ordered-8x8', colorMode: 'indexed', selectedPalette: 26,
+    adjustments: { contrast: -5, blur: 1, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 8, bloom: 22 } },
+
+  { id: 'riso-zine', label: 'Riso Zine', algorithm: 'halftone', colorMode: 'indexed', selectedPalette: 41,
+    adjustments: { contrast: 5, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'xerox', label: 'Xerox', algorithm: 'floyd-steinberg', colorMode: 'mono', selectedPalette: 0,
+    adjustments: { brightness: -3, contrast: 22, blur: 0, noise: 12 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'newsprint', label: 'Newsprint', algorithm: 'dot-pattern', colorMode: 'indexed', selectedPalette: 42,
+    adjustments: { contrast: 6, blur: 0, noise: 4 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'vhs', label: 'VHS', algorithm: 'ordered-4x4', colorMode: 'modulation', selectedPalette: 0,
+    adjustments: { contrast: -10, blur: 2, noise: 0 },
+    colorModeSettings: { modulation: { preset: 'vhs', scanlineIntensity: 35, scanlineGap: 4, chromaticOffset: 3, rgbShift: 2, noiseAmount: 18, pixelation: 1, interference: 30 } },
+    postProcessing: { crtCurve: 0, scanlines: 15, chromaticAberration: 20, vignette: 15, bloom: 0 } },
+
+  { id: 'ink-press', label: 'Ink Press', algorithm: 'blue-noise', colorMode: 'indexed', selectedPalette: 28,
+    adjustments: { contrast: 4, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'comic', label: 'Comic', algorithm: 'halftone', colorMode: 'indexed', selectedPalette: 43,
+    adjustments: { contrast: 8, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'daguerreotype', label: 'Daguerreotype', algorithm: 'atkinson', colorMode: 'indexed', selectedPalette: 12,
+    adjustments: { brightness: -2, contrast: 5, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 20, bloom: 5 } },
+
+  { id: 'phosphor', label: 'Phosphor', algorithm: 'ordered-4x4', colorMode: 'indexed', selectedPalette: 44,
+    adjustments: { contrast: 5, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 20, scanlines: 30, chromaticAberration: 0, vignette: 0, bloom: 10 } },
+
+  { id: 'blueprint', label: 'Blueprint', algorithm: 'ordered-8x8', colorMode: 'duo-tone', selectedPalette: 0,
+    adjustments: { contrast: 0, blur: 0, noise: 0 },
+    colorModeSettings: { duoTone: { shadowColor: '#0A2A5E', highlightColor: '#CFE8FF' } },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+
+  { id: 'thermal', label: 'Thermal', algorithm: 'blue-noise', colorMode: 'indexed', selectedPalette: 45,
+    adjustments: { saturation: 120, contrast: 0, blur: 0, noise: 0 },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 10 } },
+
+  { id: 'gold-leaf', label: 'Gold Leaf', algorithm: 'halftone', colorMode: 'duo-tone', selectedPalette: 0,
+    adjustments: { contrast: 6, blur: 0, noise: 0 },
+    colorModeSettings: { duoTone: { shadowColor: '#111111', highlightColor: '#C9A24B' } },
+    postProcessing: { crtCurve: 0, scanlines: 0, chromaticAberration: 0, vignette: 0, bloom: 0 } },
+];

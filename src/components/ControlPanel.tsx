@@ -27,6 +27,7 @@ interface ControlPanelProps {
   isAutoTuned: boolean;
   onReAnalyze: () => void;
   creativePresets: CreativePresetConfig[];
+  lookPresets: CreativePresetConfig[];
   activePreset: string | null;
   onPresetApply: (preset: CreativePresetConfig) => void;
   onResetAll: () => void;
@@ -137,7 +138,7 @@ export default function ControlPanel({
   colorModeSettings, onColorModeSettingsChange,
   paletteModifiers, onPaletteModifiersChange,
   postProcessing, onPostProcessingChange,
-  isAutoTuned, onReAnalyze, creativePresets, activePreset, onPresetApply,
+  isAutoTuned, onReAnalyze, creativePresets, lookPresets, activePreset, onPresetApply,
   onResetAll,
 }: ControlPanelProps) {
   const t = useT();
@@ -179,6 +180,24 @@ export default function ControlPanel({
               <span className="text-[8px] font-mono-ui text-bz-cyan tracking-widest uppercase">{t('controlPanel.label.autoTuned')}</span>
             </span>
           )}
+        </div>
+        <div className="mb-2">
+          <span className="text-[10px] font-mono-ui text-bz-system tracking-widest uppercase block mb-1">Looks</span>
+          <div className="grid grid-cols-3 gap-1">
+            {lookPresets.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => onPresetApply(preset)}
+                className={`py-1.5 text-[9px] font-mono-ui tracking-widest uppercase transition-colors duration-240 border ${
+                  activePreset === preset.id
+                    ? 'bg-bz-cyan/10 text-bz-cyan border-bz-cyan'
+                    : 'bg-transparent text-bz-system border-bz-grid hover:border-bz-system hover:text-bz-interface'
+                }`}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-1">
           {creativePresets.map((preset) => (
