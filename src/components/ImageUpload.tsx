@@ -11,6 +11,7 @@ import {
   BeforeAfter,
 } from './marketing/MarketingSections';
 import SiteFooter from './SiteFooter';
+import { VideoModal } from './VideoModal';
 
 interface ImageUploadProps {
   onImageLoad: (image: HTMLImageElement) => void;
@@ -22,6 +23,7 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
   const t = useT();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
 
   const processFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) return;
@@ -114,6 +116,7 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
           <div className="mt-5 flex flex-wrap items-center gap-4">
             <button
               type="button"
+              onClick={() => setDemoOpen(true)}
               className="inline-flex items-center gap-2 px-4 py-2.5 border border-bz-grid hover:border-bz-cyan transition-colors duration-240 font-mono-ui text-[11px] tracking-[0.22em] uppercase text-bz-paper"
             >
               {t('home.hero.watchDemo')}
@@ -183,6 +186,7 @@ export default function ImageUpload({ onImageLoad, toolbar, onSignInNeeded }: Im
       <Pricing onSignInNeeded={onSignInNeeded ?? (() => undefined)} />
 
       <SiteFooter />
+      <VideoModal videoId="OI-fWfuSjjY" open={demoOpen} onClose={() => setDemoOpen(false)} />
     </div>
   );
 }
