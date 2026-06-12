@@ -1,0 +1,35 @@
+{
+  "app": "InkNoise",
+  "sample": true,
+  "name": "Campaign texture recipe",
+  "createdAt": "2026-06-12T00:00:00.000Z",
+  "algorithm": "atkinson",
+  "colorMode": "duotone",
+  "palette": {
+    "shadow": "#0A0A0C",
+    "highlight": "#00D5FF"
+  },
+  "adjustments": {
+    "brightness": 0,
+    "contrast": 12,
+    "saturation": 92,
+    "sharpen": 8,
+    "noise": 4
+  },
+  "post": {
+    "scanlines": 0,
+    "chromaticAberration": 0,
+    "vignette": 12,
+    "bloom": 0
+  },
+  "export": {
+    "intendedPlan": "Studio",
+    "target": "4K PNG/TIFF, no watermark, batch ZIP",
+    "batchSize": "50+ images"
+  },
+  "notes": [
+    "Sample recipe for understanding the InkNoise production pack.",
+    "Drop a similar recipe into InkNoise to reproduce a campaign look.",
+    "Use Studio or Founder for clean 4K exports and batch delivery."
+  ]
+}
