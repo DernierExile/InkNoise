@@ -286,7 +286,13 @@ function App() {
     setAlgorithm(preset.algorithm);
     setColorMode(preset.colorMode);
     if (preset.selectedPalette !== undefined) setSelectedPalette(preset.selectedPalette);
-    if (preset.colorCount !== undefined) setColorCount(preset.colorCount);
+    if (preset.colorCount !== undefined) {
+      setColorCount(preset.colorCount);
+    } else if (preset.colorMode === 'indexed' && preset.selectedPalette !== undefined) {
+      // A Look is designed around its full palette. Reset the colour count to the
+      // palette length so a previously lowered "Colors" value cannot truncate it.
+      setColorCount(PREDEFINED_PALETTES[preset.selectedPalette].colors.length);
+    }
     setActivePreset(preset.id);
     setIsAutoTuned(false);
 
