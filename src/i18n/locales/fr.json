@@ -1,0 +1,618 @@
+{
+  "common": {
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "loading": "Chargement..."
+  },
+  "presets": {
+    "title": "Presets",
+    "save": "Save",
+    "saveAria": "Enregistrer les réglages actuels en preset",
+    "savePresetTitle": "Enregistrer un preset",
+    "namePlaceholder": "Nom du preset (60 car. max)",
+    "selectPlaceholder": "Choisir un preset...",
+    "none": "Aucun · pas de preset",
+    "empty": "Aucun preset enregistré.",
+    "deleteAria": "Supprimer le preset {name}",
+    "errorNameRequired": "Nom requis.",
+    "errorSave": "Échec de l'enregistrement : {msg}",
+    "proRequired": "Pro",
+    "proHint": "Enregistrez vos réglages comme presets réutilisables — fonctionnalité Pro.",
+    "signInToSave": "Se connecter"
+  },
+  "mode": {
+    "single": "Image",
+    "batch": "Lot"
+  },
+  "batch": {
+    "dropZone": "Déposer des images en lot",
+    "dropZoneHint": "{current} / {max} · déposer ou cliquer pour ajouter",
+    "queue": "File · {count}",
+    "queueDone": "Terminé · {done}",
+    "queueError": "Erreurs · {count}",
+    "clearAll": "Tout effacer",
+    "removeItem": "Retirer {name}",
+    "processAll": "Traiter tout · {count}",
+    "cancel": "Annuler",
+    "downloadZip": "Télécharger ZIP · {count}",
+    "errorMaxReached": "Limite atteinte ({max} max).",
+    "errorUnsupported": "{count} fichier(s) ignoré(s) (format non supporté).",
+    "errorTruncated": "{count} fichier(s) écarté(s) — limite : {max}.",
+    "errorZip": "Échec de la création du ZIP.",
+    "howTitle": "Comment fonctionne le traitement par lot",
+    "howBody": "Toutes les images reçoivent les mêmes réglages dither affichés ci-dessous · algorithme, mode couleur, palette et ajustements. Pour personnaliser : passe en mode Image, configure sur une image test, puis reviens ici. Jusqu'à 50 images par lot.",
+    "recapAlgorithm": "Algorithme",
+    "recapColorMode": "Mode couleur",
+    "recapPalette": "Palette",
+    "recapMaxRes": "Résolution max",
+    "switchToBatch": "Mode lot",
+    "switchTooltip": "Traiter plusieurs images avec les réglages actuels",
+    "status": {
+      "pending": "En attente",
+      "processing": "En cours",
+      "done": "Fait",
+      "error": "Erreur"
+    }
+  },
+  "header": {
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "goPro": "Passer Pro",
+    "account": "Compte",
+    "rendering": "Rendu",
+    "studioActive": "Studio",
+    "founderActive": "Founder",
+    "signOutTooltip": "Se déconnecter ({email})",
+    "homeAria": "InkNoise · retour à l'accueil",
+    "bezierAria": "Bezier.one · retour à l'écosystème",
+    "soonBadge": "Bientôt",
+    "language": "Langue"
+  },
+  "banner": {
+    "checkoutSuccess": "Paiement confirmé · Bienvenue dans BEZIER ONE. Activation du plan en cours...",
+    "checkoutCancelled": "Paiement annulé — aucun débit effectué.",
+    "dismiss": "Fermer",
+    "resized": "Redimensionnée de {orig} à {resized}",
+    "loadNewImage": "Charger une nouvelle image"
+  },
+  "home": {
+    "productLabel": "Produit · 001 · En ligne",
+    "tagline": "Texture conçue pour les images numériques.",
+    "subtagline": "Un moteur de texture, pas un filtre.",
+    "dropToBegin": "Déposez une image pour commencer",
+    "release": "Relâchez pour traiter",
+    "orBrowse": "ou",
+    "browseFiles": "parcourir les fichiers",
+    "fileTypes": "PNG · JPG · GIF · WEBP",
+    "byBezier": "par BEZIER",
+    "footerTagline": "Running visual culture · MMXXVI",
+    "liveRender": "Rendu en direct · showreel",
+    "scale": {
+      "eyebrow": "Échelle du moteur",
+      "sub": "Recettes visuelles distinctes accessibles depuis votre navigateur. Pas de bibliothèque de filtres, pas de plafond de presets. Un vrai moteur."
+    },
+    "stats": {
+      "algos": {
+        "name": "Algorithmes",
+        "desc": "Floyd-Steinberg, Atkinson, Bayer, Riemersma, Halftone, blue noise…"
+      },
+      "colors": {
+        "name": "Modes couleur",
+        "desc": "Mono, duo-tone, tri-tone, tonal, indexé, RGB, RGB-split, modulation"
+      },
+      "palettes": {
+        "name": "Palettes",
+        "desc": "Prédéfinies + moteur de palette custom avec décalages teinte, saturation, luminosité"
+      },
+      "modulations": {
+        "name": "Modulations",
+        "desc": "Courbe CRT, scanlines, aberration chromatique, vignette, bloom · cumulables"
+      }
+    },
+    "gallery": {
+      "eyebrow": "Échantillons · interactif",
+      "title": "Choisis un sujet en bas · survole les traitements à droite",
+      "render": "Rendu"
+    },
+    "hero": {
+      "h1Part1": "Texture conçue",
+      "h1Part2": "pour les",
+      "h1Highlight": "images numériques.",
+      "subPart1": "Un moteur de texture, pas un filtre. Déposez une photo et combinez ",
+      "subBold1": "25 algorithmes × 8 modes couleur × 6 post-stacks",
+      "subPart2": " · plus de ",
+      "subBold2": "150 000 recettes de texture distinctes",
+      "subPart3": ", chacune déterministe et reproductible.",
+      "watchDemo": "Voir la démo · 90s",
+      "meta": "v0.9 · 100% dans le navigateur · aucun upload · gratuit"
+    },
+    "demo": {
+      "eyebrow": "Démo en direct",
+      "title": "Faites glisser la poignée. Choisissez un algorithme.",
+      "input": "ENTRÉE",
+      "dithered": "TRAMÉ"
+    },
+    "marketing": {
+      "manifesto": {
+        "section": "01",
+        "eyebrow": "Manifeste",
+        "title": {
+          "part1": "Pas un filtre.",
+          "part2Muted": "Pas un wrapper.",
+          "part3": "Un moteur."
+        },
+        "intro": "InkNoise se place entre tes fichiers source et ton support de sortie · presse Riso, table traçante, halftone newsprint, écran sub-pixel. Déterministe, paramétrique, reproductible. L'exact opposé du « mode magique ».",
+        "cells": {
+          "filter": {
+            "title": "Filtre Instagram",
+            "body": "Un preset opaque par look. Aucun contrôle sur les seuils, les noyaux, le mapping de palette. Suffisant pour une story. Inutile pour une campagne."
+          },
+          "ai": {
+            "title": "Modèle de texture IA",
+            "body": "Du bruit halluciné qui dérive d'un rendu à l'autre. Une sortie différente à chaque pression sur render. Beau parfois. Reproductible jamais."
+          },
+          "photoshop": {
+            "title": "Preset Photoshop",
+            "body": "Des actions empilées avec de l'état caché. Le rebuild casse dès que tu ouvres le document sur une autre machine. Le versioning relève de l'espoir."
+          },
+          "inknoise": {
+            "title": "InkNoise",
+            "body": "Un preset JSON. Vingt-cinq algorithmes. Huit modes colorimétriques. Six stacks de post-prod. Même entrée, même sortie, à chaque fois, sur chaque machine. Tu sauves. Tu reproduis sur 100 visuels."
+          }
+        },
+        "stats": {
+          "algorithms": "Algorithmes",
+          "colorModels": "Modes couleur",
+          "postStacks": "Stacks post-prod",
+          "export": "Export"
+        }
+      },
+      "algorithms": {
+        "section": "02",
+        "eyebrow": "02",
+        "label": "Algorithmes",
+        "title": "Vingt-cinq vrais algorithmes. Aucun reskin.",
+        "body": "Diffusion d'erreur (Floyd-Steinberg, Atkinson, Burkes, Stucki, famille Sierra, Jarvis, Riemersma), ordonnés (Bayer 2×2 à 16×16, cluster dot), halftone (rond, carré, losange, ligne, newsprint, crosshatch), stochastiques (white, blue, stipple), et threshold. Chacun arrive avec sa propre courbe de seuil, son mapping de palette, et son option serpentine.",
+        "viewAll": "Voir les {count} algorithmes · +{extra} de plus",
+        "showLess": "Réduire · garder {count}"
+      },
+      "modes": {
+        "section": "03",
+        "label": "Modes couleur",
+        "title": "Huit façons de pousser des pixels dans l'encre.",
+        "body": "Du mono 1-bit pur à la séparation CMJN quatre canaux. Module teinte, saturation et luminosité indépendamment. Verrouille les canaux pour une sortie Riso fidèle à la plaque.",
+        "inkLabel": "encre",
+        "list": {
+          "mono": {
+            "name": "Mono",
+            "desc": "Une encre. 1-bit pur."
+          },
+          "duotone": {
+            "name": "Duo-tone",
+            "desc": "Paires d'encres Riso."
+          },
+          "tritone": {
+            "name": "Tri-tone",
+            "desc": "Hautes lumières, mids, ombres."
+          },
+          "tonal": {
+            "name": "Tonal",
+            "desc": "Rampe de palette continue."
+          },
+          "indexed": {
+            "name": "Indexé",
+            "desc": "Mapping sur une bibliothèque fixe."
+          },
+          "rgbsplit": {
+            "name": "RGB-split",
+            "desc": "Dither canal par canal."
+          },
+          "modulation": {
+            "name": "Modulation",
+            "desc": "Teinte / sat / lum pilotent le bruit."
+          },
+          "cmyk": {
+            "name": "Sép. CMJN",
+            "desc": "Séparation quatre canaux prête à imprimer."
+          }
+        }
+      },
+      "workflow": {
+        "section": "06",
+        "label": "Workflow",
+        "title": "Une image, cinquante images, même preset.",
+        "body": "InkNoise est conçu pour tenir une campagne · pas un seul hero shot. Règle le look une fois, sauve-le, applique-le sur chaque visuel que tu livres.",
+        "steps": {
+          "s1": {
+            "n": "Étape 01",
+            "h": "Dépose. Preview en direct.",
+            "p": "Glisse une image, ou un dossier de cinquante. Le canvas de preview se met à jour à 16ms par rendu · pas de spinner, pas d'upload, pas de serveur."
+          },
+          "s2": {
+            "n": "Étape 02",
+            "h": "Sauve ton preset.",
+            "p": "Chaque paramètre · algorithme, palette, stack post-prod, courbe de seuil · sérialisé dans un fichier JSON portable. Re-glisse-le pour restaurer le look exact sur n'importe quelle machine."
+          },
+          "s3": {
+            "n": "Étape 03",
+            "h": "Batche la campagne.",
+            "p": "Pose le même preset sur un dossier de 50 images. Récupère un zip avec une texture cohérente sur chaque visuel. Même entrée, même sortie. Zéro dérive."
+          }
+        }
+      },
+      "productionPack": {
+        "label": "Pack production",
+        "title": "Télécharge un handoff de campagne.",
+        "body": "Studio n'est pas seulement un export plus grand. C'est le moment où InkNoise devient un système de livraison répétable : images source, outputs traités, recette portable, logique de ZIP batch et fichiers 4K propres quand tu travailles vraiment.",
+        "previewLabel": "Campagne sample",
+        "previewBody": "Un petit pack qui montre la forme d'une vraie livraison InkNoise : sources originales, outputs traités, une recette, un rendu reproductible.",
+        "files": {
+          "pack": {
+            "name": "Pack sample complet",
+            "meta": "ZIP",
+            "desc": "Deux images de campagne, une recette JSON et un README dans un seul téléchargement."
+          },
+          "recipe": {
+            "name": "Recette JSON",
+            "meta": "Preset",
+            "desc": "Un fichier de réglages portable qui explique le look de campagne."
+          },
+          "output1": {
+            "name": "Output éditorial",
+            "meta": "PNG",
+            "desc": "Sortie Atkinson duotone générée depuis la source éditoriale."
+          },
+          "output2": {
+            "name": "Output food",
+            "meta": "PNG",
+            "desc": "Sortie Atkinson duotone générée depuis la source food."
+          },
+          "image1": {
+            "name": "Source éditoriale",
+            "meta": "Image",
+            "desc": "Image sample pour tester une texture répétable."
+          },
+          "image2": {
+            "name": "Source food",
+            "meta": "Image",
+            "desc": "Deuxième image source pour vérifier la cohérence du batch."
+          }
+        }
+      },
+      "ecosystem": {
+        "section": "08",
+        "label": "Écosystème",
+        "title": "Membre de Bezier One.",
+        "body": "Une suite de petits outils opinionés pour les image makers · construits un par un, autour de la même philosophie d'établi. InkNoise est le premier.",
+        "externalLink": "bezier.one",
+        "subtitle": "Un nom, pas une marque.",
+        "lineage": "Bezier n'est pas une marque. C'est mon nom. Je viens d'une lignée de Pierre et de Claude · des ingénieurs et un docteur en mathématique · qui ont laissé une trace. Bezier One est la suite que je construis sous ce nom.",
+        "philosophy": "Même philosophie sur chaque app · des contrôles que tu peux raisonner, des paramètres que tu peux sauver, des sorties que tu peux reproduire.",
+        "cta": "Visiter bezier.one",
+        "items": {
+          "inknoise": {
+            "name": "InkNoise",
+            "desc": "Moteur de texture pour images numériques."
+          },
+          "outline": {
+            "name": "Outline",
+            "desc": "Raster vers vecteur. SVG qualité plotter."
+          },
+          "app3": {
+            "name": "Studio · 3e app",
+            "desc": "En conception. Inclus dans Founder."
+          },
+          "app4": {
+            "name": "Studio · 4e app",
+            "desc": "En conception. Inclus dans Founder."
+          }
+        },
+        "status": {
+          "live": "En ligne",
+          "soon": "Bientôt",
+          "q4": "T4",
+          "2027": "2027"
+        }
+      },
+      "pricing": {
+        "section": "09",
+        "label": "Tarifs",
+        "title": "Lifetime d'abord. Abonnement si tu préfères.",
+        "body": "Un seul paiement. Pour toujours. Founder devient le pass production early-supporter : packs export InkNoise, fichiers de handoff Outline et chaque app Bezier One sortie sur les dix prochaines années.",
+        "founderBadge": "Founder · 500 places seulement",
+        "founderTitle": "Payer une fois, pour toutes les apps.",
+        "founderDesc": "Pas d’abonnement. Pas de frais de mise à jour. Founder débloque les fichiers que l’on livre vraiment : exports 4K sans watermark, recettes réutilisables, ZIP batch, fichiers Outline SVG/PDF/DXF et chaque future app Bezier.One.",
+        "founderItems": {
+          "inknoise": "Pack production InkNoise · PNG/TIFF 4K, sans watermark, JSON recette, presets, ZIP batch",
+          "outline": "Pack production Outline · SVG éditable, PDF de contrôle, DXF, plaques séparées",
+          "future": "Chaque future app Bezier.One, incluse dès le jour J",
+          "discord": "Ligne feedback Founder · presets · builds en avance"
+        },
+        "ctaFounder": "Devenir Founder · 79€",
+        "ctaLoading": "Chargement…",
+        "priceLabel": "une fois · pour toujours",
+        "dayOne": {
+          "label": "Si tu l'avais acheté au jour un",
+          "body": "Tu obtiens les packs production actuels maintenant, puis chaque nouvelle app Bezier dès le jour J. Studio coûte 144 €/an. Founder est le pari early-supporter."
+        },
+        "counter": {
+          "claimed": "{count} / {total} pris",
+          "remaining": "{count} restantes"
+        },
+        "tiers": {
+          "free": {
+            "name": "Free",
+            "term": "/ pour toujours",
+            "blurb": "Explore librement. Parfait pour les tests et brouillons sociaux ; exports plafonnés et watermarkés.",
+            "features": {
+              "f1": "Les 25 algorithmes",
+              "f2": "Les 8 modes couleur",
+              "f3": "Export de contrôle 1200px",
+              "f4": "Watermark InkNoise",
+              "f5": "Tests image unique"
+            },
+            "cta": "Commencer gratuitement"
+          },
+          "studio": {
+            "name": "Studio · le plus choisi",
+            "term": "/ mois · ou 69 €/an",
+            "blurb": "Pour les travaux client et les séries de campagne. Fichiers propres, sans watermark, recettes réutilisables.",
+            "features": {
+              "f1": "PNG/TIFF 4K prêts client · sans watermark",
+              "f2": "ZIP batch campagne · 50+ images",
+              "f3": "JSON recette · bibliothèque de presets · sync cloud",
+              "f4": "Preuves avant/après partageables",
+              "f5": "Support prioritaire"
+            },
+            "cta": "S'abonner"
+          },
+          "founder": {
+            "name": "Founder · 500 places",
+            "term": "/ une fois, à vie",
+            "blurb": "Possède la suite de production pendant qu’elle est encore jeune.",
+            "features": {
+              "f1": "Tout ce qui est dans Studio",
+              "f2": "À vie · zéro renouvellement",
+              "f3": "Exports production Outline inclus maintenant",
+              "f4": "Futures apps Studio incluses",
+              "f5": "Ligne feedback Founder · accès anticipé"
+            },
+            "cta": "Réserver ma place"
+          }
+        },
+        "finePrint": "Paiement Stripe · facture sur demande · TVA incluse."
+      }
+    }
+  },
+  "module": {
+    "live": "En ligne",
+    "dither": {
+      "title": "Dither",
+      "desc": "25 algorithmes · Floyd-Steinberg, Bayer, Halftone"
+    },
+    "halftone": {
+      "title": "Halftone",
+      "desc": "Logique d'impression · séparation CMYK · contrôle DPI"
+    },
+    "grain": {
+      "title": "Grain",
+      "desc": "Grain conçu · 35mm au numérique · directionnel"
+    },
+    "contrast": {
+      "title": "Contraste",
+      "desc": "Contrôle des calques · courbes de sortie · banding"
+    }
+  },
+  "preview": {
+    "split": "Côte à côte",
+    "compare": "Comparer",
+    "dragToCompare": "Glissez pour comparer",
+    "inputOriginal": "Entrée · Original",
+    "outputDithered": "Sortie · Dithered",
+    "rendering": "Rendu en cours...",
+    "original": "Original",
+    "dithered": "Dithered"
+  },
+  "export": {
+    "export": "Exporter",
+    "quality": "Qualité",
+    "redirecting": "Redirection..."
+  },
+  "controlPanel": {
+    "section": {
+      "presets": "Presets",
+      "dither": "Dither",
+      "duoTone": "Bichromie",
+      "triTone": "Trichromie",
+      "tonalMapping": "Mappage tonal",
+      "rgbSplit": "Décalage RGB",
+      "modulation": "Modulation",
+      "palette": "Palette",
+      "postProcessing": "Post-traitement",
+      "effects": "Effets",
+      "tonal": "Tonalité",
+      "levels": "Niveaux",
+      "adjustments": "Ajustements",
+      "inputOutput": "Entrée / Sortie"
+    },
+    "label": {
+      "algorithm": "Algorithme",
+      "colorMode": "Mode couleur",
+      "resampling": "Rééchantillonnage",
+      "colorCount": "Nombre de couleurs",
+      "auto": "Auto",
+      "autoTuned": "Auto-ajusté"
+    },
+    "slider": {
+      "shadow": "Ombre",
+      "midtone": "Tons moyens",
+      "highlight": "Hautes lumières",
+      "highlights": "Hautes lumières",
+      "midtones": "Tons moyens",
+      "shadows": "Ombres",
+      "preserveOriginal": "Préserver l'original",
+      "redX": "Rouge X",
+      "redY": "Rouge Y",
+      "blueX": "Bleu X",
+      "blueY": "Bleu Y",
+      "intensity": "Intensité",
+      "hueShift": "Décalage teinte",
+      "saturation": "Saturation",
+      "brightness": "Luminosité",
+      "contrast": "Contraste",
+      "scanlines": "Scanlines",
+      "scanlineGap": "Écart scanlines",
+      "chromatic": "Chromatique",
+      "chromaticAberration": "Aberration chromatique",
+      "rgbShift": "Décalage RGB",
+      "noise": "Bruit",
+      "pixelation": "Pixelisation",
+      "interference": "Interférence",
+      "vignette": "Vignettage",
+      "bloom": "Halo",
+      "sharpen": "Netteté",
+      "sharpenRadius": "Rayon netteté",
+      "blur": "Flou",
+      "inputBlack": "Noir entrée",
+      "inputWhite": "Blanc entrée",
+      "outputBlack": "Noir sortie",
+      "outputWhite": "Blanc sortie",
+      "gamma": "Gamma"
+    },
+    "button": {
+      "reset": "Réinitialiser",
+      "reAnalyze": "Ré-analyser",
+      "resetAll": "Tout réinitialiser"
+    },
+    "colorMode": {
+      "mono": "Mono",
+      "indexed": "Indexé",
+      "rgb": "RGB",
+      "duo-tone": "Bichromie",
+      "tri-tone": "Trichromie",
+      "tonal": "Tonal",
+      "rgb-split": "Décalage RGB",
+      "modulation": "Modulation"
+    },
+    "resampling": {
+      "nearest-neighbor": "Plus proche voisin",
+      "bilinear": "Bilinéaire",
+      "bicubic": "Bicubique"
+    }
+  },
+  "auth": {
+    "loginTitle": "Entrer dans Bezier One",
+    "signupTitle": "Créer votre compte",
+    "loginEyebrow": "Accès · Connexion",
+    "signupEyebrow": "Accès · Inscription",
+    "contextSubscribe": "pour vous abonner",
+    "contextSign": "Connectez-vous {context}.",
+    "emailPlaceholder": "vous@email.com",
+    "passwordPlaceholder": "mot de passe (min. 8 caractères)",
+    "signInButton": "Se connecter",
+    "createAccountButton": "Créer un compte",
+    "signingIn": "Connexion en cours...",
+    "creatingAccount": "Création en cours...",
+    "success": "Succès",
+    "switchToSignup": "Créer un compte →",
+    "switchToLogin": "← Se connecter à la place",
+    "or": "ou",
+    "continueWithGoogle": "Continuer avec Google",
+    "continueWithGitHub": "Continuer avec GitHub",
+    "error": {
+      "invalidEmail": "Veuillez entrer une adresse email valide.",
+      "passwordTooShort": "Le mot de passe doit faire au moins 8 caractères.",
+      "invalidCredentials": "Email ou mot de passe invalide.",
+      "accountExists": "Un compte existe déjà avec cet email. Essayez de vous connecter.",
+      "rateLimit": "Trop de tentatives. Veuillez patienter quelques minutes.",
+      "userNotFound": "Aucun compte trouvé avec cet email.",
+      "loginFailed": "Connexion échouée. Vérifiez vos identifiants.",
+      "signupFailed": "Création du compte échouée. Veuillez réessayer.",
+      "oauthFailed": "Impossible de démarrer la connexion. Veuillez réessayer."
+    }
+  },
+  "email": {
+    "eyebrow": "Signal · 001",
+    "title": "Restez au signal",
+    "body": "Inscrivez votre adresse pour recevoir les mises à jour InkNoise — nouveaux algorithmes, modules, et lancement de Bezier One.",
+    "successTitle": "Vous êtes sur la liste",
+    "successBody": "Nous vous tiendrons informé quand de nouveaux modules sortiront et que l'offre Bezier One sera disponible.",
+    "submit": "Tenez-moi informé",
+    "submitting": "Inscription en cours...",
+    "noThanks": "Non merci",
+    "errorInvalid": "Veuillez entrer une adresse email valide.",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "access": {
+    "eyebrow": "Accès · BEZIER ONE",
+    "title": "Un seul accès. Tous les modules.",
+    "subtitle": "Un abonnement unique débloque chaque produit BEZIER, chaque moteur de sortie, chaque workflow visuel — sous une seule couche d'accès.",
+    "studioActive": "Studio · Actif",
+    "founderActive": "Founder · Actif",
+    "perMonth": "/ mois",
+    "perYear": "/ an",
+    "lifetime": "À vie",
+    "tierStudio": "Studio",
+    "tierFounder": "Founder",
+    "tagSave52": "Économisez 52 %",
+    "tag500Seats": "500 places",
+    "feature": {
+      "noWatermark": "Sans watermark",
+      "fourKExport": "Export 4K",
+      "batchProcessing": "Traitement par lots",
+      "savePresets": "Sauvegarder les presets",
+      "allPalettes": "Toutes les palettes débloquées",
+      "everythingMonthly": "Tout l'abonnement mensuel",
+      "equivalent": "Équivalent à 5,75 €/mois",
+      "prioritySupport": "Support prioritaire",
+      "lifetimeBundle": "InkNoise + OUTLINE à vie",
+      "futureUpdates": "Toutes les futures mises à jour v1.x",
+      "earlyAccess": "Accès anticipé aux prochains modules",
+      "founderBadge": "Badge Founder"
+    },
+    "cta": {
+      "monthly": "Démarrer mensuel",
+      "annual": "Démarrer annuel",
+      "lifetime": "Réserver une place Founder"
+    },
+    "footer": "Paiement sécurisé · Propulsé par Stripe",
+    "error": {
+      "notAuthenticated": "Veuillez vous connecter pour continuer.",
+      "missingPriceId": "Paiement non configuré. ID de prix Stripe manquants.",
+      "noUrl": "Stripe n'a pas renvoyé d'URL de paiement.",
+      "generic": "Le paiement a échoué. Veuillez réessayer."
+    }
+  },
+  "footer": {
+    "tagline": "Systèmes visuels conçus pour les designers, directeurs artistiques et équipes de marque qui produisent chaque jour.",
+    "cols": {
+      "modules": "Modules",
+      "bezier": "Bezier",
+      "legal": "Légal"
+    },
+    "modules": {
+      "inknoise": "InkNoise",
+      "outline": "Outline",
+      "app3": "003 · À VENIR",
+      "app4": "004 · À VENIR"
+    },
+    "bezier": {
+      "founderPass": "Founder pass",
+      "manifesto": "Manifesto",
+      "contact": "Contact",
+      "bug": "Signaler un bug",
+      "roadmap": "Roadmap"
+    },
+    "legal": {
+      "terms": "Conditions",
+      "privacy": "Confidentialité",
+      "license": "Licence",
+      "cookies": "Gérer les cookies"
+    },
+    "bottom": {
+      "copy": "© Bezier · MMXXVI",
+      "tagline": "Running visual culture."
+    }
+  }
+}
