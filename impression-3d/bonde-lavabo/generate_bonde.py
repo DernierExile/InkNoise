@@ -2,8 +2,8 @@
 """
 Génère les STL d'un clapet de bonde de lavabo/baignoire réglable.
 
-V2 — cotes recalées sur les photos avec règle : disque Ø57 mm,
-hauteur totale ~50 mm (au lieu de Ø72 x 105 mm en V1, bien trop gros).
+V3 — cotes recalées sur les photos avec règle : disque Ø70 mm,
+hauteur totale ~50 mm, filetage fin M5 x 0,8 comme la tige d'origine.
 
 Pièces :
   - bonde-monobloc.stl : corps + tige filetée + tête fendue, une seule pièce
@@ -12,8 +12,9 @@ Pièces :
   - molette.stl        : écrou moleté de réglage/blocage
   - joint-tpu.stl      : joint annulaire (à imprimer en TPU)
 
-Filetage "rond" (profil cosinus) Ø6 x pas 1,5 mm, pensé pour l'impression FDM
-(jeu radial 0,25 mm entre mâle et femelle). Toutes les cotes sont en mm.
+Filetage "rond" (profil cosinus) Ø5 x pas 0,8 mm (équivalent M5) : imprimable
+en FDM à 0,08-0,12 mm de couche (jeu radial 0,2 mm entre mâle et femelle).
+Toutes les cotes sont en mm.
 
 Usage : python3 generate_bonde.py   (écrit les STL dans le dossier courant)
 """
@@ -26,7 +27,7 @@ import trimesh
 # ----------------------------------------------------------------------------
 N_THETA = 96                 # résolution angulaire
 
-DISC_R = 28.5                # rayon du disque de base (Ø57)
+DISC_R = 35.0                # rayon du disque de base (Ø70)
 RIM_H = 5.5                  # hauteur du bord externe
 DOME_TOP_Z = 10.8            # sommet du dôme central
 STEM_R = 5.5                 # rayon de la tige cannelée (Ø11)
@@ -34,10 +35,11 @@ STEM_TOP_Z = 27.3            # sommet de la tige cannelée
 FLUTE_AMP = 0.7              # profondeur des cannelures
 FLUTE_N = 9                  # nombre de cannelures
 
-THREAD_PITCH = 1.5           # pas du filetage
-THREAD_DEPTH = 0.6           # profondeur du filet
-ROD_CORE_R = 2.4             # rayon à fond de filet de la tige (crête = 3.0, Ø6)
-INT_BASE_R = 2.65            # rayon à fond de filet du taraudage (jeu 0,25)
+# Filetage M5 x 0,8 (profil rond) pour correspondre à la tige d'origine
+THREAD_PITCH = 0.8           # pas du filetage
+THREAD_DEPTH = 0.45          # profondeur du filet
+ROD_CORE_R = 2.05            # rayon à fond de filet de la tige (crête = 2.5, Ø5)
+INT_BASE_R = 2.25            # rayon à fond de filet du taraudage (jeu 0,2)
 
 ROD_HEAD_R = 4.5             # rayon de la tête fendue (Ø9)
 
@@ -46,8 +48,8 @@ NUT_H = 8.0                  # hauteur de la molette
 KNURL_N = 20                 # stries du moletage
 KNURL_AMP = 0.35
 
-GASKET_R_IN = 18.0           # joint : rayon interne
-GASKET_R_OUT = 24.5          # joint : rayon externe
+GASKET_R_IN = 22.0           # joint : rayon interne
+GASKET_R_OUT = 29.5          # joint : rayon externe
 GASKET_H = 3.0
 
 TH = np.linspace(0.0, 2.0 * np.pi, N_THETA, endpoint=False)
@@ -135,13 +137,13 @@ def base_profile(p):
     """Profil commun : disque, gorge, dôme, jusqu'au pied de la tige cannelée."""
     seg(p, (2.0, 0.0), (DISC_R, 0.0), 8)                       # dessous plat
     seg(p, (DISC_R, 0.0), (DISC_R, RIM_H), 3)                  # paroi externe
-    seg(p, (DISC_R, RIM_H), (27.2, 6.7), 2)                    # arrondi du bord
-    seg(p, (27.2, 6.7), (24.8, 6.7), 2)                        # dessus du bord
-    seg(p, (24.8, 6.7), (24.0, 3.5), 2)                        # gorge (mur)
-    seg(p, (24.0, 3.5), (21.0, 3.5), 2)                        # gorge (fond)
-    seg(p, (21.0, 3.5), (19.5, 7.0), 3)                        # jupe du dôme
-    seg(p, (19.5, 7.0), (9.5, 10.0), 8)                        # pente du dôme
-    seg(p, (9.5, 10.0), (7.0, DOME_TOP_Z), 3)
+    seg(p, (DISC_R, RIM_H), (33.4, 6.7), 2)                    # arrondi du bord
+    seg(p, (33.4, 6.7), (30.5, 6.7), 2)                        # dessus du bord
+    seg(p, (30.5, 6.7), (29.5, 3.5), 2)                        # gorge (mur)
+    seg(p, (29.5, 3.5), (25.8, 3.5), 2)                        # gorge (fond)
+    seg(p, (25.8, 3.5), (24.0, 7.0), 3)                        # jupe du dôme
+    seg(p, (24.0, 7.0), (10.5, 10.0), 8)                       # pente du dôme
+    seg(p, (10.5, 10.0), (7.0, DOME_TOP_Z), 3)
     seg(p, (7.0, DOME_TOP_Z), (6.0, 12.0), 2)                  # raccord tige
     seg(p, (6.0, 12.0), (STEM_R, 13.5), 2)
     flute_len = 25.5 - 13.5
@@ -166,7 +168,7 @@ def build_onepiece():
     seg(p, (STEM_R, 26.5), (4.6, STEM_TOP_Z), 2)               # épaulement
     seg(p, (4.6, STEM_TOP_Z), (ROD_CORE_R, MONO_THREAD_Z0), 3)  # cône vers tige
     thr_len = MONO_THREAD_Z1 - MONO_THREAD_Z0
-    seg(p, (ROD_CORE_R, MONO_THREAD_Z0), (ROD_CORE_R, MONO_THREAD_Z1), 100,
+    seg(p, (ROD_CORE_R, MONO_THREAD_Z0), (ROD_CORE_R, MONO_THREAD_Z1), 160,
         kind="thread", d=THREAD_DEPTH, pitch=THREAD_PITCH,
         wfun=thread_ramp(thr_len, THREAD_PITCH))
     seg(p, (ROD_CORE_R, MONO_THREAD_Z1), (ROD_CORE_R, 42.5), 2)
@@ -192,7 +194,7 @@ def build_body():
     seg(p, (4.9, STEM_TOP_Z), (3.9, STEM_TOP_Z), 2)            # face du haut
     seg(p, (3.9, STEM_TOP_Z), (INT_BASE_R, 26.8), 2)           # entrée taraudage
     thr_len = 26.8 - 15.0
-    seg(p, (INT_BASE_R, 26.8), (INT_BASE_R, 15.0), 80,         # taraudage
+    seg(p, (INT_BASE_R, 26.8), (INT_BASE_R, 15.0), 160,         # taraudage
         kind="thread", d=THREAD_DEPTH, pitch=THREAD_PITCH,
         wfun=thread_ramp(thr_len, THREAD_PITCH))
     seg(p, (INT_BASE_R, 15.0), (1.2, 14.6), 2)                 # fond du trou
@@ -209,7 +211,7 @@ ROD_TOP_Z = 31.5
 def build_rod():
     p = []
     seg(p, (1.4, 0.0), (ROD_CORE_R, 1.0), 2)                   # chanfrein pointe
-    seg(p, (ROD_CORE_R, 1.0), (ROD_CORE_R, ROD_THREAD_LEN), 120,
+    seg(p, (ROD_CORE_R, 1.0), (ROD_CORE_R, ROD_THREAD_LEN), 280,
         kind="thread", d=THREAD_DEPTH, pitch=THREAD_PITCH,
         wfun=thread_ramp(ROD_THREAD_LEN - 1.0, THREAD_PITCH))
     seg(p, (ROD_CORE_R, ROD_THREAD_LEN), (ROD_CORE_R, 24.0), 2)
@@ -238,7 +240,7 @@ def build_nut():
     seg(p, (NUT_R, NUT_H - 0.6), (4.5, NUT_H), 2)              # chanfrein
     seg(p, (4.5, NUT_H), (3.6, NUT_H), 2)                      # dessus
     seg(p, (3.6, NUT_H), (INT_BASE_R, NUT_H - 0.35), 2)        # entrée filet
-    seg(p, (INT_BASE_R, NUT_H - 0.35), (INT_BASE_R, 0.35), 50,  # taraudage
+    seg(p, (INT_BASE_R, NUT_H - 0.35), (INT_BASE_R, 0.35), 100,  # taraudage
         kind="thread", d=THREAD_DEPTH, pitch=THREAD_PITCH,
         wfun=thread_ramp(NUT_H - 0.7, THREAD_PITCH))
     seg(p, (INT_BASE_R, 0.35), (3.59, 0.01), 2)                # retour (boucle)
