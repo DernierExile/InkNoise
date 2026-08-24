@@ -7,8 +7,8 @@ cannelée, tige filetée avec tête fendue, molette de blocage, joint).
 
 | Fichier | Pièce | Matière conseillée |
 |---|---|---|
-| `bonde-monobloc.stl` | **Tout-en-un** : corps + tige filetée + tête, une seule pièce (pour qui garde la molette et le joint d'origine) | PETG (résiste à l'eau chaude) |
-| `corps-bonde.stl` | Disque Ø72 + dôme + tige cannelée (taraudage interne) | PETG |
+| `bonde-monobloc.stl` | **Tout-en-un** (Ø57 x 50 mm) : corps + tige filetée + tête, une seule pièce (pour qui garde la molette et le joint d'origine) | PETG (résiste à l'eau chaude) |
+| `corps-bonde.stl` | Disque Ø57 + dôme + tige cannelée (taraudage interne) | PETG |
 | `tige-filetee.stl` | Tige filetée Ø8 + tête fendue | PETG |
 | `molette.stl` | Écrou moleté de réglage Ø15 | PETG |
 | `joint-tpu.stl` | Joint annulaire | **TPU 95A** |
@@ -37,7 +37,7 @@ préférer le PETG (ou l'ASA).
 3. Visser la tige dans le taraudage au sommet de la tige cannelée du corps :
    plus ou moins profond selon la hauteur voulue, puis bloquer avec la molette.
 
-Le filetage est un Ø8 à pas de 2 mm, profil rond, avec 0,25 mm de jeu radial :
+Le filetage est un Ø6 à pas de 1,5 mm, profil rond, avec 0,25 mm de jeu radial :
 il se visse sans post-traitement sur une imprimante calibrée. S'il est trop
 serré/lâche, ajuster `INT_BASE_R` dans le script et regénérer.
 
@@ -51,7 +51,7 @@ pip install numpy trimesh manifold3d
 python3 generate_bonde.py
 ```
 
-Cotes par défaut (mesurées approximativement sur la photo, à vérifier avec un
-pied à coulisse sur l'original) : disque Ø72 mm, dôme Ø50, tige cannelée
-Ø14 × hauteur totale 58 mm, tige filetée Ø8 × 57,6 mm, molette Ø15 × 10 mm,
-joint Ø61/Ø46 × 4 mm.
+Cotes V2 (recalées sur les photos avec règle) : disque Ø57 mm, monobloc
+50 mm de haut, tige cannelée Ø11, tige filetée Ø6 (pas 1,5), tête Ø9,
+molette Ø10 × 8 mm, joint Ø49/Ø36 × 3 mm. À affiner au pied à coulisse
+si besoin — toutes les cotes sont des constantes en tête du script.
