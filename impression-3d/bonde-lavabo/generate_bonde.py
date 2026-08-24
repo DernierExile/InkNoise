@@ -30,9 +30,9 @@ N_THETA = 96                 # résolution angulaire
 DISC_R = 35.0                # rayon du disque de base (Ø70)
 RIM_H = 5.5                  # hauteur du bord externe
 DOME_TOP_Z = 10.8            # sommet du dôme central
-STEM_R = 5.5                 # rayon de la tige cannelée (Ø11)
+STEM_R = 3.0                 # rayon de la tige cannelée (Ø6, mesuré)
 STEM_TOP_Z = 27.3            # sommet de la tige cannelée
-FLUTE_AMP = 0.7              # profondeur des cannelures
+FLUTE_AMP = 0.35             # profondeur des cannelures
 FLUTE_N = 9                  # nombre de cannelures
 
 # Filetage M5 x 0,8 (profil rond) pour correspondre à la tige d'origine
@@ -133,8 +133,10 @@ def thread_ramp(length, pitch):
     return w
 
 
-def base_profile(p):
+def base_profile(p, stem_r=None, flute_amp=None):
     """Profil commun : disque, gorge, dôme, jusqu'au pied de la tige cannelée."""
+    stem_r = STEM_R if stem_r is None else stem_r
+    flute_amp = FLUTE_AMP if flute_amp is None else flute_amp
     seg(p, (2.0, 0.0), (DISC_R, 0.0), 8)                       # dessous plat
     seg(p, (DISC_R, 0.0), (DISC_R, RIM_H), 3)                  # paroi externe
     seg(p, (DISC_R, RIM_H), (33.4, 6.7), 2)                    # arrondi du bord
@@ -144,13 +146,13 @@ def base_profile(p):
     seg(p, (25.8, 3.5), (24.0, 7.0), 3)                        # jupe du dôme
     seg(p, (24.0, 7.0), (10.5, 10.0), 8)                       # pente du dôme
     seg(p, (10.5, 10.0), (7.0, DOME_TOP_Z), 3)
-    seg(p, (7.0, DOME_TOP_Z), (6.0, 12.0), 2)                  # raccord tige
-    seg(p, (6.0, 12.0), (STEM_R, 13.5), 2)
+    seg(p, (7.0, DOME_TOP_Z), (stem_r + 0.5, 12.0), 3)         # raccord tige
+    seg(p, (stem_r + 0.5, 12.0), (stem_r, 13.5), 2)
     flute_len = 25.5 - 13.5
-    seg(p, (STEM_R, 13.5), (STEM_R, 25.5), 60,                 # tige cannelée
-        kind="flute", amp=FLUTE_AMP, freq=FLUTE_N,
+    seg(p, (stem_r, 13.5), (stem_r, 25.5), 60,                 # tige cannelée
+        kind="flute", amp=flute_amp, freq=FLUTE_N,
         wfun=thread_ramp(flute_len, 2.5))
-    seg(p, (STEM_R, 25.5), (STEM_R, 26.5), 2)
+    seg(p, (stem_r, 25.5), (stem_r, 26.5), 2)
 
 
 # ----------------------------------------------------------------------------
@@ -165,8 +167,8 @@ MONO_TOP_Z = 56.0            # hauteur totale du monobloc (mesuré)
 def build_onepiece():
     p = []
     base_profile(p)
-    seg(p, (STEM_R, 26.5), (4.6, STEM_TOP_Z), 2)               # épaulement
-    seg(p, (4.6, STEM_TOP_Z), (ROD_CORE_R, MONO_THREAD_Z0), 3)  # cône vers tige
+    seg(p, (STEM_R, 26.5), (2.6, STEM_TOP_Z), 2)               # épaulement
+    seg(p, (2.6, STEM_TOP_Z), (ROD_CORE_R, MONO_THREAD_Z0), 3)  # cône vers tige
     thr_len = MONO_THREAD_Z1 - MONO_THREAD_Z0
     seg(p, (ROD_CORE_R, MONO_THREAD_Z0), (ROD_CORE_R, MONO_THREAD_Z1), 160,
         kind="thread", d=THREAD_DEPTH, pitch=THREAD_PITCH,
@@ -189,9 +191,9 @@ def build_onepiece():
 # ----------------------------------------------------------------------------
 def build_body():
     p = []
-    base_profile(p)
-    seg(p, (STEM_R, 26.5), (4.9, STEM_TOP_Z), 2)               # chanfrein haut
-    seg(p, (4.9, STEM_TOP_Z), (3.9, STEM_TOP_Z), 2)            # face du haut
+    base_profile(p, stem_r=5.0, flute_amp=0.7)
+    seg(p, (5.0, 26.5), (4.4, STEM_TOP_Z), 2)                  # chanfrein haut
+    seg(p, (4.4, STEM_TOP_Z), (3.9, STEM_TOP_Z), 2)            # face du haut
     seg(p, (3.9, STEM_TOP_Z), (INT_BASE_R, 26.8), 2)           # entrée taraudage
     thr_len = 26.8 - 15.0
     seg(p, (INT_BASE_R, 26.8), (INT_BASE_R, 15.0), 160,         # taraudage
