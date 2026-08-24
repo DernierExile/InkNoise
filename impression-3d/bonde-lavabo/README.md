@@ -7,7 +7,7 @@ cannelée, tige filetée avec tête fendue, molette de blocage, joint).
 
 | Fichier | Pièce | Matière conseillée |
 |---|---|---|
-| `bonde-monobloc.stl` | **Tout-en-un** (Ø70 x 54 mm) : corps + tige filetée + tête, une seule pièce (pour qui garde la molette et le joint d'origine) | PETG (résiste à l'eau chaude) |
+| `bonde-monobloc.stl` | **Tout-en-un** (Ø70 x 56 mm) : corps + tige filetée + tête, une seule pièce (pour qui garde la molette et le joint d'origine) | PETG (résiste à l'eau chaude) |
 | `corps-bonde.stl` | Disque Ø70 + dôme + tige cannelée (taraudage interne) | PETG |
 | `tige-filetee.stl` | Tige filetée Ø5 (M5 x 0,8) + tête fendue | PETG |
 | `molette.stl` | Écrou moleté de réglage Ø10 | PETG |
@@ -52,7 +52,7 @@ python3 generate_bonde.py
 ```
 
 Cotes V3 (recalées sur les photos avec règle) : disque Ø70 mm, monobloc
-54 mm de haut, tige cannelée Ø11, tige filetée Ø5 au pas de 0,8 (équivalent
-M5), tête Ø9, molette Ø10 × 8 mm, joint Ø59/Ø44 × 3 mm. À affiner au pied
+56 mm de haut, tige cannelée Ø11, tige filetée Ø5 au pas de 0,8 (équivalent
+M5), tête Ø6, molette Ø10 × 8 mm, joint Ø59/Ø44 × 3 mm. À affiner au pied
 à coulisse si besoin — toutes les cotes sont des constantes en tête du
 script. Pour un filetage aussi fin, imprimer à 0,08-0,12 mm de couche.
