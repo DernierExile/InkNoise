@@ -34,3 +34,9 @@ intérieur 203,2 mm. Les boîtes se rangent **comme des livres, tranche face à 
 identiques). ~1 042 cm³ (~1,3 kg PLA) contre ~2 kg pour frame + tiroir (−35 %).
 Impression P1P : debout, dos au plateau (empreinte 251,2 x 220,5 — alignée aux axes,
 pas de rotation 45°), hauteur 209,3, sans supports.
+
+### Placement sur plateau P1P (étagère 220,5)
+La P1P a une zone d'exclusion au coin avant-gauche (~18 x 28 mm). Centrée, la pièce
+(251 x 220 sur plateau 256) mord dessus → erreur "zone d'exclusion". Fix : décaler la
+pièce de +12 à 15 mm vers l'arrière (Y), garder centré en X. Brim désactivé (ou
+intérieur seulement) et skirt à 0 : il ne reste que ~2 mm de marge latérale.
