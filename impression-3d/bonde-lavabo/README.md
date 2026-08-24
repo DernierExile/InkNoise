@@ -9,8 +9,8 @@ cannelée, tige filetée avec tête fendue, molette de blocage, joint).
 |---|---|---|
 | `bonde-monobloc.stl` | **Tout-en-un** (Ø57 x 50 mm) : corps + tige filetée + tête, une seule pièce (pour qui garde la molette et le joint d'origine) | PETG (résiste à l'eau chaude) |
 | `corps-bonde.stl` | Disque Ø57 + dôme + tige cannelée (taraudage interne) | PETG |
-| `tige-filetee.stl` | Tige filetée Ø8 + tête fendue | PETG |
-| `molette.stl` | Écrou moleté de réglage Ø15 | PETG |
+| `tige-filetee.stl` | Tige filetée Ø6 + tête fendue | PETG |
+| `molette.stl` | Écrou moleté de réglage Ø10 | PETG |
 | `joint-tpu.stl` | Joint annulaire | **TPU 95A** |
 
 Le PLA fonctionne pour tester, mais pour un usage réel dans l'eau chaude,
