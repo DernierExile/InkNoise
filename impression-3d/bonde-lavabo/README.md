@@ -7,7 +7,8 @@ cannelée, tige filetée avec tête fendue, molette de blocage, joint).
 
 | Fichier | Pièce | Matière conseillée |
 |---|---|---|
-| `corps-bonde.stl` | Disque Ø72 + dôme + tige cannelée (taraudage interne) | PETG (résiste à l'eau chaude) |
+| `bonde-monobloc.stl` | **Tout-en-un** : corps + tige filetée + tête, une seule pièce (pour qui garde la molette et le joint d'origine) | PETG (résiste à l'eau chaude) |
+| `corps-bonde.stl` | Disque Ø72 + dôme + tige cannelée (taraudage interne) | PETG |
 | `tige-filetee.stl` | Tige filetée Ø8 + tête fendue | PETG |
 | `molette.stl` | Écrou moleté de réglage Ø15 | PETG |
 | `joint-tpu.stl` | Joint annulaire | **TPU 95A** |
@@ -17,6 +18,11 @@ préférer le PETG (ou l'ASA).
 
 ## Réglages Bambu Studio
 
+- **Monobloc** : à plat, disque contre le plateau, aucune orientation à changer.
+  0,16 mm (ou 0,12 pour un filetage plus propre), 3 parois, 15 % de
+  remplissage. Pas de supports nécessaires. Attention : la molette d'origine
+  (métal) a un filetage métrique fin qui ne correspondra pas au filetage
+  imprimé Ø8 × pas 2 — voir note sous le tableau.
 - **Corps** : à plat, disque contre le plateau. 0,16 mm, 3 parois, 15 % de
   remplissage. Pas de supports nécessaires.
 - **Tige filetée** : verticale, pointe en bas, avec un **brim** de 5 mm.

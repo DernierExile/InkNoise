@@ -183,6 +183,52 @@ def build_rod():
 
 
 # ----------------------------------------------------------------------------
+# Version monobloc : corps + tige filetée + tête, en une seule pièce
+# (pour qui possède déjà la molette et le joint d'origine)
+# ----------------------------------------------------------------------------
+MONO_THREAD_Z0 = 60.0        # début du filetage au-dessus de la tige cannelée
+MONO_THREAD_Z1 = 96.0        # fin du filetage
+MONO_TOP_Z = 105.4           # hauteur totale du monobloc
+
+
+def build_onepiece():
+    p = []
+    seg(p, (2.0, 0.0), (DISC_R, 0.0), 8)                       # dessous plat
+    seg(p, (DISC_R, 0.0), (DISC_R, RIM_H), 3)                  # paroi externe
+    seg(p, (DISC_R, RIM_H), (34.5, 8.5), 2)                    # arrondi du bord
+    seg(p, (34.5, 8.5), (31.5, 8.5), 2)                        # dessus du bord
+    seg(p, (31.5, 8.5), (30.5, 4.5), 2)                        # gorge (mur)
+    seg(p, (30.5, 4.5), (27.0, 4.5), 2)                        # gorge (fond)
+    seg(p, (27.0, 4.5), (25.0, 9.0), 3)                        # jupe du dôme
+    seg(p, (25.0, 9.0), (12.0, 12.5), 8)                       # pente du dôme
+    seg(p, (12.0, 12.5), (9.0, DOME_TOP_Z), 3)
+    seg(p, (9.0, DOME_TOP_Z), (STEM_R + 0.5, 15.0), 2)         # raccord tige
+    seg(p, (STEM_R + 0.5, 15.0), (STEM_R, 17.0), 2)
+    flute_len = 55.0 - 17.0
+    seg(p, (STEM_R, 17.0), (STEM_R, 55.0), 90,                 # tige cannelée
+        kind="flute", amp=FLUTE_AMP, freq=FLUTE_N,
+        wfun=thread_ramp(flute_len, 3.0))
+    seg(p, (STEM_R, 55.0), (STEM_R, 57.0), 2)
+    seg(p, (STEM_R, 57.0), (6.3, 58.0), 2)                     # épaulement
+    seg(p, (6.3, 58.0), (ROD_CORE_R, MONO_THREAD_Z0), 3)       # cône vers tige
+    thr_len = MONO_THREAD_Z1 - MONO_THREAD_Z0
+    seg(p, (ROD_CORE_R, MONO_THREAD_Z0), (ROD_CORE_R, MONO_THREAD_Z1), 150,
+        kind="thread", d=THREAD_DEPTH, pitch=THREAD_PITCH,
+        wfun=thread_ramp(thr_len, THREAD_PITCH))
+    seg(p, (ROD_CORE_R, MONO_THREAD_Z1), (ROD_CORE_R, 97.5), 2)
+    seg(p, (ROD_CORE_R, 97.5), (ROD_HEAD_R, 98.1), 2)          # dessous de tête
+    seg(p, (ROD_HEAD_R, 98.1), (ROD_HEAD_R, 103.8), 4)         # flanc de tête
+    seg(p, (ROD_HEAD_R, 103.8), (4.8, 104.8), 2)               # arrondi
+    seg(p, (4.8, 104.8), (1.5, MONO_TOP_Z), 2)
+    body = solid(p, start_axis=0.0, end_axis=MONO_TOP_Z)
+
+    slot = trimesh.creation.box(extents=[2 * ROD_HEAD_R + 2, 1.6, 3.0],
+                                transform=trimesh.transformations
+                                .translation_matrix([0, 0, MONO_TOP_Z - 0.6]))
+    return trimesh.boolean.difference([body, slot])
+
+
+# ----------------------------------------------------------------------------
 # Molette moletée (écrou de réglage)
 # ----------------------------------------------------------------------------
 def build_nut():
@@ -220,6 +266,7 @@ def build_gasket():
 
 if __name__ == "__main__":
     parts = {
+        "bonde-monobloc.stl": build_onepiece(),
         "corps-bonde.stl": build_body(),
         "tige-filetee.stl": build_rod(),
         "molette.stl": build_nut(),
