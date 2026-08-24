@@ -3,7 +3,7 @@
 Génère les STL d'un clapet de bonde de lavabo/baignoire réglable.
 
 V3 — cotes recalées sur les photos avec règle : disque Ø70 mm,
-hauteur totale ~50 mm, filetage fin M5 x 0,8 comme la tige d'origine.
+hauteur totale ~54 mm, filetage fin M5 x 0,8 comme la tige d'origine.
 
 Pièces :
   - bonde-monobloc.stl : corps + tige filetée + tête fendue, une seule pièce
@@ -158,8 +158,8 @@ def base_profile(p):
 # (pour qui possède déjà la molette et le joint d'origine)
 # ----------------------------------------------------------------------------
 MONO_THREAD_Z0 = 29.5        # début du filetage au-dessus de la tige cannelée
-MONO_THREAD_Z1 = 41.5        # fin du filetage
-MONO_TOP_Z = 50.0            # hauteur totale du monobloc
+MONO_THREAD_Z1 = 45.5        # fin du filetage
+MONO_TOP_Z = 54.0            # hauteur totale du monobloc
 
 
 def build_onepiece():
@@ -171,11 +171,11 @@ def build_onepiece():
     seg(p, (ROD_CORE_R, MONO_THREAD_Z0), (ROD_CORE_R, MONO_THREAD_Z1), 160,
         kind="thread", d=THREAD_DEPTH, pitch=THREAD_PITCH,
         wfun=thread_ramp(thr_len, THREAD_PITCH))
-    seg(p, (ROD_CORE_R, MONO_THREAD_Z1), (ROD_CORE_R, 42.5), 2)
-    seg(p, (ROD_CORE_R, 42.5), (ROD_HEAD_R, 43.1), 2)          # dessous de tête
-    seg(p, (ROD_HEAD_R, 43.1), (ROD_HEAD_R, 48.6), 4)          # flanc de tête
-    seg(p, (ROD_HEAD_R, 48.6), (3.8, 49.4), 2)                 # arrondi
-    seg(p, (3.8, 49.4), (1.2, MONO_TOP_Z), 2)
+    seg(p, (ROD_CORE_R, MONO_THREAD_Z1), (ROD_CORE_R, 46.5), 2)
+    seg(p, (ROD_CORE_R, 46.5), (ROD_HEAD_R, 47.1), 2)          # dessous de tête
+    seg(p, (ROD_HEAD_R, 47.1), (ROD_HEAD_R, 52.6), 4)          # flanc de tête
+    seg(p, (ROD_HEAD_R, 52.6), (3.8, 53.4), 2)                 # arrondi
+    seg(p, (3.8, 53.4), (1.2, MONO_TOP_Z), 2)
     body = solid(p, start_axis=0.0, end_axis=MONO_TOP_Z)
 
     slot = trimesh.creation.box(extents=[2 * ROD_HEAD_R + 2, 1.4, 3.0],
