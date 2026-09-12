@@ -66,18 +66,54 @@ chantier — prévois une bobine par niveau.
 
 ## Montage
 
+Les trois planches `montage-1`, `montage-2` et `montage-3` détaillent tout
+visuellement. Les coupes sont extraites directement des maillages : ce qui est
+dessiné est exactement ce qui sortira de l'imprimante.
+
+### Séquence
+
+![Séquence de montage](montage-2-sequence.png)
+
 1. Poser les 4 **pieds** aux quatre coins, mortaise vers le haut, la partie
    longue déportée **vers l'extérieur**.
-2. Planter chaque **portique** par ses deux tenons dans les mortaises des pieds.
+2. Planter chaque **portique** par ses deux tenons du bas dans les mortaises
+   des pieds.
 3. Assembler chaque **longeron** : emboîter deux moitiés par leur recouvrement,
-   serrer les 2 vis M4.
+   serrer les 2 vis M4 (voir planche 3).
 4. Descendre les deux longerons dans les encoches du dessus des traverses. Les
    becs en bout de longeron viennent coiffer les faces extérieures des
    portiques : l'ensemble est alors bloqué dans tous les sens.
 5. Poser la PS3 sur les longerons.
-6. **Pour ajouter un étage** : planter les tenons d'un nouveau portique dans les
-   mortaises qui sont sur le dessus des traverses du module précédent, puis
-   reprendre à l'étape 3.
+
+### Ajouter un niveau
+
+![Mécanisme d'empilage](montage-1-empilage.png)
+
+Le dessus de chaque traverse porte **deux mortaises de 24,6 × 12 mm**, situées
+juste au-dessus des montants. Le portique du niveau suivant a **deux tenons de
+24 × 20 × 12 mm** sous ses montants : ils tombent dans ces mortaises. La charge
+descend donc en ligne droite, tenon dans mortaise, montant après montant,
+jusqu'au bureau — il n'y a jamais de flexion dans le chemin de charge.
+
+Il n'y a rien de plus à faire : on plante le portique, on repose deux longerons
+dessus, et le nouvel étage est prêt. Le pas est de 178 mm et chaque étage offre
+136 mm de hauteur libre sous la traverse suivante.
+
+Le jeu d'emboîtement est de 0,3 mm par face. Si les tenons forcent, un coup de
+lime suffit ; s'ils sont trop libres, baisse `FIT` dans le script et réimprime.
+
+### Assembler un longeron
+
+![Assemblage des longerons](montage-3-longerons.png)
+
+Un longeron complet fait 534 mm, donc trop long pour le plateau : il est fait de
+**deux moitiés identiques**, l'une simplement tournée de 180°. Leurs languettes
+se recouvrent sur 30 mm au milieu de la portée, et **2 vis M4 × 25** traversent
+le recouvrement.
+
+Le recouvrement partage la *largeur* de la pièce et non sa *hauteur* : la
+hauteur de section reste entière au droit du joint, qui est donc aussi rigide
+que le reste du longeron, malgré sa position à mi-portée.
 
 ## Cotes de l'ouvrage
 
