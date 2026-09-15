@@ -66,54 +66,107 @@ chantier — prévois une bobine par niveau.
 
 ## Montage
 
-Les trois planches `montage-1`, `montage-2` et `montage-3` détaillent tout
-visuellement. Les coupes sont extraites directement des maillages : ce qui est
-dessiné est exactement ce qui sortira de l'imprimante.
+Les planches `montage-1` à `montage-4` détaillent tout visuellement. Les coupes
+sont extraites directement des maillages : ce qui est dessiné est exactement ce
+qui sortira de l'imprimante.
 
-### Séquence
+### Ce qui se visse — et ce qui ne se visse pas
 
-![Séquence de montage](montage-2-sequence.png)
+![Plan de vissage](montage-4-vissage.png)
 
-1. Poser les 4 **pieds** aux quatre coins, mortaise vers le haut, la partie
-   longue déportée **vers l'extérieur**.
-2. Planter chaque **portique** par ses deux tenons du bas dans les mortaises
-   des pieds.
-3. Assembler chaque **longeron** : emboîter deux moitiés par leur recouvrement,
-   serrer les 2 vis M4 (voir planche 3).
-4. Descendre les deux longerons dans les encoches du dessus des traverses. Les
-   becs en bout de longeron viennent coiffer les faces extérieures des
-   portiques : l'ensemble est alors bloqué dans tous les sens.
-5. Poser la PS3 sur les longerons.
+| Jonction | Fixation | Visserie |
+|---|---|---|
+| pied ↔ portique | tenon dans mortaise, gravité | **aucune** |
+| portique ↔ longeron | encoche + bec de retenue | **aucune** |
+| moitié A ↔ moitié B d'un longeron | recouvrement de 30 mm | **2 × M4 × 25 + écrou + 2 rondelles** |
+| niveau N ↔ niveau N+1 | tenon dans mortaise, gravité | **aucune** |
+| pieds ↔ meuble | trou Ø 5,5 en bout de pied | facultatif : vis à bois Ø 4 × 30 ou sangle |
 
-### Ajouter un niveau
+Soit **4 vis M4 par niveau**, toutes au milieu des longerons. Rien d'autre.
+
+### Étape 0 — assembler les longerons (sur l'établi, avant tout le reste)
+
+1. Prends 2 demi-longerons, pose-les à plat, **bec vers le bas**.
+2. Fais pivoter l'un des deux de 180° **à plat** (comme une aiguille de montre,
+   sans le retourner). Les becs sont alors aux deux extrémités opposées, tous
+   les deux vers le bas.
+3. Rapproche-les : les languettes glissent l'une contre l'autre et se
+   recouvrent sur 30 mm, côte à côte, à la même hauteur. Si elles se cognent au
+   lieu de glisser, tu as *retourné* une moitié au lieu de la *tourner* :
+   vérifie que les deux becs pointent bien vers le bas.
+4. Les 2 perçages Ø 4,4 de chaque languette tombent en face l'un de l'autre. Ils
+   sont à 6 mm de part et d'autre du milieu du joint, à mi-hauteur (17 mm du
+   dessous).
+5. Vis M4 × 25 + rondelle, enfilée **en travers** (horizontalement,
+   perpendiculaire au longeron), rondelle + écrou de l'autre côté. Serrage à la
+   main plus un quart de tour de clé, pas davantage : le PETG se marque.
+6. Idem pour le second longeron. Tu as deux poutres de 534 mm, rigides, avec un
+   bec à chaque bout.
+
+### Étape 1 — les pieds
+
+Pose les 4 pieds sur le bureau autour de la PS5, **poche rectangulaire vers le
+haut**. Le trou rond Ø 5,5 est à l'extrémité longue : cette extrémité va vers
+l'*extérieur* (vers l'avant pour les 2 pieds avant, vers l'arrière pour les 2
+arrière). Entraxes des poches : 206 mm entre les 2 pieds d'un même côté, 468 mm
+de gauche à droite. Pas besoin d'être précis, les longerons recalent tout à
+l'étape 3.
+
+### Étape 2 — les portiques
+
+Le portique est symétrique : pas de sens avant/arrière ni de face
+intérieure/extérieure. Les 2 tenons sous ses montants (petits blocs de
+24 × 20 × 12 mm) entrent dans les 2 poches des 2 pieds d'un même côté. Pousse à
+fond, le montant doit toucher le pied. Même chose de l'autre côté. Le portique
+tient debout seul mais peut encore glisser avec ses pieds — c'est voulu.
+
+### Étape 3 — les longerons
+
+Regarde le dessus des traverses : chacune porte, de l'intérieur vers
+l'extérieur, **2 encoches de 18,6 mm** (à 70 mm du milieu) puis **2 mortaises de
+24,6 mm** (à 103 mm, juste au-dessus des montants). Les encoches sont pour les
+longerons, les mortaises pour le niveau suivant — n'y mets rien maintenant.
+
+Descends un longeron assemblé, bec vers le bas, dans l'encoche *avant* des deux
+portiques. Les becs viennent se plaquer contre la **face extérieure** de chaque
+portique. Si un bec bute sur le dessus d'un portique, écarte légèrement ce
+portique en faisant glisser son pied. Une fois les deux becs descendus, le
+longeron dépasse de 12 mm au-dessus des traverses et ne peut plus bouger : les
+encoches le bloquent en avant/arrière, les becs en gauche/droite. Même chose
+pour le second longeron dans l'encoche *arrière*.
+
+À ce stade l'ensemble ne bouge plus quand on le pousse. Pour le déplacer,
+soulève-le par les portiques, jamais par les longerons (ils sortiraient de
+leurs encoches).
+
+### Étape 4 — la console
+
+Pose la PS3 sur les deux longerons, centrée. Elle repose sur les 12 mm qui
+dépassent. Des patins feutre autocollants sur le dessus des longerons évitent
+qu'elle glisse.
+
+### Étape 5 — ajouter un niveau
 
 ![Mécanisme d'empilage](montage-1-empilage.png)
 
-Le dessus de chaque traverse porte **deux mortaises de 24,6 × 12 mm**, situées
-juste au-dessus des montants. Le portique du niveau suivant a **deux tenons de
-24 × 20 × 12 mm** sous ses montants : ils tombent dans ces mortaises. La charge
-descend donc en ligne droite, tenon dans mortaise, montant après montant,
-jusqu'au bureau — il n'y a jamais de flexion dans le chemin de charge.
-
-Il n'y a rien de plus à faire : on plante le portique, on repose deux longerons
-dessus, et le nouvel étage est prêt. Le pas est de 178 mm et chaque étage offre
-136 mm de hauteur libre sous la traverse suivante.
+Un nouveau portique : ses 2 tenons entrent dans les **2 mortaises extérieures**
+du dessus de la traverse du niveau en place (celles de 24,6 mm, pas les
+encoches de 18,6 qui sont occupées). Descends-le à fond. Aucune vis. Puis deux
+longerons préparés comme à l'étape 0, posés comme à l'étape 3. Le pas est de
+178 mm et chaque étage offre 136 mm de hauteur libre sous la traverse suivante.
 
 Le jeu d'emboîtement est de 0,3 mm par face. Si les tenons forcent, un coup de
 lime suffit ; s'ils sont trop libres, baisse `FIT` dans le script et réimprime.
 
-### Assembler un longeron
+### Étape 6 — ancrage
+
+Chaque pied a un trou Ø 5,5 à son extrémité extérieure. Deux vis à bois
+Ø 4 × 30 dans les deux pieds arrière suffisent, ou une sangle passée dans les
+trous. À faire dès qu'il y a un second niveau.
+
+![Séquence de montage](montage-2-sequence.png)
 
 ![Assemblage des longerons](montage-3-longerons.png)
-
-Un longeron complet fait 534 mm, donc trop long pour le plateau : il est fait de
-**deux moitiés identiques**, l'une simplement tournée de 180°. Leurs languettes
-se recouvrent sur 30 mm au milieu de la portée, et **2 vis M4 × 25** traversent
-le recouvrement.
-
-Le recouvrement partage la *largeur* de la pièce et non sa *hauteur* : la
-hauteur de section reste entière au droit du joint, qui est donc aussi rigide
-que le reste du longeron, malgré sa position à mi-portée.
 
 ## Cotes de l'ouvrage
 
