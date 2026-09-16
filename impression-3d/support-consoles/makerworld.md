@@ -6,17 +6,22 @@ prévu en fin de description.
 
 ---
 
-## Title
+## Title (limite MakerWorld : 50 caractères)
+
+Recommandé — 44 caractères, la console cherchée en premier :
 
 ```
-Stackable Console Bridge – Shelf over PS5 Pro for PS3 (or any console), no supports
+PS5 Pro Stackable Console Shelf – PS3 on Top
 ```
 
-Variantes plus courtes si la limite de caractères gêne :
+Variantes, toutes sous 50 caractères :
 
 ```
-Stackable Console Bridge – PS5 Pro riser + PS3 shelf
-Modular Console Stacker – bridges over PS5 Pro, holds PS3
+Stackable Console Shelf over PS5 Pro (PS3 ready)   48
+PS5 Pro Bridge Stand – Stackable Shelf for PS3     46
+Stackable Console Bridge – PS5 Pro + PS3 Shelf     46
+PS5 Pro Riser – Stackable Shelf for PS3 & More     46
+Console Bridge: Stackable Shelf over PS5 Pro       44
 ```
 
 ## Category
