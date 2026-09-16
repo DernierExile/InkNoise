@@ -220,3 +220,48 @@ licence, description, accessoires. Images : tes photos d'abord, puis
 Case à cocher sous la description. Plus de points et plus de visibilité, mais
 tu t'engages à **ne pas publier le modèle ailleurs** (Printables, Thingiverse,
 Cults…). Ne coche que si tu veux vraiment le réserver à MakerWorld.
+
+---
+
+## Étape « Imprimer le Profil » (formulaire du print profile)
+
+### Nom du profil (60 caractères max) — doit décrire ce qui est VRAIMENT tranché
+
+```
+PETG 0.20 mm · 4 walls · 20% gyroid · no supports
+```
+(49 caractères ; remplacer 0.20 par 0.24 si tu gardes la hauteur de couche
+« draft », le reste ne change pas)
+
+### Description du profil (à coller telle quelle)
+
+```
+• Material: PETG (ASA also fine). NOT PLA — the shelf sits above a console's warm exhaust and PLA softens around 55-60 °C.
+• 0.20 mm layers, 4 walls, 20 % gyroid infill. These are structural parts: do not go below 3 walls.
+• No supports anywhere — every part is prismatic.
+• Brim on the rails (long thin parts, placed diagonally on the bed).
+• Glue stick on textured PEI — PETG welds to it on footprints this large.
+• Plates: 2 × gantry, 4 × rail half, 4 × feet = one complete level + base. For each extra level, print the gantry and rail plates again (no feet needed).
+• About 520 g and 30-35 h per level with a 0.4 nozzle; a 0.6 nozzle brings it down to ~20 h.
+• Hardware: 4 × M4×25 screws + 4 nuts + 8 washers per level. Nothing else.
+```
+
+### Compatibilité imprimantes
+
+Décocher **A1 mini** (plateau 180 × 180 mm : le portique fait 190 × 240, il ne
+rentre pas). Laisser toutes les autres (plateau ≥ 256 mm).
+
+### Plaques — il en faut 5, pas 1
+
+Dans Bambu Studio, bouton « + » à côté de la plaque dans la barre latérale :
+
+| Plaque | Contenu |
+|---|---|
+| 1 | 1 portique, à plat |
+| 2 | 1 portique, à plat |
+| 3 | 2 longerons en diagonale (si les brims se touchent : 1 seul) |
+| 4 | 2 longerons en diagonale |
+| 5 | 4 pieds |
+
+Puis « Tout trancher », puis re-téléverser : le formulaire affichera
+« Plaques d'Impression (5) ».
