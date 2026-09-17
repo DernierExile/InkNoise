@@ -56,3 +56,23 @@ Volume 750 cm³ (~930 g PLA) : -28 % vs l'etagere 6x5, -54 % vs frame + tiroir.
 Impression P1P : debout, dos au plateau, empreinte 209,2 x 220,5 et hauteur 167,3, sans
 supports. Avec 23 mm de marge laterale la piece centree degage la zone d'exclusion
 avant-gauche — plus besoin de la decaler comme la 6x5.
+
+## Variante rapide 5x4 — `Etagere_Jeux-DVD_5x4_rapide.stl`
+Meme piece que la 5x4 (209,2 x 167,3 x 220,5 mm, interieur 201,4 x 164,3 x 203,2 mm,
+20 pieds / 20 alveoles, 13 boitiers) mais **les flancs en treillis fin sont remplaces par
+des panneaux pleins perces de deux grands losanges** (84 x 124 mm, conges 6 mm).
+
+Pourquoi : le treillis d'origine produit 78 a 156 ilots separes par couche, soit ~93 000
+sauts de buse sur la piece = les 4 h 10 de "Deplacement" du slicer, plus 65 % de la
+longueur de contour. Mesure avant / apres, buse 0,4 et couches 0,2 :
+
+| | treillis | losanges |
+|---|---|---|
+| ilots par couche | 111 | **6** (-95 %) |
+| contour par couche | 2 237 mm | **1 429 mm** (-36 %) |
+| volume | 750,4 cm³ | 759,8 cm³ (+1,3 %) |
+| porte-a-faux critique | 52 364 mm² | 52 283 mm² (aucun ajout) |
+
+Estimation : **~15 h 30 au lieu de 24 h 44** a reglages identiques, ~11 h en couches 0,28.
+Pans des losanges a 34 deg de la verticale : auto-portants, aucun support.
+Meme orientation d'impression : debout sur le dos, hauteur 167,3 mm.
