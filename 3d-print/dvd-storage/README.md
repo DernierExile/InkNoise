@@ -40,3 +40,19 @@ La P1P a une zone d'exclusion au coin avant-gauche (~18 x 28 mm). Centrée, la p
 (251 x 220 sur plateau 256) mord dessus → erreur "zone d'exclusion". Fix : décaler la
 pièce de +12 à 15 mm vers l'arrière (Y), garder centré en X. Brim désactivé (ou
 intérieur seulement) et skirt à 0 : il ne reste que ~2 mm de marge latérale.
+
+## Variante compacte 5x4 — `Etagere_Jeux-DVD_5x4_h220.5mm.stl`
+Etagere reduite a **5 carres de large x 4 de profondeur** : **209,2 x 167,3 x 220,5 mm**.
+Obtenue en retirant exactement une periode de 42,0 mm en largeur et une en profondeur
+(motif verifie periodique a 42,000 en X ; jonction en Z faite avec recouvrement car la
+texture de paroi y a une periode de 2,635 mm). Resultat etanche, 20 pieds et 20 alveoles
+en 5x4 verifies sur les deux faces.
+
+Interieur utile 201,3 x 164,3 x 203,2 mm → **13 boitiers** ranges comme des livres,
+tranche face a soi (jeux PS3/PS4/PS5 171,5 mm et DVD films 190 mm passent tous les deux).
+
+Volume 750 cm³ (~930 g PLA) : -28 % vs l'etagere 6x5, -54 % vs frame + tiroir.
+
+Impression P1P : debout, dos au plateau, empreinte 209,2 x 220,5 et hauteur 167,3, sans
+supports. Avec 23 mm de marge laterale la piece centree degage la zone d'exclusion
+avant-gauche — plus besoin de la decaler comme la 6x5.
