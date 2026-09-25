@@ -1,0 +1,35 @@
+# Exemple de configuration pour le NAS (projet Docker « bezier-portal »).
+# Seul le service `portal` change par rapport à l'installation v1 :
+#   - l'image est construite depuis ce dossier (Dockerfile) au lieu de monter server.mjs ;
+#   - ADMIN_PASSWORD et PUBLIC_ORIGIN sont requis ;
+#   - DATA_DIR pointe vers /data/v2 pour laisser intactes les données de la v1.
+# Les services `caddy` et `cloudflared` existants sont à conserver tels quels
+# (le jeton Cloudflare reste dans le fichier du NAS, jamais dans ce dépôt).
+
+services:
+  portal:
+    build: /home/thierrybezier/BezierPortal
+    image: bezier-one-portal:2
+    container_name: bezier-portal
+    restart: unless-stopped
+    ports:
+      - "8095:8080"
+    environment:
+      PORT: "8080"
+      LIBRARY_ROOT: /library
+      DATA_DIR: /data/v2
+      PUBLIC_ORIGIN: https://clients.thierrybezier.com
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Définir ADMIN_PASSWORD dans le fichier .env}
+      SCAN_INTERVAL_MIN: "15"
+      THUMB_CONCURRENCY: "2"
+      PREWARM_THUMBS: "1"
+    volumes:
+      - /home/thierrybezier/Playbook:/library:ro
+      - portal-data:/data
+    stop_grace_period: 15s
+
+  # cloudflared : inchangé (tunnel bezier-portal-nas -> http://portal:8080)
+  # caddy       : inchangé
+
+volumes:
+  portal-data:

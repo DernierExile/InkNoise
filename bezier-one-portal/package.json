@@ -1,0 +1,21 @@
+{
+  "name": "bezier-one-portal",
+  "version": "2.0.0",
+  "description": "Bézier ONE — portail client auto-hébergé (NAS) inspiré de Playbook : bibliothèque hiérarchique, aperçus, sélection et liens de partage privés.",
+  "type": "module",
+  "private": true,
+  "main": "server.mjs",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "LIBRARY_ROOT=./test/library DATA_DIR=./test/data ADMIN_PASSWORD=studio PORT=8080 node server.mjs",
+    "test": "node test/smoke.mjs"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "express": "^5.1.0",
+    "sharp": "^0.34.0"
+  }
+}

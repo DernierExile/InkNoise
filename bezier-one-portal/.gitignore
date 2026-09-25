@@ -1,0 +1,7 @@
+node_modules/
+test/data*/
+test/library/
+test/shots/
+*.log
+.env
+.DS_Store
