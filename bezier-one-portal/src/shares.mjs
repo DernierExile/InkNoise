@@ -71,7 +71,7 @@ export class Shares {
     return clean.filter((p) => !clean.some((other) => other !== p && isWithin(other, p)));
   }
 
-  async create({ title, message, items, expiresAt, password, allowDownload = true }) {
+  async create({ title, message, items, expiresAt, password, allowDownload = true, createdBy = null }) {
     const id = randomId(16);
     const now = new Date().toISOString();
     const share = {
@@ -81,6 +81,7 @@ export class Shares {
       items: Shares.normalizeItems(items),
       createdAt: now,
       updatedAt: now,
+      createdBy: createdBy ? { login: createdBy.login, name: createdBy.name } : null,
       expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
       passwordHash: password ? hashPassword(String(password)) : null,
       allowDownload: Boolean(allowDownload),
@@ -157,6 +158,7 @@ export class Shares {
       ...base,
       items: share.items,
       updatedAt: share.updatedAt,
+      createdBy: share.createdBy || null,
       disabled: share.disabled,
       expired: this.isExpired(share),
       views: share.views || 0,

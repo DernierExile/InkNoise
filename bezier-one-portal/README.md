@@ -32,6 +32,13 @@ hiérarchique, aperçus, sélection multi-dossiers et liens de partage privés.
   téléchargement fichier par fichier, par dossier, de toute la sélection ou d'un
   sous-ensemble choisi. Responsive (téléphone, tablette).
 
+**Comptes du studio**
+- Le compte maître `studio` est défini par `ADMIN_PASSWORD`. Depuis « Comptes », un
+  propriétaire crée d'autres comptes (identifiant, nom, mot de passe, rôle) : les
+  membres accèdent à la bibliothèque et aux liens, les propriétaires gèrent aussi les
+  comptes. Chaque lien mémorise qui l'a créé. Changer un mot de passe ou désactiver
+  un compte déconnecte immédiatement ses sessions.
+
 **Sous le capot**
 - Index en mémoire de toute la bibliothèque (relu au démarrage, toutes les 15 min et
   sur « Actualiser ») ; cache JSON pour un démarrage instantané.
@@ -85,7 +92,7 @@ Les données v1 du volume `portal-data` ne sont pas modifiées (la v2 écrit dan
 | `LIBRARY_ROOT` | `/library` | Bibliothèque (montage lecture seule) |
 | `DATA_DIR` | `/data/v2` (image) | Index, aperçus, liens, secret de session |
 | `PUBLIC_ORIGIN` | `https://clients.thierrybezier.com` | Origine des liens générés |
-| `ADMIN_PASSWORD` | — | Mot de passe du studio (obligatoire) |
+| `ADMIN_PASSWORD` | — | Mot de passe du compte maître `studio` (obligatoire au premier démarrage) |
 | `SCAN_INTERVAL_MIN` | `15` | Relecture automatique de la bibliothèque (0 = jamais) |
 | `THUMB_CONCURRENCY` | `2` | Générations d'aperçus simultanées |
 | `PREWARM_THUMBS` | `1` | Pré-génération des vignettes après chaque scan (`0` pour couper) |
@@ -109,7 +116,8 @@ vidéo et PDF ; sans eux, ces aperçus sont simplement désactivés.
 - Studio (cookie de session) : `POST /api/admin/login`, `/logout`, `GET /api/admin/me`,
   `/status`, `/dirs`, `/dir?p=`, `/files?p=`, `/search?q=`, `/thumb?p=&w=480|1600`,
   `/file?p=[&dl=1]`, `/zip?p=`, `POST /api/admin/zip` (`paths` JSON), `POST /api/admin/rescan`,
-  `POST /api/admin/prewarm`, `GET|POST /api/admin/shares`, `GET|PATCH|DELETE /api/admin/shares/:id`
+  `POST /api/admin/prewarm`, `GET|POST /api/admin/shares`, `GET|PATCH|DELETE /api/admin/shares/:id`,
+  `GET|POST /api/admin/users`, `PATCH|DELETE /api/admin/users/:login` (propriétaires)
 - Partage : `GET /api/s/:id`, `POST /api/s/:id/unlock`, `GET /api/s/:id/tree?p=`,
   `GET /api/s/:id/thumb?p=&w=`, `GET /s/:id/file?p=[&dl=1]`, `GET /s/:id/zip[?p=]`,
   `POST /s/:id/zip` (`paths` JSON)
@@ -122,6 +130,7 @@ src/library.mjs       index de la bibliothèque (scan, cache, arbre, recherche)
 src/thumbs.mjs        aperçus (sharp / ffmpeg / pdftoppm), files d'attente, cache
 src/shares.mjs        liens de partage (création, périmètre, mot de passe, expiration)
 src/auth.mjs          sessions signées, cookies, limitation des tentatives
+src/users.mjs         comptes du studio (compte maître + comptes nommés, rôles)
 src/zip.mjs           archives en flux
 public/assets/        styles et composants communs (tuiles, sections, visionneuse…)
 public/admin/         application studio

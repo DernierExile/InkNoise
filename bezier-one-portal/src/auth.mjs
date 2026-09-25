@@ -9,9 +9,9 @@ const ADMIN_TTL_MS = 30 * 24 * 3600 * 1000;
 const SHARE_TTL_MS = 30 * 24 * 3600 * 1000;
 
 export class Auth {
-  constructor({ dataDir, adminPassword, log = console }) {
+  constructor({ dataDir, users, log = console }) {
     this.secretFile = path.join(dataDir, 'secret.key');
-    this.adminPassword = adminPassword || '';
+    this.users = users;
     this.log = log;
     this.secret = null;
     this.attempts = new Map(); // ip -> { count, resetAt }
@@ -27,11 +27,11 @@ export class Auth {
       await fs.writeFile(this.secretFile, this.secret, { mode: 0o600 });
       this.log.info('[auth] nouveau secret de session généré');
     }
-    if (!this.adminPassword) this.log.warn('[auth] ADMIN_PASSWORD absent : espace studio verrouillé');
+    if (!this.adminEnabled) this.log.warn('[auth] ADMIN_PASSWORD absent et aucun compte : espace studio verrouillé');
   }
 
   get adminEnabled() {
-    return this.adminPassword.length > 0;
+    return this.users.masterEnabled || this.users.map.size > 0;
   }
 
   sign(payload) {
@@ -94,11 +94,18 @@ export class Auth {
   }
 
   // ---------- Studio ----------
-  isAdmin(req) {
-    if (!this.adminEnabled) return false;
+  // Compte connecté (vue publique) ou null. La session porte une empreinte du mot de
+  // passe : un mot de passe changé ou un compte désactivé invalide la session.
+  currentUser(req) {
+    if (!this.adminEnabled) return null;
     const token = Auth.parseCookies(req)[ADMIN_COOKIE];
     const payload = this.verify(token);
-    return Boolean(payload && payload.role === 'studio');
+    if (!payload || payload.role !== 'studio' || !payload.login) return null;
+    return this.users.resolve(payload.login, payload.pw);
+  }
+
+  isAdmin(req) {
+    return this.currentUser(req) != null;
   }
 
   clientIp(req) {
@@ -125,16 +132,17 @@ export class Auth {
     if (this.attempts.size > 5000) this.attempts.clear();
   }
 
-  loginAdmin(req, res, password) {
-    if (!this.adminEnabled) return false;
-    const a = Buffer.from(String(password || ''));
-    const b = Buffer.from(this.adminPassword);
-    const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
-    this.recordAttempt(req, ok);
-    if (!ok) return false;
-    const token = this.sign({ role: 'studio', exp: Date.now() + ADMIN_TTL_MS, n: crypto.randomBytes(6).toString('hex') });
+  loginAdmin(req, res, login, password) {
+    if (!this.adminEnabled) return null;
+    const user = this.users.authenticate(login, password);
+    this.recordAttempt(req, Boolean(user));
+    if (!user) return null;
+    const token = this.sign({
+      role: 'studio', login: user.login, pw: this.users.passwordStamp(user.login),
+      exp: Date.now() + ADMIN_TTL_MS, n: crypto.randomBytes(6).toString('hex'),
+    });
     Auth.setCookie(req, res, ADMIN_COOKIE, token, { maxAgeMs: ADMIN_TTL_MS });
-    return true;
+    return user;
   }
 
   logoutAdmin(req, res) {

@@ -9,6 +9,7 @@ import { Library } from './src/library.mjs';
 import { Thumbs, SIZES } from './src/thumbs.mjs';
 import { Shares } from './src/shares.mjs';
 import { Auth } from './src/auth.mjs';
+import { Users } from './src/users.mjs';
 import { streamZip, safeZipName } from './src/zip.mjs';
 import { safeRel, isWithin, contentDisposition, basename, dirname } from './src/util.mjs';
 
@@ -50,8 +51,10 @@ try {
 const library = new Library({ root: config.libraryRoot, dataDir: config.dataDir, log });
 const thumbs = new Thumbs({ dataDir: config.dataDir, library, concurrency: config.thumbConcurrency, tools: config.tools, log });
 const shares = new Shares({ dataDir: config.dataDir, log });
-const auth = new Auth({ dataDir: config.dataDir, adminPassword: config.adminPassword, log });
+const users = new Users({ dataDir: config.dataDir, masterPassword: config.adminPassword, log });
+const auth = new Auth({ dataDir: config.dataDir, users, log });
 
+await users.load();
 await auth.init();
 await thumbs.init();
 await shares.load();
@@ -199,8 +202,10 @@ const admin = express.Router();
 admin.post('/login', (req, res) => {
   if (!auth.adminEnabled) throw httpError(503, "L'espace studio n'est pas configuré (ADMIN_PASSWORD manquant).");
   if (auth.throttled(req)) throw httpError(429, 'Trop de tentatives. Réessayez dans quelques minutes.');
-  if (!auth.loginAdmin(req, res, req.body?.password)) throw httpError(401, 'Mot de passe incorrect');
-  res.json({ ok: true });
+  const user = auth.loginAdmin(req, res, req.body?.login, req.body?.password);
+  if (!user) throw httpError(401, 'Identifiant ou mot de passe incorrect');
+  log.info(`[auth] connexion de ${user.login}`);
+  res.json({ ok: true, user });
 });
 
 admin.post('/logout', (req, res) => {
@@ -209,15 +214,45 @@ admin.post('/logout', (req, res) => {
 });
 
 admin.use((req, res, next) => {
-  if (!auth.isAdmin(req)) {
+  req.user = auth.currentUser(req);
+  if (!req.user) {
     return next(httpError(401, auth.adminEnabled ? 'Connexion requise' : "L'espace studio n'est pas configuré (ADMIN_PASSWORD manquant)."));
   }
   res.setHeader('Cache-Control', 'private, no-store');
   next();
 });
 
+const requireOwner = (req, res, next) => {
+  if (req.user.role !== 'owner') return next(httpError(403, 'Réservé aux propriétaires du studio'));
+  next();
+};
+
 admin.get('/me', (req, res) => {
-  res.json({ ok: true, brand: config.brand, publicOrigin: config.publicOrigin, version: pkg.version, library: library.stats() });
+  res.json({ ok: true, user: req.user, brand: config.brand, publicOrigin: config.publicOrigin, version: pkg.version, library: library.stats() });
+});
+
+// ---------- Comptes ----------
+admin.get('/users', requireOwner, (req, res) => {
+  res.json({ users: users.list() });
+});
+
+admin.post('/users', requireOwner, async (req, res) => {
+  const user = await users.create(req.body || {});
+  log.info(`[users] compte créé : ${user.login} (${user.role}) par ${req.user.login}`);
+  res.status(201).json({ user });
+});
+
+admin.patch('/users/:login', requireOwner, async (req, res) => {
+  const user = await users.update(req.params.login, req.body || {});
+  if (!user) throw httpError(404, 'Compte introuvable');
+  res.json({ user });
+});
+
+admin.delete('/users/:login', requireOwner, async (req, res) => {
+  if (Users.normalizeLogin(req.params.login) === req.user.login) throw httpError(400, 'Impossible de supprimer son propre compte.');
+  if (!(await users.remove(req.params.login))) throw httpError(404, 'Compte introuvable');
+  log.info(`[users] compte supprimé : ${req.params.login} par ${req.user.login}`);
+  res.json({ ok: true });
 });
 
 admin.get('/status', (req, res) => {
@@ -301,8 +336,8 @@ admin.get('/shares', (req, res) => {
 admin.post('/shares', async (req, res) => {
   const body = req.body || {};
   const items = Shares.normalizeItems(body.items).filter((p) => library.hasDir(p) || library.getFile(p));
-  const share = await shares.create({ ...body, items });
-  log.info(`[shares] créé ${share.id} « ${share.title} » (${share.items.length} élément(s))`);
+  const share = await shares.create({ ...body, items, createdBy: req.user });
+  log.info(`[shares] créé ${share.id} « ${share.title} » (${share.items.length} élément(s)) par ${req.user.login}`);
   res.status(201).json({ share: shares.publicView(share, { admin: true }), url: `${config.publicOrigin}/s/${share.id}` });
 });
 

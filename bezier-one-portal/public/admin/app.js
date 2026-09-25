@@ -35,6 +35,7 @@ let els = {};
 function parseRoute() {
   const hash = location.hash.replace(/^#\/?/, '');
   if (hash.startsWith('shares')) return { view: 'shares' };
+  if (hash.startsWith('users')) return { view: 'users' };
   if (hash.startsWith('search/')) return { view: 'search', q: decodeURIComponent(hash.slice(7)) };
   if (hash.startsWith('lib')) {
     const rest = hash.slice(3).replace(/^\//, '');
@@ -62,7 +63,8 @@ async function boot() {
 
 function renderLogin(err) {
   const configured = err.status !== 503 && !/ADMIN_PASSWORD/.test(err.message || '');
-  const input = h('input', { class: 'input', type: 'password', placeholder: 'Mot de passe du studio', autocomplete: 'current-password', autofocus: true });
+  const loginIn = h('input', { class: 'input', type: 'text', placeholder: 'Identifiant', autocomplete: 'username', value: prefs.get('login', 'studio'), spellcheck: 'false', autocapitalize: 'off' });
+  const input = h('input', { class: 'input', type: 'password', placeholder: 'Mot de passe', autocomplete: 'current-password' });
   const error = h('div', { class: 'error hidden' });
   const btn = h('button', { class: 'btn primary', type: 'submit' }, 'Entrer');
   const form = h('form', { onSubmit: async (e) => {
@@ -70,20 +72,110 @@ function renderLogin(err) {
     btn.disabled = true;
     error.classList.add('hidden');
     try {
-      await api('/api/admin/login', { method: 'POST', body: { password: input.value } });
-      await boot();
+      await api('/api/admin/login', { method: 'POST', body: { login: loginIn.value, password: input.value } });
+      prefs.set('login', loginIn.value.trim().toLowerCase() || 'studio');
+      await // ---------- Comptes du studio ----------
+async function renderUsers() {
+  els.content.innerHTML = '';
+  let data;
+  try {
+    data = await api('/api/admin/users');
+  } catch (err) {
+    els.content.append(emptyState('lock', 'Accès réservé', err.message));
+    return;
+  }
+  if (state.route.view !== 'users') return;
+  const me = state.me.user;
+  els.content.append(h('div', { class: 'board-head' },
+    h('div', { class: 'board-title' }, h('h1', {}, 'Comptes du studio'), h('span', { class: 'sub' }, plural(data.users.length, 'compte'))),
+    h('div', { class: 'board-actions' }, h('button', { class: 'btn primary', onClick: () => userModal() }, icon('plus'), 'Nouveau compte'))));
+  const cards = h('div', { class: 'cards', style: { maxWidth: '900px' } });
+  for (const u of data.users) {
+    const badges = [h('span', { class: `badge${u.role === 'owner' ? ' accent' : ''}` }, u.role === 'owner' ? 'Propriétaire' : 'Membre')];
+    if (u.master) badges.push(h('span', { class: 'badge muted', title: 'Défini par ADMIN_PASSWORD' }, 'Compte maître'));
+    if (u.disabled) badges.push(h('span', { class: 'badge warn' }, 'Désactivé'));
+    if (u.login === me.login) badges.push(h('span', { class: 'badge ok' }, 'Vous'));
+    const meta = [`identifiant ${u.login}`, u.lastLoginAt ? `dernière connexion le ${fmtDateTime(u.lastLoginAt)}` : 'jamais connecté'];
+    cards.append(h('div', { class: `card${u.disabled ? ' off' : ''}` },
+      h('div', { class: 'card-cover', style: { fontSize: '22px', fontWeight: '700', color: 'var(--text-2)' } }, (u.name || u.login).slice(0, 1).toUpperCase()),
+      h('div', { class: 'card-body' },
+        h('div', { class: 'card-title' }, u.name, ...badges),
+        h('div', { class: 'card-meta' }, meta.flatMap((m, i) => (i ? [h('span', { class: 'sep' }), h('span', {}, m)] : [h('span', {}, m)])))),
+      h('div', { class: 'card-actions' }, u.master ? h('span', { class: 'hint', style: { fontSize: '12px', color: 'var(--muted-2)' } }, 'Mot de passe : variable ADMIN_PASSWORD') : [
+        h('button', { class: 'btn ghost icon sm', title: 'Modifier', onClick: () => userModal(u) }, icon('edit')),
+        u.login !== me.login ? h('button', { class: 'btn ghost icon sm', title: u.disabled ? 'Réactiver' : 'Désactiver', onClick: async () => {
+          await api(`/api/admin/users/${u.login}`, { method: 'PATCH', body: { disabled: !u.disabled } });
+          toast(u.disabled ? 'Compte réactivé' : 'Compte désactivé');
+          renderUsers();
+        } }, icon(u.disabled ? 'eye' : 'lock')) : null,
+        u.login !== me.login ? h('button', { class: 'btn ghost icon sm danger', title: 'Supprimer', onClick: async () => {
+          if (!(await confirmModal({ title: 'Supprimer ce compte ?', text: `${u.name} ne pourra plus se connecter. Les liens qu’il ou elle a créés restent actifs.`, confirmLabel: 'Supprimer', danger: true }))) return;
+          await api(`/api/admin/users/${u.login}`, { method: 'DELETE' });
+          toast('Compte supprimé');
+          renderUsers();
+        } }, icon('trash')) : null,
+      ])));
+  }
+  els.content.append(cards);
+}
+
+function userModal(u = null) {
+  const loginIn = h('input', { class: 'input', value: u?.login || '', placeholder: 'ex. marie', disabled: Boolean(u), autocapitalize: 'off', spellcheck: 'false' });
+  const nameIn = h('input', { class: 'input', value: u?.name || '', placeholder: 'Nom affiché', maxlength: 80 });
+  const pwdIn = h('input', { class: 'input', type: 'text', placeholder: u ? '(inchangé)' : '8 caractères minimum', autocomplete: 'new-password' });
+  const roleIn = h('select', { class: 'select' },
+    h('option', { value: 'member', selected: !u || u.role === 'member' }, 'Membre — bibliothèque et liens de partage'),
+    h('option', { value: 'owner', selected: u?.role === 'owner' }, 'Propriétaire — peut aussi gérer les comptes'));
+  const error = h('div', { class: 'error hidden' });
+  const save = h('button', { class: 'btn primary' }, u ? 'Enregistrer' : 'Créer le compte');
+  const m = modal({
+    title: u ? `Modifier ${u.name}` : 'Nouveau compte',
+    body: [
+      h('div', { class: 'form-row' },
+        h('div', { class: 'field' }, h('label', {}, 'Identifiant'), loginIn, h('span', { class: 'hint' }, 'Minuscules, chiffres, point ou tiret.')),
+        h('div', { class: 'field' }, h('label', {}, 'Nom'), nameIn)),
+      h('div', { class: 'field' }, h('label', {}, 'Mot de passe'), pwdIn),
+      h('div', { class: 'field' }, h('label', {}, 'Rôle'), roleIn),
+      error,
+    ],
+    footer: [h('button', { class: 'btn ghost', onClick: () => m.close() }, 'Annuler'), save],
+  });
+  save.addEventListener('click', async () => {
+    save.disabled = true;
+    error.classList.add('hidden');
+    try {
+      if (u) {
+        const patch = { name: nameIn.value, role: roleIn.value };
+        if (pwdIn.value) patch.password = pwdIn.value;
+        await api(`/api/admin/users/${u.login}`, { method: 'PATCH', body: patch });
+      } else {
+        await api('/api/admin/users', { method: 'POST', body: { login: loginIn.value, name: nameIn.value, password: pwdIn.value, role: roleIn.value } });
+      }
+      m.close();
+      toast(u ? 'Compte mis à jour' : 'Compte créé');
+      renderUsers();
+    } catch (err) {
+      error.textContent = err.message;
+      error.classList.remove('hidden');
+      save.disabled = false;
+    }
+  });
+}
+
+boot();
     } catch (e2) {
       error.textContent = e2.message;
       error.classList.remove('hidden');
       btn.disabled = false;
       input.select();
     }
-  } }, h('div', { class: 'field' }, input), error, btn);
+  } }, h('div', { class: 'field' }, loginIn), h('div', { class: 'field' }, input), error, btn);
   app.innerHTML = '';
   app.append(h('div', { class: 'login' }, h('div', { class: 'login-box' },
     h('div', { class: 'brand' }, h('em', {}, 'Bézier'), h('strong', {}, 'ONE')),
     h('p', {}, configured ? 'Espace studio. Réservé à l’administration de la bibliothèque.' : 'L’espace studio n’est pas configuré : définissez ADMIN_PASSWORD dans le Docker Compose puis redémarrez le service.'),
     configured ? form : null)));
+  setTimeout(() => input.focus(), 40);
 }
 
 // ---------- Coquille ----------
@@ -102,11 +194,13 @@ function renderShell() {
   els.foot = h('div', { class: 'sidebar-foot' });
   els.navLib = h('a', { href: '#/lib/' }, icon('home'), 'Bibliothèque');
   els.navShares = h('a', { href: '#/shares' }, icon('link'), 'Liens de partage');
+  const isOwner = state.me.user?.role === 'owner';
+  els.navUsers = isOwner ? h('a', { href: '#/users' }, icon('users'), 'Comptes') : null;
   els.sidebar = h('aside', { class: 'sidebar' },
     h('div', { class: 'sidebar-head' },
       h('a', { class: 'brand', href: '#/lib/' }, h('em', {}, 'Bézier'), h('strong', {}, 'ONE')),
-      h('button', { class: 'btn ghost icon sm', title: 'Se déconnecter', onClick: logout }, icon('logout'))),
-    h('nav', { class: 'nav' }, els.navLib, els.navShares),
+      h('button', { class: 'btn ghost icon sm', title: `Se déconnecter (${state.me.user?.name || ''})`, onClick: logout }, icon('logout'))),
+    h('nav', { class: 'nav' }, els.navLib, els.navShares, els.navUsers),
     h('div', { class: 'sidebar-section' }, 'Dossiers',
       h('button', { class: 'btn ghost icon sm', title: 'Réduire tout', onClick: () => { state.expanded.clear(); persistExpanded(); renderTree(); } }, icon('collapse'))),
     els.tree,
@@ -175,6 +269,7 @@ function renderFoot() {
   const pre = th.prewarm && th.prewarm.index < th.prewarm.total ? ` · aperçus ${th.prewarm.index}/${th.prewarm.total}` : '';
   els.foot.innerHTML = '';
   append(els.foot, [
+    h('div', { class: 'row' }, h('span', {}, h('strong', { style: { color: 'var(--text-2)' } }, state.me.user?.name || ''), ` · ${state.me.user?.role === 'owner' ? 'propriétaire' : 'membre'}`)),
     h('div', { class: 'row' }, h('span', {}, h('span', { class: `dot${lib.scanning ? ' busy' : ''}` }), lib.scanning ? 'Lecture en cours…' : `${plural(lib.files, 'fichier')} · ${fmtBytes(lib.size)}`)),
     h('div', { class: 'row' }, h('span', {}, lib.scannedAt ? `Index du ${fmtDateTime(lib.scannedAt)}${pre}` : 'Index en cours de construction')),
     lib.scanError ? h('div', { class: 'error' }, lib.scanError) : null,
@@ -222,12 +317,14 @@ function renderTree() {
 
 // ---------- Rendu principal ----------
 async function render() {
-  els.navLib.classList.toggle('active', state.route.view !== 'shares');
+  els.navLib.classList.toggle('active', !['shares', 'users'].includes(state.route.view));
   els.navShares.classList.toggle('active', state.route.view === 'shares');
+  if (els.navUsers) els.navUsers.classList.toggle('active', state.route.view === 'users');
   if (state.route.view !== 'search') els.search.value = '';
   renderTree();
   els.content.scrollTop = 0;
   if (state.route.view === 'shares') return renderShares();
+  if (state.route.view === 'users') return renderUsers();
   if (state.route.view === 'search') return renderSearch(state.route.q);
   return renderLibrary(state.route.path);
 }
@@ -550,7 +647,7 @@ function shareCard(s, url) {
   if (s.hasPassword) badges.push(h('span', { class: 'badge' }, icon('lock'), ' Mot de passe'));
   if (!s.allowDownload) badges.push(h('span', { class: 'badge' }, 'Consultation seule'));
   if (s.missing) badges.push(h('span', { class: 'badge warn', title: 'Des éléments partagés n’existent plus dans la bibliothèque' }, `${s.missing} introuvable(s)`));
-  const meta = [plural(s.items.length, 'élément'), `créé le ${fmtDate(s.createdAt)}`];
+  const meta = [plural(s.items.length, 'élément'), `créé le ${fmtDate(s.createdAt)}${s.createdBy ? ` par ${s.createdBy.name}` : ''}`];
   if (s.expiresAt) meta.push(`expire le ${fmtDate(s.expiresAt)}`);
   meta.push(s.views ? `${plural(s.views, 'vue')}${s.lastViewedAt ? ` · dernière le ${fmtDateTime(s.lastViewedAt)}` : ''}` : 'jamais ouvert');
   const card = h('div', { class: `card${off ? ' off' : ''}` }, cover,
@@ -615,6 +712,94 @@ function editShareModal(s) {
       m.close();
       toast('Lien mis à jour');
       renderShares();
+    } catch (err) {
+      error.textContent = err.message;
+      error.classList.remove('hidden');
+      save.disabled = false;
+    }
+  });
+}
+
+// ---------- Comptes du studio ----------
+async function renderUsers() {
+  els.content.innerHTML = '';
+  let data;
+  try {
+    data = await api('/api/admin/users');
+  } catch (err) {
+    els.content.append(emptyState('lock', 'Accès réservé', err.message));
+    return;
+  }
+  if (state.route.view !== 'users') return;
+  const me = state.me.user;
+  els.content.append(h('div', { class: 'board-head' },
+    h('div', { class: 'board-title' }, h('h1', {}, 'Comptes du studio'), h('span', { class: 'sub' }, plural(data.users.length, 'compte'))),
+    h('div', { class: 'board-actions' }, h('button', { class: 'btn primary', onClick: () => userModal() }, icon('plus'), 'Nouveau compte'))));
+  const cards = h('div', { class: 'cards', style: { maxWidth: '900px' } });
+  for (const u of data.users) {
+    const badges = [h('span', { class: `badge${u.role === 'owner' ? ' accent' : ''}` }, u.role === 'owner' ? 'Propriétaire' : 'Membre')];
+    if (u.master) badges.push(h('span', { class: 'badge muted', title: 'Défini par ADMIN_PASSWORD' }, 'Compte maître'));
+    if (u.disabled) badges.push(h('span', { class: 'badge warn' }, 'Désactivé'));
+    if (u.login === me.login) badges.push(h('span', { class: 'badge ok' }, 'Vous'));
+    const meta = [`identifiant ${u.login}`, u.lastLoginAt ? `dernière connexion le ${fmtDateTime(u.lastLoginAt)}` : 'jamais connecté'];
+    cards.append(h('div', { class: `card${u.disabled ? ' off' : ''}` },
+      h('div', { class: 'card-cover', style: { fontSize: '22px', fontWeight: '700', color: 'var(--text-2)' } }, (u.name || u.login).slice(0, 1).toUpperCase()),
+      h('div', { class: 'card-body' },
+        h('div', { class: 'card-title' }, u.name, ...badges),
+        h('div', { class: 'card-meta' }, meta.flatMap((m, i) => (i ? [h('span', { class: 'sep' }), h('span', {}, m)] : [h('span', {}, m)])))),
+      h('div', { class: 'card-actions' }, u.master ? h('span', { class: 'hint', style: { fontSize: '12px', color: 'var(--muted-2)' } }, 'Mot de passe : variable ADMIN_PASSWORD') : [
+        h('button', { class: 'btn ghost icon sm', title: 'Modifier', onClick: () => userModal(u) }, icon('edit')),
+        u.login !== me.login ? h('button', { class: 'btn ghost icon sm', title: u.disabled ? 'Réactiver' : 'Désactiver', onClick: async () => {
+          await api(`/api/admin/users/${u.login}`, { method: 'PATCH', body: { disabled: !u.disabled } });
+          toast(u.disabled ? 'Compte réactivé' : 'Compte désactivé');
+          renderUsers();
+        } }, icon(u.disabled ? 'eye' : 'lock')) : null,
+        u.login !== me.login ? h('button', { class: 'btn ghost icon sm danger', title: 'Supprimer', onClick: async () => {
+          if (!(await confirmModal({ title: 'Supprimer ce compte ?', text: `${u.name} ne pourra plus se connecter. Les liens qu’il ou elle a créés restent actifs.`, confirmLabel: 'Supprimer', danger: true }))) return;
+          await api(`/api/admin/users/${u.login}`, { method: 'DELETE' });
+          toast('Compte supprimé');
+          renderUsers();
+        } }, icon('trash')) : null,
+      ])));
+  }
+  els.content.append(cards);
+}
+
+function userModal(u = null) {
+  const loginIn = h('input', { class: 'input', value: u?.login || '', placeholder: 'ex. marie', disabled: Boolean(u), autocapitalize: 'off', spellcheck: 'false' });
+  const nameIn = h('input', { class: 'input', value: u?.name || '', placeholder: 'Nom affiché', maxlength: 80 });
+  const pwdIn = h('input', { class: 'input', type: 'text', placeholder: u ? '(inchangé)' : '8 caractères minimum', autocomplete: 'new-password' });
+  const roleIn = h('select', { class: 'select' },
+    h('option', { value: 'member', selected: !u || u.role === 'member' }, 'Membre — bibliothèque et liens de partage'),
+    h('option', { value: 'owner', selected: u?.role === 'owner' }, 'Propriétaire — peut aussi gérer les comptes'));
+  const error = h('div', { class: 'error hidden' });
+  const save = h('button', { class: 'btn primary' }, u ? 'Enregistrer' : 'Créer le compte');
+  const m = modal({
+    title: u ? `Modifier ${u.name}` : 'Nouveau compte',
+    body: [
+      h('div', { class: 'form-row' },
+        h('div', { class: 'field' }, h('label', {}, 'Identifiant'), loginIn, h('span', { class: 'hint' }, 'Minuscules, chiffres, point ou tiret.')),
+        h('div', { class: 'field' }, h('label', {}, 'Nom'), nameIn)),
+      h('div', { class: 'field' }, h('label', {}, 'Mot de passe'), pwdIn),
+      h('div', { class: 'field' }, h('label', {}, 'Rôle'), roleIn),
+      error,
+    ],
+    footer: [h('button', { class: 'btn ghost', onClick: () => m.close() }, 'Annuler'), save],
+  });
+  save.addEventListener('click', async () => {
+    save.disabled = true;
+    error.classList.add('hidden');
+    try {
+      if (u) {
+        const patch = { name: nameIn.value, role: roleIn.value };
+        if (pwdIn.value) patch.password = pwdIn.value;
+        await api(`/api/admin/users/${u.login}`, { method: 'PATCH', body: patch });
+      } else {
+        await api('/api/admin/users', { method: 'POST', body: { login: loginIn.value, name: nameIn.value, password: pwdIn.value, role: roleIn.value } });
+      }
+      m.close();
+      toast(u ? 'Compte mis à jour' : 'Compte créé');
+      renderUsers();
     } catch (err) {
       error.textContent = err.message;
       error.classList.remove('hidden');

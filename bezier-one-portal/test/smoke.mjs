@@ -74,9 +74,44 @@ try {
   // Espace studio : non connecté
   assert.equal((await call('/api/admin/dirs')).status, 401);
   assert.equal((await call('/api/admin/login', { method: 'POST', body: { password: 'faux' } })).status, 401);
-  assert.equal((await call('/api/admin/login', { method: 'POST', body: { password: PASSWORD } })).status, 200);
+  assert.equal((await call('/api/admin/login', { method: 'POST', body: { login: 'inconnu', password: PASSWORD } })).status, 401);
+  const login = await call('/api/admin/login', { method: 'POST', body: { password: PASSWORD } });
+  assert.equal(login.status, 200);
+  assert.equal(login.data.user.login, 'studio');
+  assert.equal(login.data.user.role, 'owner');
   assert.ok(cookies.bz_studio, 'cookie de session');
-  step('connexion studio');
+  const me = await call('/api/admin/me');
+  assert.equal(me.data.user.role, 'owner');
+  step('connexion studio (compte maître)');
+
+  // Comptes
+  const badUser = await call('/api/admin/users', { method: 'POST', body: { login: 'Marie Dupont', password: 'x' } });
+  assert.equal(badUser.status, 400);
+  const created1 = await call('/api/admin/users', { method: 'POST', body: { login: 'Marie', name: 'Marie', password: 'motdepasse1', role: 'member' } });
+  assert.equal(created1.status, 201, JSON.stringify(created1.data));
+  assert.equal(created1.data.user.login, 'marie');
+  assert.equal((await call('/api/admin/users', { method: 'POST', body: { login: 'marie', password: 'motdepasse1' } })).status, 400, 'doublon');
+  const userList = await call('/api/admin/users');
+  assert.equal(userList.data.users.length, 2);
+  assert.ok(userList.data.users[0].master);
+  const marie = {};
+  assert.equal((await call('/api/admin/login', { method: 'POST', body: { login: 'marie', password: 'faux' }, jar: marie })).status, 401);
+  assert.equal((await call('/api/admin/login', { method: 'POST', body: { login: 'MARIE ', password: 'motdepasse1' }, jar: marie })).status, 200);
+  assert.equal((await call('/api/admin/dirs', { jar: marie })).status, 200, 'membre : bibliothèque accessible');
+  assert.equal((await call('/api/admin/users', { jar: marie })).status, 403, 'membre : comptes interdits');
+  const marieShare = await call('/api/admin/shares', { method: 'POST', body: { title: 'Par Marie', items: ['0. WORKSHOP'] }, jar: marie });
+  assert.equal(marieShare.status, 201);
+  assert.equal(marieShare.data.share.createdBy.login, 'marie');
+  await call(`/api/admin/users/marie`, { method: 'PATCH', body: { password: 'motdepasse2' } });
+  assert.equal((await call('/api/admin/dirs', { jar: marie })).status, 401, 'mot de passe changé : session invalidée');
+  assert.equal((await call('/api/admin/login', { method: 'POST', body: { login: 'marie', password: 'motdepasse2' }, jar: marie })).status, 200);
+  await call(`/api/admin/users/marie`, { method: 'PATCH', body: { disabled: true } });
+  assert.equal((await call('/api/admin/dirs', { jar: marie })).status, 401, 'compte désactivé');
+  assert.equal((await call('/api/admin/login', { method: 'POST', body: { login: 'marie', password: 'motdepasse2' }, jar: {} })).status, 401);
+  assert.equal((await call('/api/admin/users/studio', { method: 'DELETE' })).status, 400, 'compte maître intouchable');
+  assert.equal((await call('/api/admin/users/marie', { method: 'DELETE' })).status, 200);
+  assert.equal((await call(`/api/admin/shares/${marieShare.data.share.id}`, { method: 'DELETE' })).status, 200);
+  step('comptes : création, rôles, changement de mot de passe, désactivation, suppression');
 
   // Arbre et dossiers
   const dirs = await call('/api/admin/dirs');

@@ -36,6 +36,8 @@ try {
   await page.screenshot({ path: `${OUT}/00-landing.png` });
 
   await page.goto(`${BASE}/admin`);
+  await page.waitForSelector('input[type=password]');
+  await page.screenshot({ path: `${OUT}/01-admin-login.png` });
   await page.fill('input[type=password]', 'studio');
   await page.click('button[type=submit]');
   await page.waitForSelector('.tree-item');
@@ -77,6 +79,18 @@ try {
   await page.goto(`${BASE}/admin#/shares`);
   await page.waitForSelector('.card');
   await page.screenshot({ path: `${OUT}/07-admin-shares.png` });
+
+  await page.goto(`${BASE}/admin#/users`);
+  await page.waitForSelector('h1:has-text("Comptes du studio")');
+  await page.waitForSelector('.card');
+  await page.click('.board-actions .btn.primary');
+  await page.waitForSelector('.modal input[placeholder="ex. marie"]');
+  await page.fill('.modal input[placeholder="ex. marie"]', 'marie');
+  await page.fill('.modal input[placeholder="Nom affiché"]', 'Marie');
+  await page.fill('.modal input[autocomplete="new-password"]', 'motdepasse1');
+  await page.click('.modal-foot .btn.primary');
+  await page.waitForSelector('.card:nth-child(2)');
+  await page.screenshot({ path: `${OUT}/09-admin-users.png` });
 
   await page.goto(`${BASE}/admin#/search/nyc`);
   await page.waitForSelector('.grid .tile');

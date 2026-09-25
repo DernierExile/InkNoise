@@ -75,6 +75,7 @@ const ICONS = {
   filter: '<path d="M4 5h16l-6 8v5l-4 2v-7z"/>',
   minus: '<path d="M5 12h14"/>',
   arrowUp: '<path d="M12 19V5m0 0-6 6m6-6 6 6"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.5A5 5 0 0 1 21 19"/>',
 };
 
 export function icon(name, cls = '') {
