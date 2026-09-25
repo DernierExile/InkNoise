@@ -91,27 +91,34 @@ find "$APP_DIR" -mindepth 1 -maxdepth 1 ! -name '.env' -exec rm -rf {} + 2>/dev/
 cp -a "$SRC/." "$APP_DIR/"
 ok "Code installé dans $APP_DIR (version $(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' "$APP_DIR/package.json" | head -1))"
 
-say "Mot de passe du studio"
+say "Compte du studio"
 ensure_dir "$PROJECT_DIR"
 ENV_FILE="$PROJECT_DIR/.env"
 if [ -e "$ENV_FILE" ] && ! [ -r "$ENV_FILE" ]; then
   ok "$ENV_FILE existe (lisible par root uniquement) : conservé tel quel"
 elif [ -r "$ENV_FILE" ] && grep -q '^ADMIN_PASSWORD=.\{8,\}' "$ENV_FILE"; then
-  ok "Mot de passe déjà défini dans $ENV_FILE (inchangé)"
+  ok "Compte maître « studio » déjà défini dans $ENV_FILE (inchangé)"
+elif [ -r "$ENV_FILE" ] && grep -q '^ADMIN_PASSWORD=' "$ENV_FILE"; then
+  ok "$ENV_FILE présent sans mot de passe maître : le compte propriétaire se crée dans le navigateur"
 else
   PW="${BZ_ADMIN_PASSWORD:-}"
-  if [ -z "$PW" ]; then
-    [ -t 0 ] || die "Aucun terminal : définissez BZ_ADMIN_PASSWORD=... avant de lancer le script."
-    while :; do
-      read -r -s -p "Choisissez le mot de passe du studio (8 caractères minimum) : " PW; echo
+  if [ -z "$PW" ] && [ -t 0 ]; then
+    echo "Facultatif : mot de passe du compte maître « studio ». Laissez vide (recommandé) pour créer"
+    echo "le compte propriétaire directement dans le navigateur au premier accès à /admin."
+    read -r -s -p "Mot de passe maître (Entrée pour passer) : " PW; echo
+    if [ -n "$PW" ]; then
       read -r -s -p "Confirmez : " PW2; echo
-      [ "$PW" = "$PW2" ] || { warn "Les deux saisies diffèrent."; continue; }
-      [ "${#PW}" -ge 8 ] || { warn "Trop court."; continue; }
-      break
-    done
+      [ "$PW" = "$PW2" ] || die "Les deux saisies diffèrent."
+      [ "${#PW}" -ge 8 ] || die "Trop court (8 caractères minimum)."
+    fi
   fi
-  printf 'ADMIN_PASSWORD=%s\n' "$PW" | write_file "$ENV_FILE" 600
-  ok "Mot de passe enregistré dans $ENV_FILE (lecture root uniquement)"
+  if [ -n "$PW" ]; then
+    printf 'ADMIN_PASSWORD=%s\n' "$PW" | write_file "$ENV_FILE" 600
+    ok "Compte maître enregistré dans $ENV_FILE (lecture root uniquement)"
+  else
+    printf '# Compte maître facultatif (ADMIN_PASSWORD=...). Vide : initialisation dans le navigateur.\nADMIN_PASSWORD=\n' | write_file "$ENV_FILE" 600
+    ok "Pas de compte maître : le compte propriétaire sera créé au premier accès à $PUBLIC_ORIGIN/admin"
+  fi
 fi
 
 say "Réseau du tunnel Cloudflare"
@@ -211,10 +218,17 @@ else
   warn "Pas de réponse via $PUBLIC_ORIGIN pour l'instant. Si cela persiste au bout d'une minute, vérifiez que cloudflared est bien sur le réseau « $NET » (docker network connect $NET <cloudflared>)."
 fi
 
+SETUP_LINE=""
+if printf '%s' "$out" | grep -q '"setupRequired":true'; then
+  CODE="$(dk logs bezier-portal-v2 2>&1 | grep -o "Code d'initialisation : [A-Z0-9-]*" | tail -1 | sed "s/.*: //")"
+  SETUP_LINE="  Premier accès : ouvrez $PUBLIC_ORIGIN/admin et créez le compte propriétaire avec le code ${CODE:-(voir docker logs bezier-portal-v2)}"
+fi
+
 cat <<EOF
 
 Terminé.
-  Studio        : $PUBLIC_ORIGIN/admin  (identifiant « studio »)
+$SETUP_LINE
+  Studio        : $PUBLIC_ORIGIN/admin
   Journal       : $SUDO docker logs -f bezier-portal-v2
   Mise à jour   : bash $APP_DIR/deploy/install.sh
   Retour à v1   : bash $APP_DIR/deploy/install.sh --rollback

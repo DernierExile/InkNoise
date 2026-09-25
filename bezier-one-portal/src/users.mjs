@@ -3,7 +3,7 @@
 // Rôles : « owner » (gère les comptes) et « member » (bibliothèque et liens).
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { atomicWriteJson, readJson } from './util.mjs';
+import { atomicWriteJson, readJson, randomId } from './util.mjs';
 
 export const MASTER_LOGIN = 'studio';
 const LOGIN_RE = /^[a-z0-9][a-z0-9._-]{1,31}$/;
@@ -35,6 +35,28 @@ export class Users {
     const data = await readJson(this.file, { version: 1, users: [] });
     for (const u of data.users || []) this.map.set(u.login, u);
     if (this.map.size) this.log.info(`[users] ${this.map.size} compte(s) chargé(s)`);
+    if (this.setupRequired) {
+      this.setupCode = `${randomId(4)}-${randomId(4)}`.toUpperCase();
+      this.log.warn(`[users] Aucun compte : ouvrez /admin pour créer le compte propriétaire. Code d'initialisation : ${this.setupCode}`);
+    }
+  }
+
+  // Aucun mot de passe maître et aucun compte : le premier accès à /admin crée le propriétaire.
+  get setupRequired() {
+    return !this.masterEnabled && this.map.size === 0;
+  }
+
+  async setup({ code, login, name, password }) {
+    if (!this.setupRequired) throw Object.assign(new Error('Le studio est déjà initialisé.'), { status: 403 });
+    const a = Buffer.from(String(code || '').trim().toUpperCase());
+    const b = Buffer.from(this.setupCode || '');
+    if (!b.length || a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+      throw Object.assign(new Error("Code d'initialisation incorrect (voir le journal du conteneur)."), { status: 401 });
+    }
+    const user = await this.create({ login, name, password, role: 'owner' });
+    this.setupCode = null;
+    this.log.info(`[users] studio initialisé : compte propriétaire « ${user.login} »`);
+    return user;
   }
 
   async save() {

@@ -33,8 +33,11 @@ hiérarchique, aperçus, sélection multi-dossiers et liens de partage privés.
   sous-ensemble choisi. Responsive (téléphone, tablette).
 
 **Comptes du studio**
-- Le compte maître `studio` est défini par `ADMIN_PASSWORD`. Depuis « Comptes », un
-  propriétaire crée d'autres comptes (identifiant, nom, mot de passe, rôle) : les
+- Au premier accès à `/admin`, on crée le compte propriétaire dans le navigateur avec un
+  code d'initialisation à usage unique, affiché dans le journal du conteneur. Aucun mot de
+  passe ne transite par un script ou une conversation. `ADMIN_PASSWORD` reste possible
+  pour définir en plus un compte maître `studio`.
+- Depuis « Comptes », un propriétaire crée d'autres comptes (identifiant, nom, mot de passe, rôle) : les
   membres accèdent à la bibliothèque et aux liens, les propriétaires gèrent aussi les
   comptes. Chaque lien mémorise qui l'a créé. Changer un mot de passe ou désactiver
   un compte déconnecte immédiatement ses sessions.
@@ -64,7 +67,7 @@ curl -fsSL -o install.sh https://raw.githubusercontent.com/DernierExile/InkNoise
 bash install.sh
 ```
 
-Le script demande un mot de passe pour le studio, puis enchaîne tout seul :
+Le script enchaîne tout seul (il propose, en option, un mot de passe maître) :
 
 1. télécharge le code dans `/home/thierrybezier/BezierPortal-v2` (la v1 reste intacte
    dans `/home/thierrybezier/BezierPortal`) ;
@@ -75,7 +78,12 @@ Le script demande un mot de passe pour le studio, puis enchaîne tout seul :
 4. construit l'image (Node 22 + ffmpeg + poppler), arrête le conteneur `portal` v1 sans
    le supprimer, démarre la v2 sur le port `8095` ;
 5. vérifie `http://127.0.0.1:8095/health` puis `https://clients.thierrybezier.com/health`.
-   Si la v2 ne répond pas, il relance la v1 automatiquement.
+   Si la v2 ne répond pas, il relance la v1 automatiquement ;
+6. affiche le code d'initialisation : ouvrir `https://clients.thierrybezier.com/admin`,
+   saisir ce code, choisir identifiant et mot de passe. Le studio est prêt.
+
+Le même script peut être piloté à distance (par exemple depuis une session Claude Cowork
+sur le PC, via SSH) : voir `deploy/PROMPT-COWORK.md`.
 
 Ensuite :
 
@@ -86,8 +94,8 @@ bash /home/thierrybezier/BezierPortal-v2/deploy/install.sh --rollback # retour �
 docker logs -f bezier-portal-v2                                        # journal
 ```
 
-Le compte maître du studio s'appelle `studio`. Pour changer son mot de passe : éditer
-`/docker/bezier-portal-v2/.env` puis `docker compose -p bezier-portal-v2 -f /docker/bezier-portal-v2/docker-compose.yaml up -d`.
+Pour définir ou changer le compte maître `studio` (facultatif) : éditer
+`/docker/bezier-portal-v2/.env` (`ADMIN_PASSWORD=...`) puis `docker compose -p bezier-portal-v2 -f /docker/bezier-portal-v2/docker-compose.yaml up -d`.
 
 Sans terminal, l'équivalent manuel est possible depuis l'application Docker de UGOS :
 déposer le dossier du projet dans `/home/thierrybezier/BezierPortal-v2`, créer un projet
@@ -103,7 +111,7 @@ v1, puis démarrer le projet.
 | `LIBRARY_ROOT` | `/library` | Bibliothèque (montage lecture seule) |
 | `DATA_DIR` | `/data/v2` (image) | Index, aperçus, liens, secret de session |
 | `PUBLIC_ORIGIN` | `https://clients.thierrybezier.com` | Origine des liens générés |
-| `ADMIN_PASSWORD` | — | Mot de passe du compte maître `studio` (obligatoire au premier démarrage) |
+| `ADMIN_PASSWORD` | — | Facultatif : mot de passe du compte maître `studio`. Absent : initialisation dans le navigateur |
 | `SCAN_INTERVAL_MIN` | `15` | Relecture automatique de la bibliothèque (0 = jamais) |
 | `THUMB_CONCURRENCY` | `2` | Générations d'aperçus simultanées |
 | `PREWARM_THUMBS` | `1` | Pré-génération des vignettes après chaque scan (`0` pour couper) |
@@ -124,7 +132,7 @@ vidéo et PDF ; sans eux, ces aperçus sont simplement désactivés.
 ## API (résumé)
 
 - `GET /health`
-- Studio (cookie de session) : `POST /api/admin/login`, `/logout`, `GET /api/admin/me`,
+- Studio (cookie de session) : `POST /api/admin/setup` (premier accès), `POST /api/admin/login`, `/logout`, `GET /api/admin/me`,
   `/status`, `/dirs`, `/dir?p=`, `/files?p=`, `/search?q=`, `/thumb?p=&w=480|1600`,
   `/file?p=[&dl=1]`, `/zip?p=`, `POST /api/admin/zip` (`paths` JSON), `POST /api/admin/rescan`,
   `POST /api/admin/prewarm`, `GET|POST /api/admin/shares`, `GET|PATCH|DELETE /api/admin/shares/:id`,

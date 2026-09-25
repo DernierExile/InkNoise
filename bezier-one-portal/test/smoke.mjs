@@ -281,6 +281,47 @@ try {
   assert.equal((await call('/api/admin/dirs')).status, 401);
   step('déconnexion');
 
+  // Mode initialisation : sans ADMIN_PASSWORD, le premier accès crée le propriétaire.
+  const DATA2 = path.resolve('test/data-smoke-setup');
+  await fs.rm(DATA2, { recursive: true, force: true });
+  const srv2 = spawn(process.execPath, ['server.mjs'], {
+    env: { ...process.env, PORT: String(PORT + 1), LIBRARY_ROOT: LIB, DATA_DIR: DATA2, ADMIN_PASSWORD: '', SCAN_INTERVAL_MIN: '0', PREWARM_THUMBS: '0' },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  let logs2 = '';
+  srv2.stdout.on('data', (d) => { logs2 += d; });
+  srv2.stderr.on('data', (d) => { logs2 += d; });
+  try {
+    const B2 = `http://127.0.0.1:${PORT + 1}`;
+    let code = null;
+    for (let i = 0; i < 100 && !code; i++) {
+      code = (logs2.match(/Code d'initialisation : ([A-Z0-9]{4}-[A-Z0-9]{4})/) || [])[1];
+      await new Promise((r2) => setTimeout(r2, 100));
+    }
+    assert.ok(code, 'code d’initialisation dans le journal');
+    const j = async (url, opts = {}) => {
+      const r = await fetch(B2 + url, { method: opts.method || 'GET', headers: { 'content-type': 'application/json', ...(opts.cookie ? { cookie: opts.cookie } : {}) }, body: opts.body ? JSON.stringify(opts.body) : undefined });
+      return { status: r.status, data: await r.json().catch(() => null), cookie: (r.headers.getSetCookie?.() || []).map((c) => c.split(';')[0]).join('; ') };
+    };
+    assert.equal((await j('/health')).data.setupRequired, true);
+    const l = await j('/api/admin/login', { method: 'POST', body: { password: 'x' } });
+    assert.equal(l.status, 503); assert.equal(l.data.setupRequired, true);
+    assert.equal((await j('/api/admin/me')).data.setupRequired, true);
+    assert.equal((await j('/api/admin/setup', { method: 'POST', body: { code: 'FAUX-CODE', login: 'thierry', password: 'motdepasse1' } })).status, 401);
+    assert.equal((await j('/api/admin/setup', { method: 'POST', body: { code, login: 'thierry', password: 'court' } })).status, 400);
+    const ok2 = await j('/api/admin/setup', { method: 'POST', body: { code: code.toLowerCase(), login: 'Thierry', name: 'Thierry', password: 'motdepasse1' } });
+    assert.equal(ok2.status, 201, JSON.stringify(ok2.data));
+    assert.equal(ok2.data.user.role, 'owner');
+    assert.ok(ok2.cookie.includes('bz_studio='), 'connecté après initialisation');
+    assert.equal((await j('/api/admin/me', { cookie: ok2.cookie })).data.user.login, 'thierry');
+    assert.equal((await j('/health')).data.setupRequired, false);
+    assert.equal((await j('/api/admin/setup', { method: 'POST', body: { code, login: 'autre', password: 'motdepasse1' } })).status, 403, 'initialisation unique');
+    assert.equal((await j('/api/admin/login', { method: 'POST', body: { login: 'thierry', password: 'motdepasse1' } })).status, 200);
+    step('initialisation au premier accès (code unique, compte propriétaire)');
+  } finally {
+    srv2.kill('SIGTERM');
+  }
+
   console.log('\nTous les tests passent.');
 } catch (err) {
   failed = true;

@@ -144,6 +144,22 @@ try {
   await g2p.click('.gate-box button');
   await g2p.waitForSelector('.board-section');
 
+  // Page d'initialisation (instance sans ADMIN_PASSWORD)
+  await fs.rm(path.resolve('test/data-shots-setup'), { recursive: true, force: true });
+  const s3 = spawn(process.execPath, ['server.mjs'], {
+    env: { ...process.env, PORT: String(PORT + 2), LIBRARY_ROOT: path.resolve('test/library'), DATA_DIR: path.resolve('test/data-shots-setup'), ADMIN_PASSWORD: '', SCAN_INTERVAL_MIN: '0', PREWARM_THUMBS: '0' },
+    stdio: 'ignore',
+  });
+  try {
+    for (let i = 0; i < 50; i++) { const r = await fetch(`http://127.0.0.1:${PORT + 2}/health`).catch(() => null); if (r?.ok) break; await new Promise((r2) => setTimeout(r2, 200)); }
+    const sp = await g2.newPage();
+    await sp.goto(`http://127.0.0.1:${PORT + 2}/admin`);
+    await sp.waitForSelector('form');
+    await sp.screenshot({ path: `${OUT}/01-admin-setup.png` });
+  } finally {
+    s3.kill('SIGTERM');
+  }
+
   console.log('Captures dans', OUT);
 } finally {
   await browser.close();

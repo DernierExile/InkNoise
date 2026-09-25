@@ -98,7 +98,7 @@ const sendPage = (res, file) => res.sendFile(path.join(publicDir, file), {
 });
 
 app.get('/', (req, res) => sendPage(res, 'index.html'));
-app.get('/health', (req, res) => res.json({ ok: true, version: pkg.version, library: library.stats() }));
+app.get('/health', (req, res) => res.json({ ok: true, version: pkg.version, setupRequired: users.setupRequired, library: library.stats() }));
 app.get(['/admin', '/admin/'], (req, res) => sendPage(res, 'admin/index.html'));
 app.get('/s/:id', (req, res) => sendPage(res, 'share/index.html'));
 app.use('/assets', express.static(path.join(publicDir, 'assets'), { index: false, cacheControl: true, maxAge: 0, setHeaders: (res) => res.setHeader('Cache-Control', 'no-cache') }));
@@ -199,8 +199,24 @@ function parsePaths(body) {
 // ---------- Espace studio ----------
 const admin = express.Router();
 
+const notConfigured = () => Object.assign(httpError(503, "L'espace studio n'est pas encore initialisé."), { setupRequired: true });
+
+admin.post('/setup', async (req, res) => {
+  if (!users.setupRequired) throw httpError(403, 'Le studio est déjà initialisé.');
+  if (auth.throttled(req)) throw httpError(429, 'Trop de tentatives. Réessayez dans quelques minutes.');
+  let user;
+  try {
+    user = await users.setup(req.body || {});
+  } catch (err) {
+    if (err.status === 401) auth.recordAttempt(req, false);
+    throw err;
+  }
+  auth.loginAdmin(req, res, user.login, req.body.password);
+  res.status(201).json({ ok: true, user });
+});
+
 admin.post('/login', (req, res) => {
-  if (!auth.adminEnabled) throw httpError(503, "L'espace studio n'est pas configuré (ADMIN_PASSWORD manquant).");
+  if (!auth.adminEnabled) throw notConfigured();
   if (auth.throttled(req)) throw httpError(429, 'Trop de tentatives. Réessayez dans quelques minutes.');
   const user = auth.loginAdmin(req, res, req.body?.login, req.body?.password);
   if (!user) throw httpError(401, 'Identifiant ou mot de passe incorrect');
@@ -216,7 +232,7 @@ admin.post('/logout', (req, res) => {
 admin.use((req, res, next) => {
   req.user = auth.currentUser(req);
   if (!req.user) {
-    return next(httpError(401, auth.adminEnabled ? 'Connexion requise' : "L'espace studio n'est pas configuré (ADMIN_PASSWORD manquant)."));
+    return next(auth.adminEnabled ? httpError(401, 'Connexion requise') : notConfigured());
   }
   res.setHeader('Cache-Control', 'private, no-store');
   next();
@@ -498,6 +514,7 @@ app.use((err, req, res, next) => {
   if (res.headersSent) return res.destroy();
   const body = { error: err.message || 'Erreur' };
   if (err.needsPassword) body.needsPassword = true;
+  if (err.setupRequired) body.setupRequired = true;
   if (req.path.startsWith('/api/') || req.method !== 'GET') return res.status(status).json(body);
   res.status(status);
   if (status === 404 || status === 410) return sendPage(res, '404.html');

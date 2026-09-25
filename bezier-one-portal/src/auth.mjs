@@ -27,7 +27,7 @@ export class Auth {
       await fs.writeFile(this.secretFile, this.secret, { mode: 0o600 });
       this.log.info('[auth] nouveau secret de session généré');
     }
-    if (!this.adminEnabled) this.log.warn('[auth] ADMIN_PASSWORD absent et aucun compte : espace studio verrouillé');
+    if (!this.adminEnabled) this.log.warn('[auth] ADMIN_PASSWORD absent et aucun compte : le premier accès à /admin créera le compte propriétaire');
   }
 
   get adminEnabled() {

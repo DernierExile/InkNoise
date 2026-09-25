@@ -61,8 +61,41 @@ async function boot() {
   pollStatus();
 }
 
+function renderSetup() {
+  const codeIn = h('input', { class: 'input', type: 'text', placeholder: "Code d'initialisation (ex. AB12-CD34)", autocomplete: 'off', spellcheck: 'false', style: { textTransform: 'uppercase' } });
+  const loginIn = h('input', { class: 'input', type: 'text', placeholder: 'Identifiant (ex. thierry)', autocomplete: 'username', spellcheck: 'false', autocapitalize: 'off' });
+  const nameIn = h('input', { class: 'input', type: 'text', placeholder: 'Nom affiché', autocomplete: 'name' });
+  const pwdIn = h('input', { class: 'input', type: 'password', placeholder: 'Mot de passe (8 caractères minimum)', autocomplete: 'new-password' });
+  const pwd2In = h('input', { class: 'input', type: 'password', placeholder: 'Confirmer le mot de passe', autocomplete: 'new-password' });
+  const error = h('div', { class: 'error hidden' });
+  const btn = h('button', { class: 'btn primary', type: 'submit' }, 'Créer le compte propriétaire');
+  const form = h('form', { onSubmit: async (e) => {
+    e.preventDefault();
+    error.classList.add('hidden');
+    if (pwdIn.value !== pwd2In.value) { error.textContent = 'Les deux mots de passe diffèrent.'; error.classList.remove('hidden'); return; }
+    btn.disabled = true;
+    try {
+      await api('/api/admin/setup', { method: 'POST', body: { code: codeIn.value, login: loginIn.value, name: nameIn.value, password: pwdIn.value } });
+      prefs.set('login', loginIn.value.trim().toLowerCase());
+      toast('Studio initialisé. Bienvenue !');
+      await boot();
+    } catch (e2) {
+      error.textContent = e2.message;
+      error.classList.remove('hidden');
+      btn.disabled = false;
+    }
+  } }, ...[codeIn, loginIn, nameIn, pwdIn, pwd2In].map((i) => h('div', { class: 'field' }, i)), error, btn);
+  app.innerHTML = '';
+  app.append(h('div', { class: 'login' }, h('div', { class: 'login-box' },
+    h('div', { class: 'brand' }, h('em', {}, 'Bézier'), h('strong', {}, 'ONE')),
+    h('p', {}, 'Première ouverture du studio : créez le compte propriétaire. Le code d’initialisation se lit dans le journal du conteneur (docker logs bezier-portal-v2).'),
+    form)));
+  setTimeout(() => codeIn.focus(), 40);
+}
+
 function renderLogin(err) {
-  const configured = err.status !== 503 && !/ADMIN_PASSWORD/.test(err.message || '');
+  if (err.data?.setupRequired || err.status === 503) return renderSetup();
+  const configured = true;
   const loginIn = h('input', { class: 'input', type: 'text', placeholder: 'Identifiant', autocomplete: 'username', value: prefs.get('login', 'studio'), spellcheck: 'false', autocapitalize: 'off' });
   const input = h('input', { class: 'input', type: 'password', placeholder: 'Mot de passe', autocomplete: 'current-password' });
   const error = h('div', { class: 'error hidden' });
