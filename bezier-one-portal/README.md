@@ -52,37 +52,48 @@ hiérarchique, aperçus, sélection multi-dossiers et liens de partage privés.
   HMAC, limitation des tentatives de mot de passe, en-têtes `noindex`, CSP.
 - Aucune dépendance de build côté front (HTML/CSS/JS natifs).
 
-## Déploiement sur le NAS (UGREEN, Docker Compose)
+## Déploiement sur le NAS en une commande
 
-Prérequis : les trois conteneurs v1 (`portal`, `caddy`, `cloudflared`) tournent ;
-le tunnel Cloudflare pointe vers `http://portal:8080`. Rien ne change côté réseau.
+Prérequis : les conteneurs v1 (`portal`, `caddy`, `cloudflared`) tournent et le tunnel
+Cloudflare pointe vers `http://portal:8080`. Rien ne change côté réseau ni côté Cloudflare.
 
-1. **Récupérer le code** sur le NAS, en conservant la v1 à côté :
-   ```sh
-   cd /home/thierrybezier
-   mv BezierPortal BezierPortal-v1          # sauvegarde de l'ancien server.mjs et Caddyfile
-   git clone <url-du-dépôt> BezierPortal    # ou copier le dossier bezier-one-portal ici
-   cp BezierPortal-v1/Caddyfile BezierPortal/ 2>/dev/null || true
-   ```
-2. **Mot de passe du studio** : créer `/docker/bezier-portal/.env` contenant
-   `ADMIN_PASSWORD=...` (voir `.env.example`). Ce fichier ne doit jamais être versionné.
-3. **Compose** : dans `/docker/bezier-portal/docker-compose.yaml`, remplacer le service
-   `portal` par celui de `docker-compose.example.yaml` (build depuis
-   `/home/thierrybezier/BezierPortal`, variables `ADMIN_PASSWORD`, `PUBLIC_ORIGIN`,
-   `DATA_DIR=/data/v2`). Laisser `caddy` et `cloudflared` inchangés.
-4. **Construire et lancer** :
-   ```sh
-   cd /docker/bezier-portal
-   docker compose build portal
-   docker compose up -d portal
-   docker compose logs -f portal     # attendre « scan terminé » puis « pré-génération lancée »
-   ```
-5. **Vérifier** : `https://clients.thierrybezier.com/health` renvoie le nombre de
-   fichiers indexés ; `https://clients.thierrybezier.com/admin` demande le mot de passe.
+Depuis un terminal sur le NAS (SSH sur `192.168.1.31`, ou le terminal de UGOS) :
 
-Retour arrière : `mv BezierPortal BezierPortal-v2 && mv BezierPortal-v1 BezierPortal`,
-remettre l'ancien service `portal` dans le Compose, `docker compose up -d portal`.
-Les données v1 du volume `portal-data` ne sont pas modifiées (la v2 écrit dans `/data/v2`).
+```sh
+curl -fsSL -o install.sh https://raw.githubusercontent.com/DernierExile/InkNoise/refs/heads/claude/kind-hypatia-biu6jv/bezier-one-portal/deploy/install.sh
+bash install.sh
+```
+
+Le script demande un mot de passe pour le studio, puis enchaîne tout seul :
+
+1. télécharge le code dans `/home/thierrybezier/BezierPortal-v2` (la v1 reste intacte
+   dans `/home/thierrybezier/BezierPortal`) ;
+2. écrit `/docker/bezier-portal-v2/.env` (mot de passe, lisible par root seulement) et
+   `/docker/bezier-portal-v2/docker-compose.yaml` ;
+3. repère le réseau Docker du conteneur `cloudflared` et y inscrit la v2 sous l'alias
+   `portal`, celui que le tunnel utilise déjà ;
+4. construit l'image (Node 22 + ffmpeg + poppler), arrête le conteneur `portal` v1 sans
+   le supprimer, démarre la v2 sur le port `8095` ;
+5. vérifie `http://127.0.0.1:8095/health` puis `https://clients.thierrybezier.com/health`.
+   Si la v2 ne répond pas, il relance la v1 automatiquement.
+
+Ensuite :
+
+```sh
+bash /home/thierrybezier/BezierPortal-v2/deploy/install.sh            # mise à jour (re-télécharge et reconstruit)
+bash /home/thierrybezier/BezierPortal-v2/deploy/install.sh --status   # état et tests de santé
+bash /home/thierrybezier/BezierPortal-v2/deploy/install.sh --rollback # retour à la v1 en quelques secondes
+docker logs -f bezier-portal-v2                                        # journal
+```
+
+Le compte maître du studio s'appelle `studio`. Pour changer son mot de passe : éditer
+`/docker/bezier-portal-v2/.env` puis `docker compose -p bezier-portal-v2 -f /docker/bezier-portal-v2/docker-compose.yaml up -d`.
+
+Sans terminal, l'équivalent manuel est possible depuis l'application Docker de UGOS :
+déposer le dossier du projet dans `/home/thierrybezier/BezierPortal-v2`, créer un projet
+`bezier-portal-v2` avec le contenu de `docker-compose.example.yaml` (en remplaçant le réseau
+par celui du projet v1, en général `bezier-portal_default`), arrêter le conteneur `portal`
+v1, puis démarrer le projet.
 
 ## Variables d'environnement
 
